@@ -317,7 +317,7 @@ Kết quả:
 */
 ```
 
-**Number**
+# **Number**
 
 *Signed Integer Numbers* // Số nguyên có dấu
 
@@ -357,7 +357,7 @@ Việc lựa chọn 32-bit hay 64-bit không liên quan tới việc tối ưu c
 Trong rust có 2 kiểu float là f32 và f64 tương đương với 32-bit floating-point numbers và 64-bit floating-point numbers
 f32 hiển thị 7 số phần thập phân, f64 hiển thị 16 số phần thập phân
 
-**Explicit Conversions**
+# **Explicit Conversions**
 
 
 ```
@@ -414,7 +414,7 @@ kiểu 3: khai báo biến và giá trị rồi kiểu giá trị ngay sau (khô
 
 Tương tự với kiểu dữ liệu float
 
-**All the Numeric Types**
+# **All the Numeric Types**
 
 ```
 let _: i8 = 127;
@@ -453,7 +453,7 @@ just two floating-point numeric types:
 ```
 
 
-**Booleans and Characters**
+# **Booleans and Characters**
 
 ```
 let a: bool = true;
@@ -525,3 +525,398 @@ Kết quả:
 A à
 */
 ```
+
+# **The Empty Tuple**
+
+....
+
+
+# **Array and Vector Types**
+
+```
+let _array1: [char; 3] = ['x', 'y', 'z'];
+let _array2: [f32; 200] = [0f32; 200];
+let _vector1: Vec<char> = vec!['x', 'y', 'z'];
+let _vector2: Vec<i32> = vec![0; 5000];
+```
+
+# **Constants**
+
+```
+let n = 20;
+let _ = [0; n];
+
+/*
+Kết quả:
+error: expected item, found keyword `let`
+  |
+  | let n = 20;
+  | ^^^ consider using `const` or `static` instead of `let` for global variables
+
+error: aborting due to previous error
+*/
+```
+
+Cách làm trên đã vi phạm qui tắc trong Rust. Bởi độ dài của array phải được làm rõ trước khi biên dịch ngay cả khi nó là immutable (giá trị bất biến, không thể thay đổi khi gán vào biến), do đó theo 1 nghĩa nào đó có thể hiểu giá trị khi biên dịch là 1 hằng số (constants)
+
+```
+const N: usize = 20;
+let _ = [0; N];
+```
+
+
+# **Discovering the Type of an Expression**
+
+....
+
+
+# **Enumerating Cases**
+
+*Enumerations*
+
+Instead of writing the following code:
+
+```
+const ONE: u8 = 1;
+const TWO: u8 = 2;
+const THREE: u8 = 3;
+const FOUR: u8 = 4;
+const FIVE: u8 = 5;
+let number = ONE;
+if number == ONE {
+    print!("1");
+} else if number == TWO {
+    print!("2");
+} else if number == THREE {
+    print!("3");
+} else if number == FOUR {
+    print!("4");
+} else if number == FIVE {
+    print!("5");
+}
+
+/*
+Kết quả:
+1
+*/
+```
+
+It is better to write the following equivalent code:
+
+```
+enum Number {
+    One,
+    Two,
+    Three,
+    Four,
+    Five,
+}
+let contin = Number::Three;
+match contin {
+    Number::One => print!("\n1"),
+    Number::Two => print!("\n2"),
+    Number::Three => print!("\n3"),
+    Number::Four => print!("\n4"),
+    Number::Five => print!("\n5"),
+}
+
+/*
+Kết quả:
+3
+*/
+```
+
+enums chỉ có thể có 1 giá trị trong list được định nghĩa trước. Những items đó được gọi là variants (biến thể)
+
+```
+enum T {A, B, C, D};
+let n: i32 = T::D;
+let e: T = 1;
+
+
+/*
+
+error[E0308]: mismatched types
+   |
+   |     let n: i32 = T::D;
+   |            ---   ^^^^ expected `i32`, found `T`
+   |            |
+   |            expected due to this
+
+error[E0308]: mismatched types
+   |
+   |     let e: T = 1;
+   |            -   ^ expected `T`, found integer
+   |            |
+   |            expected due to this
+*/
+```
+
+enums không thể ngầm convert qua numbers và ngược lại numbers không thể ngầm convert qua enums
+
+*The match Construct*
+
+The `match` statement is the basic Rust tool to use enumerations, similarly to the `switch` statement in the C language, even if they differ about many aspects.
+
+Các biểu thức (expressions) ở sau keyword `match` không nhất thiết phải nằm trong dấu ngoặc kép (enclosed). Các trường hợp khác nhau được tạo từ pattern sau đó là ký tự `=>` và cuối cùng là biểu thức, những trường hợp này được ngăn cách bởi dấu phẩy (commas)
+ví dụ:
+```
+enum Var {
+    Val1,
+    Val2,
+}
+let x = Var::Val2;
+match x {
+    Var::Val1 => print!("hello"),
+    Var::Val2 => print!("hi"),
+}
+```
+`print!()` là 1 biểu thức hợp lệ. Tuy nhiên `let a = 3;`, `let a = 3` hay `fn empty() {}` không phải biểu thức hợp lệ
+
+
+
+
+```
+enum Number {
+    One,
+    Two,
+    Three,
+    Four,
+    Five,
+}
+let contin = Number::Three;
+match contin {
+    Number::One => let a = 7;,
+    Number::Two => let a = 7,
+    Number::Three => fn name() {},
+    Number::Four => print!("\n4"),
+    Number::Five => print!("\n5"),
+}
+```
+
+Nếu muốn sử dụng biểu câu lệnh không phải biêủ thức hay đánh giá một số biểu thức ở sau `=>` có thể sử dụng block `{}`
+
+```
+enum Continent {
+    Europe,
+    Asia,
+    Africa,
+    America,
+    Oceania,
+}
+let mut contin = Continent::Europe;
+match contin {
+    Continent::Europe => {
+        contin = Continent::Asia;
+        print!("E");
+    }
+    Continent::Asia => {
+        let a = 7;
+    }
+    Continent::Africa => print!("Af"),
+    Continent::America => print!("Am"),
+    Continent::Oceania => print!("O"),
+}
+
+/*
+Kết quả:
+E
+*/
+```
+
+*Relational Operators and Enums*
+
+enums không thể so sánh với toán tử `==` 
+
+```
+enum CardinalPoint {
+    North,
+    South,
+    West,
+    East,
+}
+let direction = CardinalPoint::South;
+if direction == CardinalPoint::North {
+}
+
+/*
+
+
+error[E0369]: binary operation `==` cannot be applied to type `CardinalPoint`
+    |
+    |     if direction == CardinalPoint::North {
+    |        --------- ^^ -------------------- CardinalPoint
+    |        |
+    |        CardinalPoint
+*/
+```
+enums được dùng trong rất nhiều thư viện và cả trong các thư viện của Rust vì vậy không chỉ toán tử `==` mà các toán tử quan hệ khác cũng bị coi là không hợp lệ
+
+
+```
+enum CardinalPoint {
+    North,
+    South,
+    West,
+    East,
+}
+let direction = CardinalPoint::South;
+if CardinalPoint::South < CardinalPoint::North { }
+
+/*
+error[E0369]: binary operation `<` cannot be applied to type `CardinalPoint`
+    |
+    |     if CardinalPoint::South < CardinalPoint::North { }
+    |        -------------------- ^ -------------------- CardinalPoint
+    |        |
+    |        CardinalPoint
+*/
+
+```
+
+*Handling All the Cases*
+
+```
+enum CardinalPoint {
+    North,
+    South,
+    West,
+    East,
+}
+let direction = CardinalPoint::South;
+match direction {
+    CardinalPoint::North => print!("NORTH"),
+    CardinalPoint::South => print!("SOUTH"),
+}
+
+/*
+error[E0004]: non-exhaustive patterns: `CardinalPoint::West` and `CardinalPoint::East` not covered
+    |
+    |     match direction {
+    |           ^^^^^^^^^ patterns `CardinalPoint::West` and `CardinalPoint::East` not covered
+    |
+note: `CardinalPoint` defined here
+    |
+    |     enum CardinalPoint {
+    |          -------------
+...
+    |         West,
+    |         ^^^^ not covered
+    |         East,
+    |         ^^^^ not covered
+    = note: the matched value is of type `CardinalPoint`
+*/
+```
+
+Để có thể biên dịch được, cần phải handle hết các case
+
+```
+enum CardinalPoint {
+    North,
+    South,
+    West,
+    East,
+}
+let direction = CardinalPoint::South;
+match direction {
+    CardinalPoint::North => print!("NORTH"),
+    CardinalPoint::South => print!("SOUTH"),
+    CardinalPoint::East => {},
+    CardinalPoint::West => {},
+}
+```
+
+Đây là 2 biến nhưng nếu có nhiều biến hơn thì sao? để tránh phải handle hết các biến không có tác động có thể dùng `_` (underscore)
+
+```
+enum CardinalPoint {
+    North,
+    South,
+    West,
+    East,
+}
+let direction = CardinalPoint::South;
+match direction {
+    CardinalPoint::North => print!("NORTH"),
+    CardinalPoint::South => print!("SOUTH"),
+    _ => {},
+}
+```
+
+`_` luôn match với tất cả giá trị vì vậy để tránh bị lỗi trong quá trình biên dịch cũng như thực thi cần handle hết các case cần thiết trước. `_` giống như `default` trong C
+
+*Using match with Numbers*
+
+
+```
+
+match "value" {
+    "val" => print!("value "),
+    _ => print!("other "),
+}
+match 3 {
+    3 => print!("three "),
+    4 => print!("four "),
+    5 => print!("five "),
+    _ => print!("other "),
+}
+match '.' {
+    ':' => print!("colon "),
+    '.' => print!("point "),
+    _ => print!("other "),
+}
+
+/*
+other three point
+*/
+
+```
+
+*Enumerations with Data*
+
+```
+enum Result {
+    Success(f64),
+    Failure(u16, char),
+    Uncertainty,
+}
+// let outcome = Result::Success(23.67);
+let outcome = Result::Failure(1200, 'X');
+match outcome {
+    Result::Success(value) => print!("Result: {}", value),
+    Result::Failure(error_code, module) =>
+        print!("Error n. {} in module {}", error_code, module),
+    Result::Uncertainty => {}
+}
+
+/*
+
+Error n. 1200 in module X
+*/
+```
+
+*“match” Expressions*
+
+giống như `if`, `match` cũng là biểu thức 
+
+```
+enum CardinalPoint {
+    North,
+    South,
+    West,
+    East,
+}
+let direction = CardinalPoint::South;
+print!("{}", match direction {
+    CardinalPoint::North => 'N',
+    CardinalPoint::South => 'S',
+    _ => '*',
+});
+
+/*
+
+S
+*/
+```
+
+Nếu thay biểu thức thứ 3 thành `_ => {},` có thể sẽ gặp lỗi `match arms have incompatible types`
