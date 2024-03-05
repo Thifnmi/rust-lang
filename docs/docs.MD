@@ -22,41 +22,41 @@ command line script debug
 rustc $* --color always 2>&1 | more
 ```
 
-# **data types:**
+# **Data types**
 
-*string*
+## *string*
 
 ```
 let x = "my string"
 ```
 
-*integer*
+## *integer*
 
 ```
 let number = 12345
 ```
 
-*float*
+## *float*
 
 ```
 let f = 12.3
 let f = 12.
 ```
 
-*bool*
+## *bool*
 
 ```
 let b = true
 let b = false
 ```
 
-*array*
+## *array*
 
 ```
 let my_array = ["my", "array"]
 ```
 
-*mutable array* (array in array)
+## *mutable array* (array in array)
 
 ```
 let mut my_mutable_array = ["my", "array"];
@@ -69,13 +69,13 @@ this is array.
 */
 ```
 
-*Multidimensional Arrays* (Mảng đa chiều)
+## *Multidimensional Arrays* (Mảng đa chiều)
 
 ```
 let multidimensional_arrays = [[[[]]]]
 ```
 
-*Vector*
+## *Vector*
 
 ```
 let x = vec!["This", "is"];
@@ -133,7 +133,7 @@ else {
 }
 ```
 
-**expression**
+# **expression**
 
 ```
 print!("{}",
@@ -154,7 +154,7 @@ print!("{}",
 
 # **loop**
 
-conditioned loop
+## *conditioned loop*
 
 ```
 while condition {
@@ -162,7 +162,7 @@ while condition {
 }
 ```
 
-infinite loop
+## *infinite loop*
 
 ```
 while true {
@@ -170,7 +170,7 @@ while true {
 }
 ```
 
-couting loop (for)
+## *couting loop (for)*
 
 ```
 for variable in a..b  {
@@ -186,13 +186,13 @@ there is the in keyword, followed by two integer numeric expressions, separated 
 let `<mut>` _arr = ["value 1", "value 2"];
 ```
 
-Arrays of Specified Size
+## *Arrays of Specified Size*
 
 ```
 let `<mut> `_arr = [`<default value>`; `<length>`];
 ```
 
-Multidimensional Arrays
+## *Multidimensional Arrays*
 
 ```
 let `mut` arr = [[[[["ahihi"], 100], 17], 5], 20];
@@ -275,7 +275,7 @@ This line contains a sentence.
 
 # **Using Primitive Types**
 
-*Non-Decimal Numeric Bases*
+## *Non-Decimal Numeric Bases*
 
 ```
 let hexadecimal = 0x10;
@@ -290,7 +290,7 @@ Kết quả:
 */
 ```
 
-*Underscore in Numeric Literals (_)
+## *Underscore in Numeric Literals (_)*
 
 ```
 let one_billion = 1_000_000_000;
@@ -319,7 +319,7 @@ Kết quả:
 
 # **Number**
 
-*Signed Integer Numbers* // Số nguyên có dấu
+## *Signed Integer Numbers* // Số nguyên có dấu
 
 có 2 loại là integer và float
 
@@ -336,7 +336,7 @@ i8 cho phép biểu diễn 256 giá trị tương đương 2^8 và trong khoản
 
 chỉ có thể thực hiện biểu thức toán tử giữa các biến cùng kiểu giá trị
 
-*Unsigned Integer Numbers* // Số nguyên không dấu
+## *Unsigned Integer Numbers* // Số nguyên không dấu
 
 Giống như signed integer, unsigned integer cũng có các dạng 8-bit unsigned integer, 16-bit unsigned integer, 32-bit unsigned integer, 64-bit unsigned integer
 u8 cũng cho phép biểu diễn 256 giá trị giống như i8 tuy nhiên chỉ cho phép giá trị nguyên dương và trong khoảng từ 0 -> 255
@@ -353,7 +353,7 @@ Rust không hỗ trợ 16-bit system nhưng lại hỗ trợ cả 32-bit system 
 
 Việc lựa chọn 32-bit hay 64-bit không liên quan tới việc tối ưu code mà nó phụ thuộc vào việc sau khi biên dịch sẽ chạy trên hệ thống nào? (32-bit hay 64-bit). Với mục đích đó, Rust có thêm 2 loại là isize và usize
 
-*Float*
+## *Float*
 Trong rust có 2 kiểu float là f32 và f64 tương đương với 32-bit floating-point numbers và 64-bit floating-point numbers
 f32 hiển thị 7 số phần thập phân, f64 hiển thị 16 số phần thập phân
 
@@ -392,7 +392,7 @@ Kết quả:
 lúc này giá trị của biến a = -12 vì 500 không thể dùng 8 bit để biểu diễn (2^8 = 256) mà phải dùng ít nhất 9 bit (2^9=512) để biểu diễn ...
 tương tự ...
 
-*Type suffixes of numeric literals*
+## *Type suffixes of numeric literals*
 
 ```
 let _a: i16 = -150;
@@ -572,7 +572,7 @@ let _ = [0; N];
 
 # **Enumerating Cases**
 
-*Enumerations*
+## *Enumerations*
 
 Instead of writing the following code:
 
@@ -654,7 +654,7 @@ error[E0308]: mismatched types
 
 enums không thể ngầm convert qua numbers và ngược lại numbers không thể ngầm convert qua enums
 
-*The match Construct*
+## *The match Construct*
 
 The `match` statement is the basic Rust tool to use enumerations, similarly to the `switch` statement in the C language, even if they differ about many aspects.
 
@@ -672,8 +672,6 @@ match x {
 }
 ```
 `print!()` là 1 biểu thức hợp lệ. Tuy nhiên `let a = 3;`, `let a = 3` hay `fn empty() {}` không phải biểu thức hợp lệ
-
-
 
 
 ```
@@ -724,7 +722,7 @@ E
 */
 ```
 
-*Relational Operators and Enums*
+## *Relational Operators and Enums*
 
 enums không thể so sánh với toán tử `==` 
 
@@ -774,7 +772,7 @@ error[E0369]: binary operation `<` cannot be applied to type `CardinalPoint`
 
 ```
 
-*Handling All the Cases*
+## *Handling All the Cases*
 
 ```
 enum CardinalPoint {
@@ -845,7 +843,7 @@ match direction {
 
 `_` luôn match với tất cả giá trị vì vậy để tránh bị lỗi trong quá trình biên dịch cũng như thực thi cần handle hết các case cần thiết trước. `_` giống như `default` trong C
 
-*Using match with Numbers*
+## *Using match with Numbers*
 
 
 ```
@@ -872,7 +870,7 @@ other three point
 
 ```
 
-*Enumerations with Data*
+# *Enumerations with Data*
 
 ```
 enum Result {
@@ -895,7 +893,7 @@ Error n. 1200 in module X
 */
 ```
 
-*“match” Expressions*
+## *“match” Expressions*
 
 giống như `if`, `match` cũng là biểu thức 
 
@@ -921,7 +919,7 @@ S
 
 Nếu thay biểu thức thứ 3 thành `_ => {},` có thể sẽ gặp lỗi `match arms have incompatible types`
 
-*Use of Guards in match Constructs*
+## *Use of Guards in match Constructs*
 
 ```
 for n in -2..5 {
@@ -944,3 +942,369 @@ for n in -2..5 {
 4 is plural.
 */
 ```
+
+# **Using Heterogeneous Data Structures** Cấu trúc dữ liệu không đồng nhất
+
+## *Tuples*
+
+Không giống như arrays hay vector, tuple có thể lưu trữ đối một hay nhiều object không có cùng kiểu dữ liệu
+
+```
+let data = (10000000, 183.19, 'Q');
+let copy_of_data = data;
+print!("{}, {}, {}", data.0, copy_of_data.1, data.2);
+
+
+/*
+10000000, 183.19, Q
+*/
+```
+
+ngoài ra data type của tuples có thể được định nghĩa rõ ràng 
+
+```
+let data: (i32, f64, char) = (10000000, 183.19, 'Q');
+```
+
+giống như array, tuple cũng có thể truy vấn dữ liệu từng item bên trong bằng cách
+
+```
+data.<index>
+```
+
+Và dữ liệu của tuple cũng có thể thay đổi được
+
+```
+let mut data = (10000000, 183.19, 'Q'); data.0 = -5;
+data.2 = 'x';
+print!("{}, {}, {}", data.0, data.1, data.2);
+
+
+/*
+-5, 183.19, x
+*/
+```
+
+Điểm khác nhau giữa array và tuple là tuple không thể truy cập bằng variable index
+
+
+```
+let array = [12, 13, 14];
+let tuple = (12, 13, 14);
+let i = 0;
+print!("{}", array[i]);
+print!("{}", tuple.i);
+
+/*
+
+error[E0609]: no field `i` on type `({integer}, {integer}, {integer})`
+  |
+  |     print!("{}", tuple.i);
+  |                        ^
+*/
+```
+
+## *Structs*
+
+tuples rất hữu ích khi không có quá nhiều item, nhưng khi có nhiều thì rất dễ nhầm lẫn và code trở nên khó hiểu hơn
+
+```
+let data = (10, 'x', 12, 183.19, 'Q', false, -9);
+print!("{}", data.2 + data.6);
+                ^        ^
+                12      -9
+/*
+
+3
+*/
+```
+
+Ngoài ra kiểu dữ liệu của từng ittem trong tuple được định nghĩa bởi chuỗi các field, nếu nhiều field thì sẽ quá dài để định nghĩa và khó để hiểu
+
+```
+let data1 = (10, 'x', 12, 183.19, 'Q', false, -9);
+let mut data2: (u16, char, i16, f64, bool, char, i16);
+data2 = data1;
+
+/*
+Đoạn code trên lỗi do nhầm kiểu giá trị giữa index 4 và 5
+*/
+```
+Ngoài ra nếu thêm 1 field vào đầu của tuple thì tất cả index object của tuple phải tăng thêm 1 trong code ví dụ `data.2` phải tăng lên thành `data.3`
+
+Do đó, sẽ rất hữu ích nếu có câu lệnh định nghĩa cấu trúc, khai báo tên, gán nhãn cho các field của cấu trúc đó
+
+```
+struct ExampleStruct {
+    integer: i32,
+    fractional: f32,
+    character: char,
+    five_bytes: [u8; 5],
+}
+
+fn main() {
+    let data = ExampleStruct {
+        integer: 10_000_000,
+        fractional: 183.19,
+        character: 'Q',
+        five_bytes: [9, 0, 250, 60, 200],
+    };
+    print!("{}, {}, {}, {}", data.five_bytes[3], data.integer, data.fractional, data.character);
+}
+
+/*
+
+60, 10000000, 183.19, Q
+*/
+```
+
+Nếu variable được định nghĩa là mutable thì giá trị các trường của biến có thể được thay đổi 
+
+```
+struct ExampleStruct {
+    integer: i32,
+    fractional: f32,
+}
+let mut data = ExampleStruct {
+    integer: 10,
+    fractional: 183.19,
+};
+data.fractional = 8.2;
+print!("{}, {}", data.fractional, data.integer);
+
+/*
+8.2, 10
+*/
+```
+
+Giống như tuple, vì vậy có thể khỏi tạo empty structs
+
+## *Tuple-Structs*
+
+Là sự kết hợp giữa `tuples` và `structs`. kiểu cấu trúc này có tên, phải được định nghĩa trước giống như `structs` nhưng lại không có tên các `fields` giống `tuples`
+
+```
+struct SomeData (
+    i32,
+    f32,
+    char,
+    [u8; 5],
+);
+let data = SomeData (
+    10_000_000,
+    183.19,
+    'Q',
+    [9, 0, 250, 60, 200],
+);
+print!("{}, {}, {}, {}", data.2, data.0, data.1, data.3[2]);
+/*
+
+Q, 10000000, 183.19, 250
+*/
+```
+
+## *Lexical Conventions*
+
+```
+const MAXIMUM_POWER: u16 = 600;
+enum VehicleKind {
+    Motorcycle,
+    Car,
+    Truck,
+}
+struct VehicleData {
+    kind: VehicleKind,
+    registration_year: u16,
+    registration_month: u8,
+    power: u16,
+}
+let vehicle = VehicleData {
+    kind: VehicleKind::Car,
+    registration_year: 2003,
+    registration_month: 11,
+    power: 120,
+};
+if vehicle.power > MAXIMUM_POWER {
+    println!("Too powerful");
+}
+```
+
+    - Tên của biến constaints chỉ cho phép khí tự viết hoa và được nối với nhau bằng dấu underscore `_`
+    - Tên hàm, thư viện thông thường và enum variant bao gôm các từ được ghép với nhau và viết hoa chứ cái đầu tiên mỗi từ (Camel style convention)
+    - Các biến khác chỉ sử dụng chữ cái viết thường, giữa các từ nối với nhau bằng dấu underscore `_`
+
+
+# **Defining Functions**
+
+## *Defining and Invoking a Function*
+
+
+```
+fn line() {
+    println!("----------");
+}
+line();
+line();
+line();
+
+/*
+----------
+----------
+----------
+*/
+```
+
+## *Functions Defined After Their Use*
+
+Not use with variable
+```
+f();
+fn f() {}
+```
+
+## *Functions Shadowing Other Functions*
+
+```
+{
+    fn f() {
+        print!("a");
+    }
+    f();
+    f();
+}
+{
+    f();
+}
+
+/*
+
+aab
+*/
+```
+
+```
+fn f() {
+    print!("1");
+}
+fn main() {
+    f();
+    f();
+    fn f() {
+        print!("3");
+    }
+}
+
+f();
+fn f() {
+    print!("2");
+}
+/*
+232
+*/
+```
+
+## *Passing Arguments to a Function*
+
+```
+fn print_sum(addend1: f64, addend2: f64) {
+    println!("{} + {} = {}", addend1, addend2, addend1 + addend2);
+}
+fn main() {
+    print_sum(3.0, 5.0);
+    print_sum(3.2, 5.1);
+}
+/*
+
+3 + 5 = 8
+3.2 + 5.1 = 8.3
+*/
+```
+
+
+## *Passing Arguments by Value*
+
+
+```
+fn print_double(mut x: f64) {
+    x *= 2.0;
+    println!("value in func print_double {}", x);
+}
+fn main() {
+    let x = 4.0;
+    print_double(x);
+    print!("{}", x);
+}
+```
+
+## *Returning a Value from a Function*
+
+```
+fn double(x: f64) -> f64 {
+    x * 2.0
+}
+fn main() {
+    print!("{}", double(17.3));
+}
+
+/*
+34.6
+*/
+```
+
+```
+fn f1(x: i32) {}
+fn f2(x: i32) -> () {}
+```
+
+`f1` `f2` is a same function, both return an empty tuple
+
+This code is valid
+```
+fn f1() -> i32 { 4.5; "abc"; 73i32 }
+fn f2() -> i32 { 4.5; "abc"; 73 }
+fn f3() -> i32 { 4.5; "abc"; 73 + 100 }
+```
+but this code is not
+
+```
+fn f1() -> i32 { 4.5; "abc"; false }
+fn f2() -> i32 { 4.5; "abc"; () }
+fn f3() -> i32 { 4.5; "abc"; {} }
+fn f4() -> i32 { 4.5; "abc"; }
+
+/*
+
+`mismatched type errors`
+f1: expected i32, found bool
+f2,f3,f4: expected i32, found ()
+*/
+```
+
+## *Early Exit*
+
+```
+fn f(x: f64) -> f64 {
+    if x <= 0. {
+        return 0.;
+    }
+    x + 3.
+}
+print!("{} {}", f(1.), f(-1.));
+
+/*
+
+4 0
+*/
+```
+
+```
+fn f(x: i32) {
+    if x <= 0 { return; }
+    if x == 4 { return (); }
+    if x == 7 { return {}; }
+    print!("{}", x);
+}
+f(5);
+```
+
+## *Returning Several Values*
