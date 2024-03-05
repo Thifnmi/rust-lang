@@ -920,3 +920,27 @@ S
 ```
 
 Nếu thay biểu thức thứ 3 thành `_ => {},` có thể sẽ gặp lỗi `match arms have incompatible types`
+
+*Use of Guards in match Constructs*
+
+```
+for n in -2..5 {
+    println!("{} is {}.", n, match n {
+        0 => "zero",
+        1 => "one",
+        _ if n < 0 => "negative",
+        _ => "plural",
+    });
+}
+
+/*
+
+-2 is negative.
+-1 is negative.
+0 is zero.
+1 is one.
+2 is plural.
+3 is plural.
+4 is plural.
+*/
+```
