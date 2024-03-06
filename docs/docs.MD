@@ -1307,4 +1307,166 @@ fn f(x: i32) {
 f(5);
 ```
 
-## *Returning Several Values*
+## *Returning Several Values* // 1 func trả về nhiều giá trị
+
+có thể dùng tuple
+
+```
+fn several_values(dividend: i32, divisor: i32) -> (i32, i32){
+    (dividend / divisor, dividend % divisor)
+}
+println!("{:?}", several_values(12, 9))
+
+/*
+
+(1, 3)
+*/
+```
+
+hoặc có thể trả về enum, struct, tuple struct, array, vector
+
+```
+enum E { E1, E2 }
+struct S { a: i32, b: bool }
+struct TS (f64, char);
+fn f1() -> E { E::E2 }
+fn f2() -> S { S { a: 49, b: true } }
+fn f3() -> TS { TS (4.7, 'w') }
+fn f4() -> [i16; 4] { [7, -2, 0, 19] }
+fn f5() -> Vec<i64> { vec![12000] }
+print!("{} ", match f1() { E::E1 => 1, _ => -1 }); print!("{} ", f2().a);
+print!("{} ", f3().0);
+print!("{} ", f4()[0]);
+print!("{} ", f5()[0]);
+/*
+-1 49 4.7 7 12000
+*/
+```
+
+## *Change a Variable of the Caller*
+
+Thông thường 
+
+```
+let mut arr = [5, -4, 9, 0, -7, -1, 3, 5, 3, 1];
+for i in 0..10 {
+    if arr[i] < 0 {
+        arr[i] *= 2;
+    }
+}
+print!("{:?}", arr);
+
+/*
+[5, -8, 9, 0, -14, -2, 3, 5, 3, 1]
+*/
+```
+
+Chuyển sang thành func để tái sử dụng
+
+```
+fn double_negatives(mut a: [i32; 10]) { for i in 0..10 {
+    if a[i] < 0 {
+        a[i] *= 2;
+        }
+    }
+}
+let mut arr = [5, -4, 9, 0, -7, -1, 3, 5, 3, 1];
+double_negatives(arr);
+print!("{:?}", arr);
+
+/*
+[5, -4, 9, 0, -7, -1, 3, 5, 3, 1]
+*/
+```
+
+Kết qủa là array vẫn được giữ nguyên. bởi vì khi gọi hàm giá trị của array đã được sao chép qua array khác. khi hàm xử lý xong các giá trị được sao chép (cũng đã qua xử lý) cũng sẽ bị hủy vì vậy giá trị của hàm gốc vẫn còn nguyên và cũng có thể bỏ khai báo `mut` khi khai báo mảng. Cách khắc phục
+
+```
+fn double_negatives(mut a: [i32; 10]) -> [i32; 10] {
+    for i in 0..10 {
+        if a[i] < 0 {
+            a[i] *= 2;
+        }
+    }
+    a
+}
+let mut arr = [5, -4, 9, 0, -7, -1, 3, 5, 3, 1];
+arr = double_negatives(arr);
+print!("{:?}", arr);
+
+/*
+[5, -8, 9, 0, -14, -2, 3, 5, 3, 1]
+*/
+```
+
+Kết quả lúc này đã chính xác. tuy nhiên có 1 nhược điểm là tất cả data được copy qua. func được gọi sẽ copy tất cả data vào func. lúc này data đó sẽ giống như local data của data, khi xử lý xong data đó sẽ được copi ngược lại data ban đầu. điều này gây lãng phí tài nguyên
+
+## *Passing Arguments by Reference*
+
+
+```
+fn double_negatives(a: &mut [i32; 10]) {
+    for i in 0..10 {
+        if (*a)[i] < 0 {
+            (*a)[i] *= 2;
+        }
+    }
+}
+fn main() {
+    let mut arr = [5, -4, 9, 0, -7, -1, 3, 5, 3, 1];
+    double_negatives(&mut arr);
+    print!("{:?}", arr);
+}
+
+/*
+[5, -8, 9, 0, -14, -2, 3, 5, 3, 1]
+*/
+```
+
+kết quả lúc này đã chính xác, nhưng không cần copy data
+lúc này xuất hiện 2 ký tự mới `*` và `&`. Những thứ này trong Rust có ý nghĩa giống với trong C, `&` mang ý nghĩa `địa chỉ của object trong RAM` *the (memory) address of the object* và `*` là `giá trị của object trong RAM` *the object that is present at the (memory) address*
+
+
+## *Using References*
+
+```
+let a = 15;
+let ref_a = &a;
+print!("{} {} {} {}", a, *ref_a, ref_a, &ref_a);
+
+/*
+15 15 15 15
+*/
+```
+
+```
+let a = &&&7;
+print!("{} {} {} {}", ***a, **a, *a, a);
+
+/*
+7 7 7 7
+*/
+```
+
+## *Mutability of References*
+
+
+```
+let mut a: i32 = 10;
+let mut b: i32 = 20;
+let mut p: &mut i32 = &mut a;
+println!("{} {}", *p, p);
+*p += 1;
+println!("{} {}", *p, p);
+p = &mut b;
+println!("{} {}", *p, p);
+*p += 1;
+println!("{} {}", *p, p);
+
+/*
+10 10
+11 11
+20 20
+21 21
+*/
+```
