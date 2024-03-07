@@ -1470,3 +1470,173 @@ println!("{} {}", *p, p);
 21 21
 */
 ```
+
+# **Defining Generic Functions and Structs**
+
+## *Need of Generic Functions*
+
+Rust kiểm tra kiểu dữ liệu nghiêm ngặt, vì vậy khi định nghĩa function cần xác định chính xác kiểu dữ liệu của parameters
+
+```
+fn square_root(x: f32) -> f32 {}
+```
+
+ví dụ khi gọi tới hàm `square_root` cần phải truyền chính xác kiểu dữ liệu như square_root(16.5f32) hay square_root(16.5f64 as f32) và không được truyền kiểu khác như square_root(16.5f64)
+
+điều này gây bất tiện cho chính người viết functions cũng như người sử dụng gọi tới function đó. ví dụ nếu quyết định function đó sử dụng kiểu i16, nhưng mỗi khi gọi vào lại là kiểu i32 thì tốt nhất là nên thay đổi cách định nghĩa function
+
+
+```
+fn f(ch: char, num1: i16, num2: i16) -> i16 {
+    if ch == 'a' {
+        num1
+    }
+    else {
+        num2
+    }
+}
+
+print!("{}", f('a', 37, 41));
+
+/*
+37
+*/
+```
+
+```
+fn f(ch: char, num1: i16, num2: i16) -> i16 {
+    if ch == 'a' {
+        num1
+    }
+    else {
+        num2
+    }
+}
+
+print!("{}", f('a', 37.9, 41));
+
+/*
+error
+*/
+
+/*
+convert data to i16
+*/
+print!("{}", f('a', 37.9 as i16, 41.5 as i16));
+```
+
+đoạn code trên sẽ báo lỗi và khi đó buộc phải convert về i16 và kết quả vẫn sẽ là 37 thay vì 37.9
+
+nếu thay đổi cách định nghĩa function (thay thế i16 bằng f32 hoặc f64) thì các vấn đề được giải quyết. tuy nhiên mỗi khi call tới function phải sử dụng data dạng float
+
+## *Defining and Using Generic Functions*
+
+```
+fn f1<T>(ch: char, num1: T, num2: T) -> T {
+    if ch == 'a' { num1 } else { num2 }
+}
+
+// thay thế tham số `T` với kiểu dữ liệu i16
+let a: i16 = f1::<i16>('a', 37, 41);
+
+// thay thế tham số `T` với kiểu dữ liệu f64
+let b: f64 = f1::<f64>('b', 37.2, 41.1);
+println!("{} {}", a, b);
+
+/*
+37 41.1
+*/
+```
+
+ở đây phía sau tên function có ký từ `T` ở phía trong ngoặc nhọn (angular brackets `<>`). đây là tham số kiểu của function
+
+Điều đó có nghĩa những function được khai báo như thế không phải là function cụ thể mà là hàm chung được tham số hóa bởi tham số `T`. Hàm như vậy sẽ chỉ trở thành hàm cụ thể (concrete function) khi và chỉ khi biên dịch với tham số được định nghĩa cụ thể thay cho tham số `T`
+
+Tham số T được định nghĩa và chỉ sử dụng được trong phạm vi của function.
+với ví dụ bên trên nó được sử dụng 3 lần trong function và nó cũng có thể được sử dụng trong phần body của function chứ không phải bất kỳ nơi nào khác. trong khi tham số `ch` thuộc kiểu `char` thì cả tham số num1, num2 và giá trị của hàm đêù thuộc dạng chung `T`. khi sử dụng hàm như vậy cần phải thay thế tham số `T` bằng một kiểu cụ thể.
+
+khi kiểu dữ liệu i16 được sử dụng điều đó có nghĩa là 2 số nguyên truyền vào phải có kiểu dữ liệu i16 và kết quả trả về của function cũng sẽ có kiểu i16
+khi kiểu dữ liệu f64 được sử dụng điều đó có nghĩa là 2 số thập phân truyền vào phải có kiểu dữ liệu f64 và kết quả trả về của function cũng sẽ có kiểu f64
+nếu tham số của function hay kiểu giá trị trả về hoặc cả 2 đều bị hoán đổi thì khi biên dịch sẽ xảy ra lỗi `mismatched types`
+
+Như vậy khi code library/ các function dùng chung sẽ hạn chế các function vô nghĩa, chúng có thể viết application code sử dụng nó với 2 loại riêng biệt, các loại khác cũng có thể dễ dàng được xử dụng mà không cần phải thay đổi code library/ các function dùng chung
+
+Trong `C` không cho phép những hàm dùng chung nhưng `C++` thì có và được gọi là function templates
+
+## *Inferring the Parametric Types*
+
+đoạn code phía trên chạy tốt nhưng có thể tối giản hơn được
+
+```
+fn f1<T>(ch: char, num1: T, num2: T) -> T {
+    if ch == 'a' { num1 } else { num2 }
+}
+
+let a: i16 = f1('a', 37, 41);
+
+let b: f64 = f1('b', 37.2, 41.1);
+println!("{} {}", a, b);
+
+/*
+37 41.1
+*/
+```
+
+các mệnh đề như `::<i16>` và `::<f64>` đã bị loại bỏ nhưng kết quả vẫn tương đương. đúng vậy, khi phân tích cú pháp biên dịch của hàm chung các giá trị được truyền vào sẽ được sử dụng để xác định kiểu của tham số
+Như có vẻ như, các mệnh đề ::<i16> và ::<f64> đã bị xóa, dù sao cũng có được một chương trình tương đương. Thật vậy, trình biên dịch, khi phân tích cú pháp lệnh gọi hàm chung, sử dụng các loại giá trị được truyền làm đối số để xác định tham số loại.
+Điều này có nghĩa là kiểu tham số được suy ra từ kiểu của các giá trị được sử dụng trong biểu thức chứa lệnh gọi hàm chung, đương nhiên các loại khác nhau được sử dụng phải nhất quán.
+
+```
+fn f<T>(a: T, _b: T) -> T { a }
+let _a = f(12u8, 13u8);
+let _b = f(12i64, 13i64);
+let _c = f(12i16, 13u16);
+let _d: i32 = f(12i16, 13i16);
+```
+
+ví dụ này chương trình sẽ gặp lỗi ở dòng lệnh `let _c = f(12i16, 13u16);` bởi 2 giá trị truyền vào có kiểu dữ liệu khác nhau và `let _d: i32 = f(12i16, 13i16);` vì kiểu dữ liệu trả về và biến được gán giá trị có kiểu khác nhau
+
+nếu muốn tham số hóa một hàm có nhiều tham số có kiểu dữ liệu khác nhau hay chỉ định kiểu dữ liệu cho tham số đó
+
+
+```
+fn f<Param1, Param2>(_a: Param1, _b: Param2) {}
+f('a', true);
+f(12.56, "Hello");
+f((3, 'a'), [5, 6, 7]);
+```
+
+## *Defining and Using Generic Structs*
+
+```
+struct S<T1, T2> {
+    c: char,
+    n1: T1,
+    n2: T1,
+    n3: T2,
+}
+let _s = S { c: 'a', n1: 34, n2: 782, n3: 0.02 };
+```
+Định nghĩa struct chung có tên là S nhận vào 2 tham số hóa là T1 và T2. Tham số thứ nhất được sử dụng 2 lần bởi 2 field trong struct trong khi tham số thứ 2 chỉ được sử dụng bởi 1 field
+
+```
+struct TS<T1, T2>(char, T1, T1, T2);
+let _se = TS('a', 34, 782, 0.02);
+```
+tương tự như phía trên nhưng thay vì struct thì ví dụ này là tuple-struct
+
+Ngoài ra cũng có thể biểu diễn việc tham số hóa cho struct rõ ràng hơn
+
+```
+struct S<T1, T2> { c: char,
+    n1: T1,
+    n2: T1,
+    n3: T2,
+}
+let _s = S::<u16, f32> { c: 'a', n1: 34, n2: 782, n3: 0.02 };
+
+struct TS<T1, T2> (char, T1, T1, T2);
+let _ts = TS::<u16, f32> ('a', 34, 782, 0.02);
+```
+
+structs chung (generic structs) không được cho phép trong `C` nhưng trong `C++` thì được. chúng được gọi là `class templates` và `the struct templates`.
