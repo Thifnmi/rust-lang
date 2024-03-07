@@ -1640,3 +1640,172 @@ let _ts = TS::<u16, f32> ('a', 34, 782, 0.02);
 ```
 
 structs chung (generic structs) không được cho phép trong `C` nhưng trong `C++` thì được. chúng được gọi là `class templates` và `the struct templates`.
+
+
+## *Genericity Mechanics*
+
+để hiểu rõ hơn về cách thức hoạt động hãy thử đặt mình vào vị trí của trình biên dịch để theo dõi quá trình biên dịch. về mặt khái niệm quá trình biên dịch được chia làm nhiều giai đoạn. hãy thử sức với đoạn code này 
+
+```
+fn swap<T1, T2>(a: T1, b: T2) -> (T2, T1) { (b, a) }
+let x = swap(3i16, 4u16);
+let y = swap(5f32, true);
+print!("{:?} {:?}", x, y);
+```
+
+giai đoạn đầu tiên chỉ scan source code, mỗi khi tìm thấy hàm chung (generic function) nó sẽ load qua cấu trúc dữ liệu của nó bên trong cả function, ở giai đoạn này chỉ kiểm tra lỗi cú pháp
+giai đoạn thứ 2 source code được scan lại một lần nữa, mỗi khi biên dịch gặp lệnh gọi hàm chung (generic function) ...
+
+## *Generic Arrays and Vectors*
+
+Ngay từ đầu array và vector đã là những dạng chung, trong thực tế array là 1 phần của Rust còn vector là cấu trúc được xác định trong các thư viên của Rust
+
+## *Generic Enums*
+
+Enum cũng có thể có dạng chung
+
+```
+enum Result1<SuccessCode, FailureCode> {
+    Success(SuccessCode),
+    Failure(FailureCode, char),
+    Uncertainty,
+}
+fn main() {
+    let mut _res = Result1::Success::<u32, u16>(12u32);
+    _res = Result1::Uncertainty;
+    _res = Result1::Failure(0u16, 'd');
+}
+```
+
+generic enum được sử dụng nhiều trong các thư viện của Rust
+một trong số những vấn đề tiêu biểu dùng enum để giải quyết trong Rust đó là nếu 1 function có thể bị lỗi thì nó phải làm gì?
+
+ví dụ hàm pop() để loại bỏ item cuối cùng của vector và trả về item nếu tồn tại. nhưng nếu `vec![0; 0].pop()` (xóa item khỏi vector rỗng) thì làm gì?
+một vài ngôn ngữ thì không xác định hành vi này, nó có thể dẫn tới sự cố hoặc kết quả không đoán trước được. Nhưng trong Rust thì tránh càng nhiều hành vi không được xác định trước thì càng tốt
+một số ngôn ngữ thì thì có `exception`, khi đó các hành vi không xác định sẽ được xử lý bởi đoạn code trong block hoặc bởi lời gọi hàm hiện tại và cũng có thể không đuộc xử lý dẫn tới sự cố. Trong Rust thì không có khái niệm exception.
+một vài ngôn ngữ khác thì trả về giá trị `null` nhưng vector có thể chứa hầu hết mọi loại kiểu giá trị và trong đó cũng có nhiều loại không có giá trị `null`
+
+Vậy trong Rust xử lý như nào?
+
+```
+let mut v = vec![11, 22, 33]; for _ in 0..5 {
+    let item: Option<i32> = v.pop();
+    match item {
+        Some(number) => print!("{}, ", number),
+        None => print!("#, "),
+    }
+}
+
+/*
+33, 22, 11, #, #,
+*/
+```
+
+v là vector có 3 giá trị
+vòng for sẽ lặp lại 5 lần, mỗi lần sẽ remove 1 item trong vector v, nếu thành công sẽ in ra giá trị của item, nếu thất bại in ra `#`
+
+với `Option` là generic enum được định nghĩa bởi thư viện tiêu chuẩn của Rust
+
+```
+enum Option<T> {
+    Some(T),
+    None,
+}
+```
+
+
+## *Error Handling*
+
+Trong thư viện của Rust cũng đã có 1 số generic enum để handle trường hợp function không trả về được đúng giá kiểu giá trị mong muốn
+
+```
+fn divide(numerator: f64, denominator: f64) -> Result<f64, String> {
+    if denominator == 0.0 { Err(format!("Divide by zero")) } else { Ok(numerator / denominator) }
+}
+fn main() {
+    print!("{:?}, {:?}", divide(8.0, 2.0), divide(8.0, 0.0));
+}
+
+/*
+Ok(4.0), Err("Divide by zero")
+*/
+
+```
+
+Tương tự `Result` cũng giống như `Option` đều là generic enum trong thư viện tiêu chuẩn của Rust. tuy nhiên `Option` không có giá trị nào được thể hiện khi không có kết quả còn `Result` có thể thêm mô tả khi thực hiện gặp lỗi
+
+```
+enum Result<T, E> {
+    Ok(T),
+    Err(E),
+}
+```
+
+ở ví dụ trên T có dạng f64 vì vậy kết quả của function phải là f64 và E là String vì chỉ muốn hiển thị message. các kết quả trên được in ra dưới dạng thông tin debug. tuy nhiên trong production điều đó là không được chấp nhận
+
+```
+fn divide(numerator: f64, denominator: f64) -> Result<f64, String> {
+    if denominator == 0.0 { Err(format!("Divide by zero")) } else { Ok(numerator / denominator) }
+}
+
+fn show_divide(num: f64, den: f64) {
+    match divide(num, den) {
+        Ok(val) => println!("{} / {} = {}", num, den, val),
+        Err(msg) => println!("Cannot divide {} by {}: {}", num, den, msg),
+    }
+}
+
+fn main() {
+    show_divide(8.0, 2.0);
+    show_divide(8.0, 0.0);
+}
+
+/*
+8/2= 4
+Cannot divide 8 by 0: Divide by zero
+*/
+```
+
+## *Enum Standard Utility Functions*
+
+`Result` và `Option` là 2 thư viện tiêu chuẩn cho phép nắm bắt linh hoạt và hiệu quả tất cả các trường hợp có thể xảy ra trong quá trình code thực tế. tuy nhiên sử dụng `match` để so sánh gặp khá nhiều bất tiện. vì vậy trong thư viện tiêu chuẩn có một vài function để giải mã giá trị của `Result` và `Option`
+
+
+```
+fn divide(numerator: f64, denominator: f64) -> Result<f64, String> {
+    if denominator == 0.0 { Err(format!("Divide by zero")) } else { Ok(numerator / denominator) }
+}
+
+fn main() {
+    let r1 = divide(8.0, 2.0);
+    let r2 = divide(8.0, 0.0);
+    println!("{} {}", r1.is_ok(), r2.is_ok());
+    println!("{} {}", r1.is_err(), r2.is_err());
+    println!("r1 value: {}", r1.unwrap());
+    println!("r2 value: {}", r2.unwrap());
+}
+
+/*
+true false
+false true
+r1 value: 4
+thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: "Divide by zero"'
+*/
+```
+
+`is_ok()` trả về `true` nếu `Ok()` của `Result` được áp dụng và ngược lại `is_er()` trả về `true` nếu `Err()` của `Result` được áp dụng. điều này có nghĩa là `is_err` và `! is_ok` trả về kết quả giống nhau
+`unwrap()` trả về giá trị của biến khi `Ok()` của `Result` được áp dụng
+`unwrap()` cũng là 1 function của Option enum. khi đó có thể lấy ra giá trị của cả vector như sau 
+
+```
+let mut v = vec![11, 22, 33];
+for _ in 0..v.len() {
+    print!("{}, ", v.pop().unwrap())
+}
+
+/*
+33, 22, 11, 
+*/
+```
+
+`unwrap()` được sử dụng nhiều trong Rust bỏi nó nhanh và gọn
