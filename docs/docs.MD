@@ -1809,3 +1809,97 @@ for _ in 0..v.len() {
 ```
 
 `unwrap()` được sử dụng nhiều trong Rust bỏi nó nhanh và gọn
+
+# **Allocating Memory**
+
+## *The Various Kinds of Allocation*
+
+để hiểu rõ hơn về Rust cũng như các ngôn ngữ lập trình hệ thống khác ví dụ như `C`, cần phải hiểu rõ các khái niệm khác nhau về  `memory allocation`, `static allocation`, `stack allocation`, `heap allocation`
+
+
+## *Linear Addressing*
+
+trong bất kỳ phần cứng máy tính nào đều có 1 thứ dùng để đọc và ghi nó được gọi là RAM, bao gồm các chuỗi bytes dài và có thể truy cập.  bytes đầu tiên trong RAM có vị trí là 0 trong khi byte cuối cùng có vị trí là kích thước bộ nhớ -1
+
+nói một cách đơn giản thì hiện tại chúng ta có 2 loại máy tính
+    - những thứ tại 1 thời điểm chỉ có thể chạy 1 tiến trình và tiến trình đó sử dụng trực tiếp bộ nhớ vật lý được gọi là `hệ thống bộ nhớ thưc (real-memory systems)`
+    - những hệ thống có thể chạy được đa chương trình, cung cấp không gian địa chỉ ảo cho mỗi chương trình chạy được gọi là `hệ thống bộ nhớ ảo (vitual-memory systems)`
+
+...
+
+## *Static Allocation*
+
+```
+static _A: u32 = 3;
+static _B: i32 = -1_000_000;
+static _C: f64 = 5.7e10;
+static _D: u8 = 200;
+```
+
+`static` giống như `let`, cả 2 đều dùng để khởi tạo biến và tùy ý khởi tạo. tuy nhiên vẫn có những điểm khác biêt:
+    - `static` sử dụng `static allocation` trong khi `let` sử dụng `stack allocation`
+    - `static` yêu cầu kiểu dữ liệu của biến, trong khi `let` thì không với `let` đó là 1 option
+    - code thông thường không thể thay đổi giá trị của biến `static` ngay cả khi cả khi có `mut`. điều này vì lý do an toàn, do vậy các biến `static` trong Rust thường không thể thay đổi
+    - qui tắc đặt tên biến static: chỉ chứa các ký tự viết hoa và ngăn cách các từ bằng underscore `_`, nếu vi phạm khi biên dịch sẽ có cảnh báo được đưa ra
+
+1 nhược điểm của `static allocation` là không thể tạo được hàm đệ quy (các hàm trực tiếp hoặc gián tiếp gọi chúng)
+1 nhược điểm nữa là nếu tất cả các biến trong chương trình đều là `static allocation`, khi thực thi nếu chương trình nhiều biến mỗi lần chỉ sử dụng 1 phần nhỏ các biến sẽ gây tốn nhiều bộ nhớ
+thêm vào đó biến static không an toàn khi thay đổi
+vì vậy trong Rust chúng không được sử dụng nhiều
+tuy nhiên `static allocation` được sử dụng nhiều cho 2 kiểu dữ liệu: file thực thi nhị phân (executable binary code thực ra nó cũng không thực sự là dữ liệu) và các chuỗi ký tự 
+
+## *Stack Allocation*
+
+vì những thiếu sót của static allocation, Rust phân bổ các object vào stack mỗi khi biến được khai báo với từ khóa `let` và cả khi truyền tham số vào hàm được gọi. cái được gọi là `stack` là một không không thể thiếu của mọi không gian địa chỉ
+
+trong thực tế có 1 stack cho mỗi luồng chứ không chỉ là stack cho mỗi tiến trình. nếu hệ thống hỗ trợ đa luồng, mỗi khi chạy 1 chương trình tức là mỗi tiến trình được tạo sẽ có 1 luông được tạo theo và khỏi chạy bên trong tiến trình đó. sau đó trong tiến trình các luồng khác có thể được khởi tạo và chạy theo. mỗi khi luồng được tạo ra, bao gồm luồng chính của mỗi tiến trình hệ điều hành sẽ được yêu cầu để phân bổ một phần địa chỉ không gian. đó chính là `stack` của luồng. trong hệ thống bộ nhớ thực chỉ có 1 `stack` được tạo ra khi chương trình khởi chạy
+
+mỗi luồng lưu trữ địa chỉ các đầu của `stack` đó. thông thường phần cuối giá trị cao hơn được gọi là phần đáy cảu ngăn xếp, phần cuối có giá trị nhỏ hơn được coi là phần trên cùng của ngăn xếp
+
+
+```
+let _a: u32 = 3;
+let _b: i32 = -1_000_000;
+let _c: f64 = 5.7e10;
+let _d: u8 = 200;
+```
+
+...
+
+## *Limitations of Stack Allocation*
+
+`stack allocation` rất tiện lợi nhưng lại có vài hạn chế
+    - kích thước. kích thước phụ thuộc vào hệ điều hành và có thể bị giảm với 1 số ứng dụng nhưng theo thứ tự độ lớn nó rơi vào khoảng vài megabytes
+    - Rust cho phép phân bổ stack chỉ với các object có kích thước biết trước khi biên dịch như kiểu và mảng nguyên thủy, không cho phân bổ stack các đối tượng có kích thước chỉ được xác định khi chạy như vector
+    - không được phân bổ/giải phóng các đối tượng explicitly (rõ ràng?) trong ngăn xếp, mọi biến đều đươc tự động phân bổ khi hàm mà nó khai báo được gọi, ngay cả khi nó được khai báo trong  của hàm đó và nó sẽ bị hủy cấp phát khi quá trình thực thi hàm đó kết thúc. không thể ghi đè hành vi đó.
+
+
+...
+
+## *Heap Allocation*
+
+
+...
+
+
+## *Heap Management*
+
+...
+
+## *The Behavior of Box*
+
+...
+
+## *Similarity with C and C++*
+
+...
+
+
+## *Boxing and Unboxing*
+
+...
+
+## *Register Allocation*
+
+...
+
