@@ -1903,3 +1903,263 @@ let _d: u8 = 200;
 
 ...
 
+
+
+# **Data Implementation**
+
+## *Discovering the Size of Objects*
+
+từ source file, Rust có thể biên dịch ra tất cả ngôn ngữ máy, miễn là nó hoạt động theo cách mà Rust chỉ định cho mã nguồn đó
+Do đó, với một biến ta không xác định được nó sử dụng bao nhiêu bit bộ nhớ và vị trí của nó trong bộ nhớ. Nhưng trình biên dịch thậm chí có thể xóa biến đó khỏi bộ nhớ vì nó không bao giờ được sử dụng hoặc vì nó được lưu trong thanh ghi bộ xử lý.
+Tuy nhiên, nên xem cách triển khai điển hình có thể có của việc sắp xếp dữ liệu được sử dụng bởi chương trình Rust.
+
+```
+print!("{} ", std::mem::size_of::<i32>());
+print!("{} ", std::mem::size_of_val(&12));
+
+/*
+4 4
+*/
+```
+trong câu lệnh đầu tiên trình biên dịch sử dụng thư viện module `std` (standard) sau đó có thêm sub-module `mem` (memory) cuối cùng là generic function `size_of`
+trình biêm dịch cụ thể hóa generic function bằng cách sử dụng kiểu i32 sau đó tạo ra lệnh gọi hàm cụ thể mà không truyền bất cứ tham số nào. Hàm như vậy sẽ trả về số byte (chính xác là “octet của bit”) được chiếm bởi bất kỳ đối tượng nào thuộc loại đã chỉ định. Thông thường, việc gọi hàm như vậy sẽ được nội tuyến và do đó code được tạo ra chỉ là một số không đổi. Trên thực tế, một số 32 bit xuất hiện chiếm 4 byte.
+Lưu ý rằng có thể gọi hàm này ngay cả khi trong chương trình không có đối tượng thuộc loại được chỉ định.
+
+ở câu lệnh thứ 2 tương tự câu thứ nhất nhưng gọi generic function khác là `size_of_val` “size of value”. Trong trường hợp này, loại tham số cần thiết để cụ thể hóa hàm chung được suy ra từ đối số và do đó không cần phải chỉ định rõ ràng. Thay vào đó, trong câu lệnh đầu tiên không có đối số và do đó tham số kiểu là bắt buộc.
+Khi hàm cụ thể size_of_val được gọi, một tham chiếu bất biến tới một đối tượng sẽ được truyền tới nó. Hàm trả về kích thước tính bằng byte của đối tượng đó.
+
+
+## *The use Directive*
+
+trong Rust `use` giống như trong `C++`
+
+
+
+```
+use std::mem;
+
+fn main() {
+    println!("{} ", std::mem::size_of::<i32>());
+    println!("{} ", std::mem::size_of_val(&12));
+}
+
+use std::mem::size_of;
+use std::mem::size_of_val;
+fn main() {
+    print!("{} ", size_of::<i32>());
+    print!("{} ", size_of_val(&12));
+}
+
+use std::mem::*;
+fn main() {
+    print!("{} ", size_of::<i32>());
+    print!("{} ", size_of_val(&12));
+}
+```
+
+dấu * `the asterisk` là ký tự đại diện để import tất cả các submodule
+
+## *The Sizes of the Primitive Types*
+
+```
+use std::mem::*;
+println!(
+    "{} {} {} {} {} {} {} {} {} {} {} {}",
+    size_of::<i8>(),
+    size_of::<u8>(),
+    size_of::<i16>(),
+    size_of::<u16>(),
+    size_of::<i32>(),
+    size_of::<u32>(),
+    size_of::<i64>(),
+    size_of::<u64>(),
+    size_of::<f32>(),
+    size_of::<f64>(),
+    size_of::<bool>(),
+    size_of::<char>()
+);
+/*
+1 1 2 2 4 4 8 8 4 8 1 4
+*/
+```
+
+
+với 1 vài kiểu dữ liệu khác sẽ phụ thuộc vào nên tảng của thiết bị đang biên dịch
+
+```
+use std::mem::*;
+println!(
+    "{} {} {} {}",
+    size_of::<isize>(),
+    size_of::<usize>(),
+    size_of::<&i8>(),
+    size_of::<&u32>()
+);
+
+/*
+In a 64-bit system 8 8 8 8
+while in a 32-bit system 4 4 4 4
+*/
+```
+
+2 giá trị được in ra cuối cùng là giá trị tham chiếu, đối tượng được tham chiếu (pointer) có kích thước bằng một địa chỉ bộ nhớ
+
+
+## *The Representation of Primitive Types*
+
+trong Rust không khuyến khích việc truy cập vào biểu diễn bên trong các đối tượng cũng bởi vì việc này không dễ thực hiện nhưng vẫn có mẹo để làm điều đó
+
+```
+fn as_bytes<T>(o: &T) -> &[u8] {
+    unsafe { std::slice::from_raw_parts(o as *const _ as *const u8, std::mem::size_of::<T>()) }
+}
+
+fn main() {
+    println!("{:?}", as_bytes(&1i8));
+    println!("{:?}", as_bytes(&2i16));
+    println!("{:?}", as_bytes(&3i32));
+    println!("{:?}", as_bytes(&(4i64 + 5 * 256 + 6 * 256 * 256)));
+    println!("{:?}", as_bytes(&'A'));
+    println!("{:?}", as_bytes(&true));
+    println!("{:?}", as_bytes(&&1i8));
+}
+
+/*
+[1]
+[2, 0]
+[3, 0, 0, 0]
+[4, 5, 6, 0, 0, 0, 0, 0]
+[65, 0, 0, 0]
+[1]
+[125, 159, 5, 4, 1, 0, 0, 0]
+*/
+```
+
+hàm chung as_bytes ở đây đơn giản là lấy tham chiếu đến một đối số thuộc bất kỳ loại dữ liệu nào và trả về một object đại diện cho chuỗi bute chưa trong object như vậy
+bằng cách in ra như vậy ta có thể thấy cách biểu diễn của bất kỳ đối tượng nào dưới dạng chuỗi byte lưu trong RAM
+
+giải thích cho ví dụ bên trên:
+đầu tiên i8 có giá trị 1 được lưu trữ tring một byte đơn
+sau đó i16 có giá trị 2 được lưu trữ dưới dạng một cặp byte, trong đó byte thứ nhất là 2 và byte thứ 2 là 0. điều này xảy ra trên cả hệ thống 32 bit và 64 bit. nhưng chỉ trong cái gọi là `little-endian` hardware architectures. Thay vào đó, với `big-endian` sẽ in ra [0,2]
+
+các dong tiếp theo cũng tương tự như vậy
+
+lưu ý:
+kiểu char được lưu dưới dạng 32 bit chứ các giá trị unicode của ký tưh đó còn bool được lưu dưới dạng 1 byte 1 là đúng, 0 là sai
+
+dòng cuối cùng sẽ in ra địa chỉ của số i8. địa chỉ như vậy chiếm 8 byte đối với bộ xử lý 64 bit và khác nhau tùy vào từng lần chạy
+
+## *Location of Bytes in Memory*
+
+với bộ nhớ ảo cũng có thể xem được địa chỉ của đối tượng
+
+```
+let b1 = true;
+let b2 = true;
+let b3 = false;
+print!(
+    "{} {} {}",
+    &b1 as *const bool as usize, &b2 as *const bool as usize, &b3 as *const bool as usize
+);
+
+/*
+64-bit system, 140727116566237 140727116566238 14072711656623
+
+32-bit system, in ra được 3 số nhỏ hơn 5 tỷ
+*/
+```
+
+## *Sizes of Composite Data Types*
+
+```
+use std::mem::*;
+
+enum E1 {
+    E1a,
+    E1b,
+};
+enum E2 {
+    E2a,
+    E2b(f64),
+};
+println!(
+    "{} {} {} {} {} {}",
+    size_of_val(&[0i16; 80]),
+    size_of_val(&(0i16, 0i64)),
+    size_of_val(&[(0i16, 0i64); 100]),
+    size_of_val(&E1::E1a),
+    size_of_val(&E2::E2a),
+    size_of_val(&vec![(0i16, 0i64); 100])
+);
+
+/*
+160 16 1600 1 16 24
+*/
+```
+
+    - mảng gồm 80 số 16-bit chiếm 160 byte, tức là 80 * 2 do đó không bị lãng phí
+    - tuple gồm 1 số 16 byte và 1 số 64 byte chiếm 16 byte giống như nếu cả 2 số đều chiếm 8 byte do đó phần đệm 6 byte được thêm vào
+    - mảng gồm 100 tuple 16 bit chiếm 1600 byte do đó không có khoảng đệm giữa các phần tử của mảng nhưng phần đệm của mỗi mục được nhân với độ dài của mảng
+    - enum tất cả các biến không có field dữ liệu luôn chỉ chiếm 1 byte
+    - enum có biến lớn nhất chứa 8 byte chiếm 16 byte ngay cả khi giá trị hiện tại không có dữ liệu, vì có 7 byte đệm
+    - vector gồm 100 tuple có kiểu dữ liệu byte chiếm 24 byte nhưng tất nhiên vẫn thiếu gì đó trong thước đo này
+
+## *Vector Allocation*
+
+vector được triển khai dưới dạng cấu trúc 2 đối tượng: header có kích thước cố định được phân bổ theo stack và phần đệm biến dài thay đổi được theo heap-allocation
+về mặt lý thuêys có 1 vài khác để triển khai vector data structure
+
+...
+
+
+```
+let mut v = vec![0; 0];
+println!("{} {}", v.len(), v.capacity());
+v.push(11);
+println!("{} {}", v.len(), v.capacity());
+v.push(22);
+println!("{} {}", v.len(), v.capacity());
+v.push(33);
+println!("{} {}", v.len(), v.capacity());
+v.push(44);
+println!("{} {}", v.len(), v.capacity());
+v.push(55);
+println!("{} {}", v.len(), v.capacity());
+
+
+/*
+0 0
+1 4
+2 4
+3 4
+4 4
+5 8
+*/
+```
+
+
+```
+let mut v = vec![0; 0];
+let mut prev_capacity = std::usize::MAX;
+for i in 0..1_000 {
+    let cap = v.capacity();
+    if cap != prev_capacity {
+        println!("{} {} {}", i, v.len(), cap); prev_capacity = cap;
+    }
+    v.push(1);
+}
+
+
+/*
+0 0 0
+1 1 4
+5 5 8
+9 9 16
+17 17 32
+33 33 64
+65 65 128
+129 129 256
+257 257 512
+513 513 1024
+*/
+```
