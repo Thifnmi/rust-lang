@@ -2163,3 +2163,191 @@ for i in 0..1_000 {
 513 513 1024
 */
 ```
+
+
+# **Defining Closures**
+
+## *The Need for “Disposable” Functions*
+
+
+```
+let mut arr = [4, 8, 1, 10, 0, 45, 12, 7];
+arr.sort();
+print!("{:?}", arr);
+
+
+/*
+[0, 1, 4, 7, 8, 10, 12, 45]
+*/
+```
+
+đoạn code trên sắp xếp array theo thứ tự tăng dần (ascending), tuy nhiên nếu muốn theo thứ tự giảm dần (descending) hay sử dụng tiêu chí khác thì sao? không có prepacket function nào cả, phải tự gọi hàm `sort_by` và truyền tham chiếu tới hàm so sánh. hàm nhận vào 2 số và sẽ trả dấu hiệu xem số nào đứng trước
+
+
+```
+use std::cmp::Ordering;
+fn desc(a: &i32, b: &i32) -> Ordering {
+    if a < b {
+        Ordering::Greater
+    } else if a > b {
+        Ordering::Less
+    } else {
+        Ordering::Equal
+    }
+}
+fn main() {
+    let mut arr = [4, 8, 1, 10, 0, 45, 12, 7];
+    arr.sort_by(desc);
+    println!("{:?}", arr);
+}
+
+/*
+[45, 12, 10, 8, 7, 4, 1, 0]
+*/
+```
+
+cách này có hoạt động tuy nhiên nó có 1 vài nhược điểm
+    - func `desc` được tạo ra và chỉ sử dụng duy nhất 1 lần trong cả quá trình. thông thường function được tạo ra không chỉ để sử dụng 1 lần, hơn thế, phần thân func được tạo ra có thể được mở rộng. tuy nhiên function `sort_by` yêu cầu truyền vào 1 function. vậy điều cần thiết ở đây là một `inline anonymous function` (hàm ẩn danh nội tuyến?), một hàm được khai báo cùng lúc và có thể sử dụng được
+    - ngoài ra, có kiểu tùy chọn là khai báo variable nhưng nó bắt buộc với các tham số và giá trị trả về khi khai báo function
+
+...
+
+## *Capturing the Environment*
+
+các hàm trong Rust không thể truy cập tới biến khai báo bên ngoài chúng, có thể truy cập tới `static` nhưng không thể truy cập tới các biến `stack allocation` được khai báo với `let`
+
+```
+fn main() {
+    let two = 2.;
+    print_double(17.2);
+    fn print_double(x: f64) {
+        print!("{}", x * two);
+    }
+}
+
+/*
+error[E0434]: can't capture dynamic environment in a fn item
+  |
+  |         print!("{}", x * two);
+  |                          ^^^
+  |
+  = help: use the `|| { ... }` closure form instead
+*/
+```
+
+vì vậy có thể sửa thành
+
+```
+const TWO: f64 = 2.;
+fn print_double(x: f64) {
+    print!("{}", x * TWO);
+}
+print_double(17.2);
+
+hoặc
+
+static TWO: f64 = 2.;
+fn print_double(x: f64) {
+    print!("{}", x * TWO);
+}
+print_double(17.2);
+```
+
+việc hạn chế như vậy có lý do chính đáng: các biến bên ngoài đi vào function hiệu quả, tuy nhiên lại không rõ ràng ở trong func gây việc ra hiểu lầm trong khi đọc hiểu code
+nhưng khi 1 hàm chỉ có thể được gọi ở ở nơi có đã được định nghĩa, thì việc nó truy cập vào các biến bên ngoài không khiến function trở nên khó hiểu hơn, bởi vì các biến bên ngoài đó đã có sẵn trong câu lệnh khai báo.
+Do đó, các yêu cầu đối với tính năng: an inline anonymous function, with type inference, a single expression as body the capture of any valid variable.
+
+## *Closures*
+
+vì tính hữu dụng rất lớn nên trong Rust có một tính năng có tên là `closure`. nó là 1 hàm tiện dụng hơn để định nghĩa small anonymous functions, và gọi tới chúng ngay tại nơi định nghĩa
+
+trong thực tế, bạn cũng có thể định nghĩa `closure` gắn vào biến, đặt tên và gọi tới nó bằng tên biến. tuy nhiên đó không phải cách sử dụng điển hình nhất của `closure`
+
+```
+use std::cmp::Ordering;
+fn main() {
+    let mut arr = [4, 8, 1, 10, 0, 45, 12, 7];
+    let desc = |a: &i32, b: &i32| -> Ordering {
+        if a < b {
+            Ordering::Greater
+        } else if a > b {
+            Ordering::Less
+        } else {
+            Ordering::Equal
+        }
+    };
+    arr.sort_by(desc);
+    print!("{:?}", arr);
+}
+
+/*
+[45, 12, 10, 8, 7, 4, 1, 0]
+*/
+```
+
+điểm khác nhau với ví dụ trước đó:
+    - fn được thay bằng `let`
+    - ký tự `=` được thêm vào sau khi khai báo biến
+    - `(` và `)` đưuojc loại bỏ và thay vào đó là `|`
+    - `;` được thêm vào ở cuối
+
+
+```
+use std::cmp::Ordering;
+let mut arr = [4, 8, 1, 10, 0, 45, 12, 7];
+arr.sort_by(|a, b| {
+    if a < b {
+        Ordering::Greater
+    } else if a > b {
+        Ordering::Less
+    } else {
+        Ordering::Equal
+    }
+});
+print!("{:?}", arr);
+```
+
+
+
+```
+arr.sort();
+arr.sort_by(|a, b| a.cmp(b));
+```
+
+```
+arr.sort_by(|a, b| (&-*a).cmp(&-*b));
+arr.sort_by(|a, b| b.cmp(a));
+```
+
+```
+let mut arr = [4, 8, 1, 10, 0, 45, 12, 7];
+arr.sort_by(|a, b| b.cmp(a));
+print!("{:?}", arr);
+```
+
+## *Other Examples*
+```
+let factor = 2;
+let multiply = |a| a * factor;
+print!("{}", multiply(13));
+let multiply_ref: &(Fn(i32) -> i32) = &multiply; print!(
+    " {} {} {} {} {}",
+    (*multiply_ref)(13),
+    multiply_ref(13),
+    (|a| a * factor)(13),
+    (|a: i32| a * factor)(13),
+    |a| -> i32 { a * factor }(13));
+```
+
+
+```
+print!(
+    "{}",
+    (|v: &Vec<i32>| {
+        let mut sum = 0;
+        for i in 0..v.len() {
+        sum += v[i];
+        }
+        sum
+    })(&vec![11, 22, 34]));
+```
