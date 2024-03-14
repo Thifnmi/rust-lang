@@ -2307,12 +2307,15 @@ arr.sort_by(|a, b| {
 print!("{:?}", arr);
 ```
 
+nó đã đơn giản hơn, tuy nhiên ở thư viện `std` có chứa 1 function `cmp` viết tắt của compare. function này return giá trị tương đương với enum Ordering (trả về gía trị nào lớn hơn trong 2 đối số nhận vào - order asc) 
 
 
 ```
 arr.sort();
 arr.sort_by(|a, b| a.cmp(b));
 ```
+
+do vậy cũng có thể đảo ngược thứ tự 2 số để có thể nhận được kết quả đảo ngược của 2 số (order desc)
 
 ```
 arr.sort_by(|a, b| (&-*a).cmp(&-*b));
@@ -2326,6 +2329,9 @@ print!("{:?}", arr);
 ```
 
 ## *Other Examples*
+
+1 vài cách để call closure
+
 ```
 let factor = 2;
 let multiply = |a| a * factor;
@@ -2339,6 +2345,7 @@ let multiply_ref: &(Fn(i32) -> i32) = &multiply; print!(
     |a| -> i32 { a * factor }(13));
 ```
 
+    - `print!("{}", multiply(13));` ...
 
 ```
 print!(
