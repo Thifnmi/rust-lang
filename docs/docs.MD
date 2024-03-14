@@ -2358,3 +2358,183 @@ print!(
         sum
     })(&vec![11, 22, 34]));
 ```
+
+
+# **Using Changeable Strings**
+
+
+## *Static Strings*
+
+```
+fn main() {
+    let mut a = "Hel";
+    println!("{}", a);
+    a = "lo";
+    println!("{}", a);
+}
+
+/*
+Hel
+lo
+*/
+```
+
+## *Dynamic Strings*
+
+nếu muốn tạo hoặc sửa nội dung của string trong quá trình runtime thì kiểu `&str` thường được sử dụng lại không phù hợp
+nhưng trong Rust lại cung cấp 1 phương thức khác của kiểu string, đó là dynamic strings, nó cho phép thay đổi nội dung của string
+
+```
+let mut a: String = "He".to_string(); a.push('l');
+a.push('l');
+a.push('o');
+print!("{}", a);
+
+/*
+Hello
+*/
+```
+
+có nhiều cách để tạo `dynamic strings` trong đó việc call tới `to_string()` từ `static strings` là 1 trong số các cách. tên function này nên được gọi là `to_dynamic_string` hoặc `to_String` nhưng cách gọi thứ nhất thì quá dài còn cách thứ 2 thì vi phạm qui tắc đặt tên function trong Rust
+
+`dynamic string` có thể in ra được giống như bất kỳ `static string` nào. nhưng nó có khả năng làm được điều mà `static string` khong thể nào làm được: to grow
+
+```
+let mut b: String = "Xy".to_string();
+b.remove(0);
+b.insert(0, 'H');
+b.pop();
+b.push('i');
+println!("{}", b);
+
+/*
+Hi
+*/
+```
+
+## *Implementation of String*
+
+`static string` trong Rust khá giống với `string` trong C và có thêm vài điểm cộng. `dynamic string` trong Rust lại giống với object std::string trong C++. tuy nhiên sự khác biệt chính giữa Rust và dynamic string trong C++ đó là bất kỳ chuỗi nào trong C++ đều chứa 1 mảng ký tự còn trong Rust thì chưa 1 mảng byte biểu thị chuỗi UTF-8,nó không chứa 1 mảng ký tự nào
+
+Rust cũng có vài điểm tương đồng khác như bộ đệm `static string` giống như array, nghĩa là type string giống như generic [u8, N] type, `dynamic string` giống như vectors bytes, string type giống với Vec<u8> type
+
+thật vậy, các function chúng ta thấy `push`, `pop`, `insert`, `remove`, `len` giống như với Vector
+
+ngoài ra cả `synamic string` và `vectors` đều có cách thực hiện giống nhau, cấu trúc của cả 2 đều gồm 3 field
+    • the address of the beginning of the heap-allocated buffer containing the data items;
+    • the number of items that may be contained in the allocated buffer;
+    • the number of items presently used in the allocated buffer.
+
+
+```
+let mut s1 = "".to_string();
+s1.push('e');
+let mut s2 = "".to_string();
+s2.push('è');
+let mut s3 = "".to_string();
+s3.push('€');
+println!("{} {}; ", s1.capacity(), s1.len());
+println!("{} {}; ", s2.capacity(), s2.len());
+println!("{} {}", s3.capacity(), s3.len());
+```
+
+
+```
+let mut s = "".to_string();
+for _ in 0..10 {
+    println!("{:?} {} {}", s.as_ptr(), s.capacity(), s.len());
+    s.push('a');
+}
+println!("{:?} {} {}: {}", s.as_ptr(), s.capacity(), s.len(), s);
+
+```
+
+
+as_ptr function (as pointer) return address of the head-allocation buffer chứa ký tự của string
+
+
+## *Creating Strings*
+
+create an empty dynamic string
+
+```
+let s1 = String::new();
+let s2 = String::from("");
+let s3 = "".to_string();
+let s4 = "".to_owned();
+let s5 = format!(""); print!("({}{}{}{}{})", s1, s2, s3, s4, s5);
+
+```
+
+function `new()` của kiểu String là basic contructor, nó giống với `default-constructor` trong C++
+funtion `from()` của kiểu String là converter contructor, nó giống với `non-default-constructor` trong C++
+
+`to_string()` và `to_owned()` có thể hoán đổi cho nhau
+
+`format()` có định dạng giống với `print()`, điểm khác biệt duy nhất là `print()` trả về kết quả in ra màn hình còn `format` trả về string object chứa kết quả
+
+ngoại trừ function `new()`, tất cả các cách trước đó dùng để tạo `dynamic string` có thể sử dụng để convert `non-empty static string` thành `dynamic string`
+
+```
+let s = "a,";
+let s1 = String::from(s);
+let s2 = s.to_string();
+let s3 = s.to_owned();
+// let s4 = format!(s);
+// let s5 = format!("a,{}");
+let s6 = format!("{}", s);
+print!("({}{}{}{})", s1, s2, s3, s6);
+
+
+/*
+(a,a,a,a,)
+*/
+```
+
+## *Concatenating Strings*
+
+```
+let ss1 = "He";
+let ss2 = "llo ";
+let ds1 = ss1.to_string();
+let ds2 = ss2.to_string();
+let ds3 = format!("{}{}", ss1, ss2); print!("{}", ds3);
+let ds3 = format!("{}{}", ss1, ds2); print!("{}", ds3);
+let ds3 = format!("{}{}", ds1, ss2); print!("{}", ds3);
+let ds3 = format!("{}{}", ds1, ds2); print!("{}", ds3);
+
+/*
+Hello Hello Hello Hello
+*/
+```
+
+
+```
+let mut dyn_str = "Hello".to_string();
+dyn_str = format!("{}{}", dyn_str, ", ");
+dyn_str = format!("{}{}", dyn_str, "world");
+dyn_str = format!("{}{}", dyn_str, "!");
+println!("{}", dyn_str);
+let mut dyn_str = "Hello".to_string();
+dyn_str.push_str(", ");
+dyn_str.push_str("world");
+dyn_str.push_str("!");
+println!("{}", dyn_str);
+
+/*
+Hello, world!
+*/
+```
+
+function `push_str()` nhận vào 1 `static string` và đẩy tất cả vào chuỗi đích
+
+
+```
+let mut dyn_str = "Hello".to_string();
+dyn_str += ", ";
+dyn_str += "world";
+dyn_str += "!";
+print!("{}", dyn_str);
+```
+
+`+=` operator tương tự với function `push_str`
