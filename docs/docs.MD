@@ -2538,3 +2538,78 @@ print!("{}", dyn_str);
 ```
 
 `+=` operator tương tự với function `push_str`
+
+
+# **Ranges and Slices**
+
+## *The Ranges*
+
+```
+fn main() {
+    for i in 0..12 {
+        print!("{}", i);
+    }
+    println!("");
+    let dozen = 0..12;
+    for j in dozen {
+        print!("{}", j);
+    }
+    println!("");
+
+    let range: std::ops::Range<usize> = 3..8;
+    println!(
+        "{:?}, {}, {}, {}",
+        range,
+        range.start,
+        range.end,
+        range.len()
+    );
+    for i in range {
+        print!("{}, ", i);
+    }
+    println!("");
+
+    let r1 = 3u8..12u8;
+    let r2 = 3u8..12;
+    let r3 = 3..12u8;
+    let r4 = 3..12;
+    let r5 = -3..12;
+    let r6 = 3..12 as i64;
+    println!(
+        "{} {} {} {} {} {}",
+        std::mem::size_of_val(&r1),
+        std::mem::size_of_val(&r2),
+        std::mem::size_of_val(&r3),
+        std::mem::size_of_val(&r4),
+        std::mem::size_of_val(&r5),
+        std::mem::size_of_val(&r6)
+    );
+}
+
+```
+
+
+```
+let r1 = 3u8..12i8;
+let r2: std::ops::Range<u32> = -3..12;
+let r3: std::ops::Range<i32> = 3i16..12;
+```
+
+dòng thứ nhất lỗi do kiểu dữ liệu khác nhau
+dòng thứ 2 lỗi do -3 không thuộc kiểu u32
+dòng cuối lỗi do 3i16 không thuộc giá trị của i32
+
+```
+let _r1 = 3u8..1200;
+let _r2 = 3..5_000_000_000;
+```
+
+cả 2 đều có cảnh báo bị tràn số nguyên, dòng thứ nhất vị phạm Range<u8> dòng thứ 2 vi phạm Range<i32>
+
+```
+let _r1 = false .. true;
+let _r2 = "hello" .. "world";
+let _r3 = 4.2 .. 7.9;
+```
+
+trông những đoạn code trên thật vô nghĩa nhưng nó lại được cho phép không có cảnh báo tuy nhiên những range vô lý như vậy không được sử dụng trong `for`
