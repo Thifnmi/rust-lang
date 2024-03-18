@@ -37,4 +37,39 @@ fn main() {
         std::mem::size_of_val(&r5),
         std::mem::size_of_val(&r6)
     );
+    println!("{}", min([23, 17, 12, 16, 15, 28, 17, 30]));
+    println!("{}", min_drawback1(&[23, 17, 12, 16, 15, 28, 17, 30]));
+    println!("{}", min_drawback4(&[23, 17, 12, 16, 15, 28, 17, 30]));
+}
+
+fn min(arr: [i32; 8]) -> i32 {
+    let mut minimum = arr[0];
+    for i in 1..arr.len() {
+        if arr[i] < minimum {
+            minimum = arr[i];
+        }
+    }
+    minimum
+}
+
+fn min_drawback1(arr: &[i32; 8]) -> i32 {
+    let mut minimum = arr[0];
+    for i in 1..arr.len() {
+        if arr[i] < minimum {
+            minimum = arr[i];
+        }
+    }
+    minimum
+}
+
+fn min_drawback4(arr: &[i32; 8], start: usize, count: usize) -> i32 {
+    // Let's assume 'start' is between 0 and 7,
+    // and 'count' is between 1 and 8 - start.
+    let mut minimum = arr[start];
+    for i in start + 1..start + count {
+        if arr[i] < minimum {
+            minimum = arr[i];
+        }
+    }
+    minimum
 }

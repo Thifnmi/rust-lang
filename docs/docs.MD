@@ -2613,3 +2613,71 @@ let _r3 = 4.2 .. 7.9;
 ```
 
 trông những đoạn code trên thật vô nghĩa nhưng nó lại được cho phép không có cảnh báo tuy nhiên những range vô lý như vậy không được sử dụng trong `for`
+
+
+## *Passing a Sequence to a Function*
+
+
+```
+fn min(arr: [i32; 8]) -> i32 {
+    let mut minimum = arr[0];
+    for i in 1..arr.len() {
+        if arr[i] < minimum {
+            minimum = arr[i];
+        }
+    }
+    minimum
+}
+print!("{}", min([23, 17, 12, 16, 15, 28, 17, 30]));
+
+/*
+12
+*/
+```
+
+kết quả trả ra tuy chính xác nhưng lại có 1 số nhược điểm:
+    - nó sẽ copy ra 1 array mới, việc truyền tham số vào cần tốn 1 khoảng thời gian, không gian ngăn xếp, không gian bộ nhớ
+    - chỉ có thể nhận vào 1 mảng có 8 số, nếu thừa hoặc thiếu sẽ lỗi
+    - không thể nhận vào đối số là 1 vector
+    - không thể nhận yêu cầu từ 1 vị trí nào đó trong mảng
+
+để khắc phục lỗi thứ nhất có thể truyền tham chiếu của array thay vì truyền giá trị
+
+```
+fn min_drawback1(arr: &[i32; 8]) -> i32 {
+    let mut minimum = arr[0];
+    for i in 1..arr.len() {
+        if arr[i] < minimum {
+            minimum = arr[i];
+        }
+    }
+    minimum
+}
+
+/*
+12
+*/
+```
+
+để khắc phục nhược điểm thứ 4 ta có thể thêm các đối số vào để xác định xử lý từ index nào và xử lý bao nhiêu item
+
+```
+fn min_drawback4(arr: &[i32; 8], start: usize, count: usize) -> i32 {
+    // Let's assume 'start' is between 0 and 7,
+    // and 'count' is between 1 and 8 - start.
+    let mut minimum = arr[start];
+    for i in start + 1..start + count {
+        if arr[i] < minimum {
+            minimum = arr[i];
+        }
+    }
+    minimum
+}
+print!("{}", min(&[23, 17, 12, 16, 15, 28, 17, 30], 3, 2));
+
+
+/*
+15
+*/
+```
+kết quả ở đây đã khác, do ngoài array được tham chiếu vào còn có thêm 2 đối số khác `3, 2`. số đầu tiên là vị trí bắt đầu, số thứ 2 là số lượng item xử lý => có 2 số được xử lý từ array bắt đầu từ vị trí thứ 3 (index bắt đầu từ 0) là `16, 15`
