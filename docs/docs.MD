@@ -2681,3 +2681,173 @@ print!("{}", min(&[23, 17, 12, 16, 15, 28, 17, 30], 3, 2));
 */
 ```
 kết quả ở đây đã khác, do ngoài array được tham chiếu vào còn có thêm 2 đối số khác `3, 2`. số đầu tiên là vị trí bắt đầu, số thứ 2 là số lượng item xử lý => có 2 số được xử lý từ array bắt đầu từ vị trí thứ 3 (index bắt đầu từ 0) là `16, 15`
+
+## *The Slices*
+
+sau khi đang giá các vấn đề trên và để khắc phục chúng, 1 khái niệm tên `slice` được đưa vào Rust
+
+```
+fn min(arr: &[i32]) -> i32 {
+    // Let's assume 'arr' is not empty.
+    let mut minimum = arr[0];
+    for i in 1..arr.len() {
+        if arr[i] < minimum {
+            minimum = arr[i];
+        }
+    }
+    minimum
+}
+
+fn main() {
+    print!("{}", min(&[23, 17, 12, 16, 15, 28, 17, 30]));
+}
+
+
+/*
+12
+*/
+```
+
+kết qủa trả ra vẫn là 12 tuy nhiên có điểm khác biệt với ví dụ phía trên `; 8` đã bị loại bỏ. bây giờ biến `arr` trông giống như tham chiếu tới array nhưng không có kích thước vụ thể của array
+
+loại này là `a reference to a slice` hay `slice reference`. dạng chung của nó là `&[T]` với `T` là đại diện cho bất kỳ kiểu nào có thể chứa trong array. ở đây, `slice` có nghĩa là một chuỗi con của các mục bên trong một chuỗi các mục, chẳng hạn như một array hoặc một vector buffer
+
+## *Slicing*
+
+nhờ sự tiện dụng của `slices` ta lại có cách sử dụng mới. giả sử có array hoặc vector như `let arr = [23, 17, 12, 16, 15, 2]` và một function lấy một slice đối số, ví dụ như func `min` ở phía trên
+
+```
+fn min(arr: &[i32]) -> i32 {
+    // Let's assume 'arr' is not empty.
+    let mut minimum = arr[0];
+    for i in 1..arr.len() {
+        if arr[i] < minimum {
+            minimum = arr[i];
+        }
+    }
+    minimum
+}
+
+fn main() {
+    let arr = [23, 17, 12, 16, 15, 2];
+    let range = 2..5;
+    let slice_ref = &arr[range];
+    println!("{}", min(slice_ref));
+}
+
+/*
+12
+*/
+```
+
+
+
+```
+let arr = [55, 22, 33, 44, 66, 7, 8];
+let v = vec![55, 22, 33, 44, 66, 7, 8];
+let sr1 = &arr[2..5];
+let sr2 = &v[2..5];
+print!("{:?} {:?} {:?} {:?}", sr1, sr2, &sr1[1..2], &sr1[1]);
+
+/*
+[33, 44, 66] [33, 44, 66] [44] 44
+*/
+```
+
+
+## *Out-of-Range Slicing*
+
+```
+let arr = [55, 22, 33, 44, 66];
+let _r1 = 4..4;
+let _a1 = &arr[_r1];
+let _r2 = 4..3;
+//let _a2 = &arr[_r2];
+let _r3 = -3i32..2;
+//let _a3 = &arr[_r3];
+let _r4 = 3..8;
+//let _a4 = &arr[_r4];
+```
+
+ở chương trình này ngoại trừ dòng đầu tiên thì tất cả các dòng còn lại để là khai báo range và dùng slice để lấy kết quả từ mảng ở dòng đầu tiên
+tất cả range đều là đúng, nhưng không phải các slicing operations là đúng vì vậy một vài dòng code đã được comment lại
+dòng thứ 2 hoàn toàn hợp lệ vì slice bắt đầu từ 4 và kết thúc cũng ở 4 vì vậy silce lúc này là slice rỗng, nhưng silce rỗng lại được cho phép
+dòng thứ 4 sử dụng slice ngược kết thúc trước khi bắt đầu, điều này được cho phép khi biên dịch nhưng lại gây ra lỗi trong quá trình chạy giống như `out-of-range` trong array vì vậy sẽ in ra lỗi `a slice index that starts at 4 but ends at 3` trong quá trình chạy
+dòng thứ 6 vó kiểu dữ liệu i32 nhưng cũng giống điều này gây lỗi khi biên dịch vì index chỉ có kiểu dữ liệu usize
+dòng thứ 8 đã vi phạm kích thước của array, nó có thể biên dịch được nhưng lại gây ra lỗi `index 8 out of range for slice of length 5`
+
+**những ví dụ ở đây được thực hiện với array tuy nhiên cũng đúng với vector và slice**
+
+## *Mutable slicing*
+
+một slice là 1 phần của chuỗi khác vì vậy thay đổi nội dung cũng có nghĩa là thay đổi giá trị của một hoặc nhiều item trong chuỗi ban đầu
+
+
+```
+let mut arr = [11, 22, 33, 44];
+{
+    let sl_ref = &mut arr[1..3];
+    print!("{:?}", sl_ref);
+    sl_ref[1] = 0;
+    print!(" {:?}", sl_ref);
+}
+print!(" {:?}", arr);
+
+/*
+[22, 33] [22, 0] [11, 22, 0, 44]
+*/
+```
+
+sl_ref là immutable variable tham chiếu tới một mutable slice 
+
+
+## *Open-Ended Ranges and Slicing*
+
+đôi khi ta muốn lấy tất cả các item từ đầu tới vị trí thứ n hoặc từ vị trí thứ n tới hết có thể làm theo cách sau
+
+```
+let arr = [11, 22, 33, 44];
+let n = 2;
+let sr1 = &arr[0..n];
+let sr2 = &arr[n..arr.len()];
+print!("{:?} {:?}", sr1, sr2);
+
+/*
+[11, 22] [33, 44]
+*/
+```
+
+hoặc có thể viết đơn giản hơn như này
+
+```
+let arr = [11, 22, 33, 44];
+let n = 2;
+let sr1 = &arr[..n];
+let sr2 = &arr[n..];
+print!("{:?} {:?}", sr1, sr2);
+
+/*
+[11, 22] [33, 44]
+*/
+```
+
+ta thấy ở dòng thứ 3 không có điểm đầu và dòng thứ 4 không có điểm cuối, nhưng trên thực tế những range này là loại riêng biệt
+
+```
+let r1: std::ops::RangeFrom<i32> = 3..;
+let r2: std::ops::RangeTo<i32> = ..12;
+println!(
+    "{:?} {:?} {} {}",
+    r1,
+    r2,
+    std::mem::size_of_val(&r1),
+    std::mem::size_of_val(&r2)
+);
+
+/*
+3.. ..12 4 4
+*/
+```
+
+r1 là biến thuộc loại RangeFrom có nghĩa là biến này có 1 giới hạn điểm đầu nhưng không có điểm cưới, r2 cũng thuộc RangeFrom tuy nhiên lại có điểm giới hạn trên nhưng không có điểm giới hạn dưới, cả 2 điều chỉ chiếm 4 bytes bởi vì nó chỉ lưu trữ object i32
+
