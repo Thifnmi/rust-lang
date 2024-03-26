@@ -2851,3 +2851,264 @@ println!(
 
 r1 là biến thuộc loại RangeFrom có nghĩa là biến này có 1 giới hạn điểm đầu nhưng không có điểm cưới, r2 cũng thuộc RangeFrom tuy nhiên lại có điểm giới hạn trên nhưng không có điểm giới hạn dưới, cả 2 điều chỉ chiếm 4 bytes bởi vì nó chỉ lưu trữ object i32
 
+# **Using Iterators**
+
+## *String Characters*
+
+như đã tìm hiểu từ trước, trong Rust tồn tại cả `static string` và `dynamic string` và cả 2 đều thuộc dạng `UTF-8`
+
+```
+let s = "abc012è€";
+for i in 0..s.len() {
+    println!("{}: {}", i, s.as_bytes()[i]);
+}
+
+/*
+0: 97
+1: 98
+2: 99
+3: 48
+4: 49
+5: 50
+6: 195
+7: 168
+8: 226
+9: 130
+10: 172
+*/
+```
+
+function `as_bytes()` convert chuỗi thành slice các số có kiểu dữ liệu u8. việc convert như vậy mất thời gian chuyển đổi là 0 bởi `string buffer` của nó là chính các chuỗi bytes đó
+việc biểu diễn ký tự dạng UTF-8 cho bất kỳ ký tự ASCII nào cũng chỉ là mã ASCII của ký tự đó vì vậy mã ASCII của các ký tự `a, b, c, 0, 1 và 2` sẽ được in ra
+ký tự `è` được biểu diễn bằng 1 cặp bytes có giá trị là 195 và 168
+ký tự `€` được biểu diễn bằng 1 chuỗi 3 bytes là 226, 230 và 172. Do đó, để có được một ký tự ở một vị trí nhất định, cần quét hết các ký tự trước đó.
+
+Tình huống này tương tự như trường hợp của tệp văn bản, so với các tệp có độ dài bản ghi cố định. Khi sử dụng tệp có độ dài bản ghi cố định, có thể đọc bản ghi ở bất kỳ vị trí n nào bằng cách “tìm kiếm” vị trí đó mà không cần đọc tất cả các dòng trước đó. Thay vào đó, bằng cách sử dụng tệp có độ dài dòng thay đổi, để đọc dòng thứ n, bắt buộc phải đọc tất cả các dòng trước đó.
+
+# *Scanning a String*
+Để xử lý được các ký tự trong 1 chuỗi cần phải quét qua lần lượt các ký tự đó. vì vậy muốn in ra được ký tự thứ 3 trong chuỗi `€èe` đầu tiên phải quét qua ký tự `€` mà ký tự này được biểu diễn bằng chuỗi 3 bytes vậy nên phải quét qua 3 bytes đầu tiên cho ký tự thứ nhất, ký tự thứ 2 `è` lại được biểu diễn bằng chuỗi 2 bytes vậy nên cần phải quét qua thêm 2 bytes nữa và cuối cùng là ký tự `e` chỉ cần quét qua 1 byte nữa vì nó chỉ dùng chuỗi 1 bytes để biểu diễn
+
+
+```
+fn print_nth_char(s: &str, mut n: u32) {
+    let mut iter: std::str::Chars = s.chars();
+    loop {
+        let item: Option<char> = iter.next();
+        match item {
+            Some(c) => {
+                if n == 1 {
+                    print!("{}", c);
+                }
+            }
+            None => {
+                break;
+            }
+        }
+        n -= 1;
+    }
+}
+print_nth_char("€èe", 3);
+```
+
+function bên trên được định nghĩa với đầu vào là 1 string `s` và 1 số `n` và in ra ký tự tại vị trí `n` trong string `s` nếu có tồn tại, nếu không sẽ không làm gì. dòng cuối cùng là lệnh gọi tới function phía trên với chuỗi gồm 3 ký tự `€èe` và số 3 vì vậy kết quả in ra sẽ là `e`
+
+thư viện `std` trong Rust cung cấp vòng lặp cho chuỗi có tên gọi là `chars()`. nếu có 1 chuỗi tên là `my_str` ta có thể lặp nó bằng cách `my_str.chars()` giống như dòng 2 ở đoạn code phía trên
+
+bất kỳ vòng lặp nào cũng có function `next()`. function này trả về giá trị tiếp theo của vòng lặp bắt đầu từ vị trí hiện tại. tuy nhiên hầu hết các trình tự đều có kết thúc. vì vậy vòng lặp sẽ chỉ trả về giá trị tiếp theo nếu chưa đến vị trí cuối cùng của chuỗi. để biết gía trị hiện tại của chuỗi là giá trị cuối khi gọi hàm `next()` trong Rust sẽ trả về giá trị kiểu `Option<T>` và nếu giá trị là `None` tức là chuỗi không còn giá trị nào nữa
+
+bằng việc sử dụng câu lệnh `match`, trường hợp `Some` sẽ xử lý tiếp ký tự tiếp theo của chuỗi, nếu `None` sẽ thoát khỏi vòng lặp. nếu đối số `n` là 1 nó sẽ in ra ký tự đầu tiên của chuỗi vì vậy giá trị của biến `c` sẽ được in ra và ngược lại nếu khác đối số `n` được truyền vào sẽ không có gì được thực hiện. sau câu lệnh `match` giá trị đếm `n` sẽ giảm đi 1 tới khi `n` bằng 1 thì đạt được ký tự cần in ra
+
+từ 1 chuỗi ta có thể dễ dàng in ra được mã số của các ký tự
+
+```
+fn print_codes(s: &str) {
+    let mut iter = s.chars();
+    loop {
+        match iter.next() {
+            Some(c) => {
+                println!("{}: {}", c, c as u32);
+            }
+            None => {
+                break;
+            }
+        }
+    }
+}
+print_codes("€èe");
+```
+
+# *Using Iterators in for Loops*
+
+ở ví dụ trước nó có phần phức tạp, do đó cần trải qua quá trình cải tiến mạnh mẽ để đơn giản cú pháp hơn
+
+```
+fn print_codes(s: &str) {
+    for c in s.chars() {
+        println!("{}: {}", c, c as u32);
+    }
+}
+print_codes("€èe");
+```
+
+đoạn mã này được tạo ra dựa trên ví dụ trước đó nhưng đoạn mã này rõ ràng hơn nhiều cho người đọc
+
+`iterator` không phải là một loại (type) chính xác hơn nó là đặc tả loại (type specification). bất kỳ biểu thức nào có phương thức `next()` trả về `option<T>` value đều được coi là `iterator`
+
+cho đến nay ta đã sử dụng `range` trong vòng lặp. tất cả các `range` có điểm giới hạn bắt đầu đều được coi là `iterator` vì chúng đều có function `next()`
+
+ví dụ như:
+
+
+```
+// OK: std::ops::Range<u32> is an iterator
+let _v1 = (0u32..10).next();
+// OK: std::ops::RangeFrom<u32> is an iterator
+let _v2 = (5u32..).next();
+// Illegal: std::ops::RangeTo<u32> is not an iterator
+// let _v3 = (..8u32).next();
+// Illegal: std::ops::RangeFull is not an iterator
+// let _v4 = (..).next();
+```
+
+
+```
+for byte in "€èe".bytes() {
+    print!("{} ", byte);
+}
+
+/*
+226 130 172 195 168 101
+*/
+```
+
+3 số đầu tiên đại diện cho ký tự `€`, 2 số tiếp theo đại diện cho `è` và byte cuối cùng là `e` trong bảng mã ASCII
+
+đoạn mã phía trên có thể được chia ra thành 
+
+```
+
+let string: &str = "€èe";
+let string_it: std::str::Bytes = string.bytes();
+for byte in string_it {
+    print!("{} ", byte);
+}
+
+```
+
+trong khi function `chars()` phía trên trả về dữ liệu kiểu `std::str::Chars` thì function `bytes` bên dưới trả về dữ liệu kiểu `std::str::Bytes`
+
+tất nhiên cả `chars()` và `bytes()` đều là string iterator nhưng `chars()` trả về ký tự tiếp theo của string còn `bytes()` trả về byte tiếp theo của string
+
+các string function này đều khác với `as_bytes()` function, nó trả về 1 slice tham chiếu tới các bytes của string
+
+việc sử dụng vòng lặp trên slice, array hay vector cũng khá điển hình nhưng string không phải vòng lặp, slice, array hay vector. Tuy nhiên, giống như string iterator có được bằng cách gọi hàm `chars()`, do đó, slice, array hoặc vectơ iterator có được bằng cách gọi hàm `iter()`.
+
+
+```
+for item_ref in (&[11u8, 22, 33]).iter() {
+    // *item_ref += 1;
+    print!("{} ", *item_ref);
+}
+for item_ref in [44, 55, 66].iter() {
+    // *item_ref += 1;
+    print!("{} ", *item_ref);
+}
+for item_ref in vec!['a', 'b', 'c'].iter() {
+    // *item_ref = if *item_ref == 'b' { 'B' } else { '-' };
+    print!("{} ", *item_ref);
+}
+
+/*
+11 22 33 44 55 66 a b c
+*/
+```
+
+đoạn code phía trên có thể được tách nhỏ ra như sau
+
+
+```
+let slice: &[u8] = &[11u8, 22, 33];
+let slice_it: std::slice::Iter<u8> = slice.iter();
+for item_ref in slice_it {
+    // *item_ref += 1;
+    print!("{} ", *item_ref);
+}
+let arr: [i32; 3] = [44, 55, 66];
+let arr_it: std::slice::Iter<i32> = arr.iter();
+for item_ref in arr_it {
+    // *item_ref += 1;
+    print!("{} ", *item_ref);
+}
+let vec: Vec<char> = vec!['a', 'b', 'c'];
+let vec_it: std::slice::Iter<char> = vec.iter();
+for item_ref in vec_it {
+    // *item_ref = if *item_ref == 'b' { 'B' } else { '-' };
+    print!("{} ", *item_ref);
+}
+```
+
+function `iter()` được áp dụng vào 1 slice item có dạng T, hoặc 1 array item kiểu T hoặc 1 vector item dạng T và trả về giá trị có kiểu `std::slice::Iter<T>`. giống như tên gọi của nó, giá trị được trả về của nó có dạng `iterator` vì vậy có thể dùng nó cho vòng lặp
+
+khi lặp trên 1 vòng lặp có kiểu T, các biến lặp có kiểu T, khi lặp trên 1 chuỗi các biến có kiểu char, khi lặp qua 1 chuỗi có kiểu T biến của nó sẽ có kiểu &T tức là tham chiếu. do đó để truy cập tới giá trị của nó, toán tử `*` có thể hoặc đôi khi phải được sử dụng
+
+câu lệnh đầu tiên trong vòng lặp thứ nhất ở bên trên đã bị vô hiệu hóa do nó không chính xác. trong thực tế, biến lặp là không thể thay đổi và điều này có thể hiểu được ngay cả khi áp dụng với slice, array và vector
+
+vòng lặp chuỗi trên các bytes của string được tạo bằng function `bytes()`
+
+```
+for byte in "€èe".bytes() {
+    print!("{} ", byte);
+}
+```
+
+một cách khác để lặp các bytes trên chuỗi đó là tạo slice tham chiếu tới các bytes của string bằng cách sử dụng function `as_bytes()` sau đó lặp trên tham chiếu slice đó
+
+```
+for byte in "€èe".as_bytes().iter() {
+    print!("{} ", byte);
+}
+```
+
+# *Iterations Without Mutation*
+
+tới hiện tại vẫn chỉ dùng vòng lặp để đọc các chuỗi, điều này khá điển hình
+trong khi lặp các ký tự trong chuỗi, việc cố gắng thay đổi chúng là điều không hợp lý vì ký tự mới có thể được biểu diễn bằng số byte khác với hiện tại, ví dụ nếu ký từ `è` được thay thế bằng ký tự `e` nghĩa là 2 byte của ký tự `è` phải được thay thế chỉ bằng 1 byte của ký tự `e`. do đó trong thư viện `std` của Rust không có cách nào để thay thế ký tự bằng ký tự khác với cách sử dụng vòng lặp chuỗi ký tự
+
+Khi lặp các byte của một chuỗi, việc cố gắng thay đổi chúng là không an toàn vì byte mới có thể đang tạo ra một chuỗi UTF-8 không hợp lệ. Do đó, thư viện `std` Rust không có cách nào để thay đổi từng chuỗi từng byte bằng cách sử dụng vòng lặp chuỗi byte.
+
+Khi lặp trên `range`, như chúng ta đã thấy, giá trị `range` được vòng lặp sử dụng là giá trị ở đầu vòng lặp, ngay cả khi nó được thay đổi bên trong vòng lặp
+
+```
+let mut r = "abc".chars();
+for i in r {
+    r = "XY".chars();
+    print!("{} {}; ", i, r.next().unwrap());
+}
+
+/*
+a X; b X; c X;
+*/
+```
+
+như ta thấy, giá trị mới được gán bên trong vòng lặp được sử dụng, tuy nhiên vòng lặp vẫn lặp trên giá trị được khởi tạo ban đầu
+
+biến vòng lặp được khỏi tạo ở mỗi lần vòng lặp chạy
+
+```
+let r = 0..5;
+for mut i in r {
+    i += 10;
+    print!("{} ", i);
+}
+
+/*
+10 11 12 13 14
+*/
+```
+
+giá trị của `i` được tăng dần qua từng vòng lặp, tuy nhiên `i` sẽ được khởi tạo lại ở vòng lặp sau đó
+
+do đó, đối với string và range không cần sử dụng vòng lặp để thay đổi item trong chuỗi
+
+# *Iterations with Mutation*
+
