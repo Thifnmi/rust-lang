@@ -3112,3 +3112,231 @@ do đó, đối với string và range không cần sử dụng vòng lặp đ�
 
 # *Iterations with Mutation*
 
+đôi khi lặp 1 chuỗi cũng cần thay đổi các phần tử của nó. Nhưng các cách lặp phía trên đều không cho phép thực hiện điều đó, thậm chí ngay cả khi dùng `mutable iterator` cũng không thể làm được
+
+trong thực tế `mutable iterator` có thể thay đổi và có thể được tạo ra để lặp trên 1 chuỗi khác chứ không phải được sử dụng để làm thay đổi trình tự của vòng lặp
+
+```
+let slice1 = &[3, 4, 5];
+let slice2 = &[7, 8];
+let mut iterator = slice1.iter();
+for item_ref in iterator {
+    print!("[{}] ", *item_ref);
+}
+iterator = slice2.iter();
+for item_ref in iterator {
+    print!("({}) ", *item_ref);
+}
+
+/*
+[3] [4] [5] (7) (8)
+*/
+```
+
+đây là 1 cách sử dụng của `mutable iterator`
+
+biến iterator đầu tiên trong đoạn code phía trên được tham chiếu tới slice1 và sau đó là slice2
+
+vòng lặp tương tự như tham chiếu, trong đó mutable reference lại không giống với tham chiếu tới mutable object
+
+nhưng nếu muốn thay đổi các giá trị trong chuỗi thông qua vòng lặp trên một chuỗi thì không thể sử dụng vòng lặp thông thường (ngay vả khi nó là immutable hay mutable)
+
+```
+let mut slice = &mut [3, 4, 5]; {
+let mut iterator = slice.iter();
+for mut item_ref in iterator {
+        *item_ref += 1;
+    }
+}
+print!("{:?}", slice);
+
+```
+
+đoạn code phía trên mặc dù đã chứa mệnh đề `mut` tuy nhiên khi biên dịch vẫn gặp lỗi bởi vì *item_ref vẫn là immutable
+
+với mục đích của đoạn code phía trên cần phải sử dụng loại vòng lặp khác. `mutating iterator`. tất nhiên nó phải được khởi tạo trên chuỗi có thể thay đổi
+
+```
+let slice = &mut [3, 4, 5]; {
+let iterator = slice.iter_mut();
+for item_ref in iterator {
+        *item_ref += 1;
+    }
+}
+print!("{:?}", slice);
+
+/*
+[4, 5, 6]
+*/
+```
+
+một vài mệnh đề `mut` đã bị loại bỏ, có 1 vài thay đổi nhỏ so với đoạn code phía trên thay vì gọi tới function `iter()` hiện tại đã được thay thế bằng `iter_mut()`. hay thử nghĩ tới các function tương tự như `get an iterator to read it` hay `get an iterator to mutate it`
+
+đoạn code phía trên có thể được trình bày 1 cách rõ ràng như sau
+
+```
+let slice = &mut [3, 4, 5]; {
+    let iterator: std::slice::IterMut<i32> = slice.iter_mut();
+    for item_ref in iterator {
+        *item_ref += 1;
+    }
+}
+print!("{:?}", slice);
+```
+
+trong khi `iter()` trả về giá trị kiểu `Iter<T>` thì `iter_mut()` trả về kiểu `IterMut<T>`
+
+quay trở lại với bài toán lặp trên slice, array, vector mà không thay đổi các giá trị của chuỗi đó, các ví dụ dưới đây sẽ thay đổi giá trị của chuỗi
+
+```
+for item_ref in (&mut [11u8, 22, 33]).iter_mut() {
+    *item_ref += 1;
+    print!("{} ", *item_ref);
+}
+for item_ref in [44, 55, 66].iter_mut() {
+    *item_ref += 1;
+    print!("{} ", *item_ref);
+}
+for item_ref in vec!['a', 'b', 'c'].iter_mut() {
+    *item_ref = if *item_ref == 'b' { 'B' } else { '-' };
+    print!("{} ", *item_ref);
+}
+
+
+/*
+12 23 34 45 56 67 - B -
+*/
+```
+
+đoạn code phía trên có thể được chia nhỏ ra như sau
+
+
+```
+let slice: &mut [u8] = &mut [11u8, 22, 33];
+let slice_it: std::slice::IterMut<u8> = slice.iter_mut();
+for item_ref in slice_it {
+    *item_ref += 1;
+    print!("{} ", *item_ref);
+}
+let mut arr: [i32; 3] = [44, 55, 66];
+let arr_it: std::slice::IterMut<i32> = arr.iter_mut();
+for item_ref in arr_it {
+    *item_ref += 1;
+    print!("{} ", *item_ref);
+}
+let mut vec: Vec<char> = vec!['a', 'b', 'c'];
+let vec_it: std::slice::IterMut<char> = vec.iter_mut();
+for item_ref in vec_it {
+    *item_ref = if *item_ref == 'b' { 'B' } else { '-' };
+    print!("{} ", *item_ref);
+}
+```
+
+có 1 vài điểm khác biệt giữa 2 đoạn code trước khi bắt đầu vòng lặp như:
+    - biến slice được tham chiếu tới mutable bytes
+    - biến arr và vec đều là mutable
+    - mỗi khi gọi tới function `iter()` đều được thay đổi bằng `iter_mut()`
+    - kiểu dữ liệu trả về của `iter_mut()` là `IterMut<T>` còn `iter()` là `Iter<T>`
+    - các item được tham chiếu tới biến `item_ref` trong các vòng lặp thực sự đã được thay đổi
+
+dưới đây là 1 ví dụ chứng minh cho việc thay đổi đối với dữ liệu cơ bản là có hiệu quả
+
+
+```
+let slice = &mut [11u8, 22, 33];
+for item_ref in slice.iter_mut() {
+    *item_ref += 1;
+}
+print!("{:?} ", slice);
+
+let mut arr = [44, 55, 66];
+for item_ref in arr.iter_mut() {
+    *item_ref += 1;
+}
+print!("{:?} ", arr);
+
+let mut vec = vec!['a', 'b', 'c'];
+for item_ref in vec.iter_mut() {
+    *item_ref = if *item_ref == 'b' { 'B' } else { '-' };
+}
+print!("{:?} ", vec);
+
+/*
+[12, 23, 34] [45, 56, 67] ['-', 'B', '-']
+*/
+```
+
+vậy là tới nay ta đã có 4 function để lấy từ 1 chuỗi và trả về vòng lặp là `chars()`, `bytes`, `iter()`, `iter_mut()`. các function không nhận vào 1 vòng lặp nhưng lại trả ra vòng lặp được gọi là `iterator generators`
+
+# *An Iterator Adapter: filter*
+
+một số cách sử dụng khác của iterators
+
+ví dụ cho 1 mảng các số, làm như nào để lấy được ra các số âm trong mảng đó
+
+```
+let arr = [66, -8, 43, 19, 0, -31];
+for n in arr.iter() {
+    if *n < 0 { print!("{} ", n); }
+}
+
+/*
+-8 -31
+*/
+```
+
+nhưng cũng có cách khác để làm việc này
+
+```
+let arr = [66, -8, 43, 19, 0, -31];
+for n in arr.iter().filter(|x| **x < 0) {
+    print!("{} ", n);
+}
+```
+function `filter()` nằm trong thư viện `std` của Rust. nó được sử dụng trong vòng lặp và nhận vào 1 `closure` như 1 đối số. đúng như tên gọi của nó, mục tiêu của hàm này dùng để `filtering` các giá trị trong chuỗi lặp, nghĩa là loại bỏ các giá trị không đạt tiêu chí của `closure` và chỉ cho phép các giá trị thoả mãn tiêu chí đó
+
+function `filter()` lấy 1 item tại 1 thời điểm từ vòng lặp và gọi tới `closure` với mỗi đối số được nhận vào. trong ví dụ trên item hiện tại là 1 số nguyên và được gắn vào biến local `x`
+
+`closure` bắt buộc phải trả về 1 giá trị `Boolean` với kết quả thỏa mãn điều kiện sẽ là `True`, ngược lại nếu không thỏa mãn sẽ là `False` khi thực hiện filter. giá trị không thỏa mãn điều kiện sẽ bị hủy bỏ trong khi giá trị thỏa mãn sẽ được chuyển sang biểu thức khác
+trong thực thế function `filter()` trả về 1 vòng lặp ( khi function `next()` được gọi) chỉ trả ra các giá trị mà `closure` trả về True
+vì đề bài phía trên chỉ quan tâm tới các số âm nên điều kiện bên trong `closure` sẽ là `x < 0` nhưng lại có 2 dấu hoa thị (asterisks - *). điều này là sao?
+
+vòng lặp được function `iter()` trả về tham chiếu tới item của chuỗi chứ không phải bản thân item đó vì vậy cần có dấu hoa thị để lấy item đó
+ngoài ra function `filter()` khi nhận vào 1 item từ vòng lặp, truyền tới `closure` tham chiếu của item đó vì vậy cần thêm 1 dấu hoa thị nữa. khi đó `x` được tham chiếu tới tham chiếu của một số nguyên. vì vậy 2 dấu hoa thi là cần thiết để lấy giá trị và so sánh nó với 0
+
+như đã thấy function `filter()` trả về 1 vòng lặp khác, vì vậy có thể sử dụng chúng bên trong vòng lặp `for`, vòng lặp thường được sử dụng
+
+vì function `filter()` lấy 1 vòng lặp và lại trả về 1 vòng lặp khác nên có thể nói nó biến "transforms" vòng lặp thành 1 vòng lặp khác. những việc biến đổi vòng lặp như vậy thường được gọi là `iterator adapter`. thuật ngữ `adapter` gợi nhớ tới các đầu cắm điện và câu nói "if a plug does not fit a socket, you use an adapter"
+
+# *The map Iterator Adapter*
+
+đề bài: cho 1 array các số, làm thế nào để gấp đối các số trong array
+
+```
+let arr = [66, -8, 43, 19, 0, -31];
+for n in arr.iter() {
+    print!("{} ", n * 2);
+}
+
+/*
+132 -16 86 38 0 -62
+*/
+```
+
+nhưng cũng có thể thực hiện theo cách này
+
+```
+let arr = [66, -8, 43, 19, 0, -31];
+for n in arr.iter().map(|x| *x * 2) {
+    print!("{} ", n);
+}
+```
+
+function `map()` là 1 `iterator adapter` khác trong thự viện `std` của Rust. mục đích của nó là `transforms` các giá trị do vòng lặp tạo ra thành giá trị mới. Khác với function `filter` giá trị được trả về bởi `closure` có thể là bất cứ loại nào, nó đại diện cho giá trị đã được `transforms`
+
+trên thực thế function `map()` trả về 1 vòng lặp mới được tạo ra để tạo ra tất cả các item được trả về bởi `closure` nhận với dưới dạng đối số
+
+trong khi `filter()` loại bỏ các item trong vòng lặp và giữ lại các item thỏa mãn điều kiện. còn `map()` không loại bỏ bất kỳ item nào nhưng lại `transform` chúng
+
+điểm khác biệt nữa giữa chúng đó là `filter()` nhận vào tham chiếu làm đối số cho `closure` còn `map()` thì nhận vào giá trị
+
