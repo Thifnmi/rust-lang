@@ -142,4 +142,72 @@ fn main() {
     for n in arr.iter().map(|x| *x * 2) {
         print!("{} ", n);
     }
+
+    // The enumerate Iterator Adapter
+    let arr = ['a', 'b', 'c'];
+    for i in 0..arr.len() {
+        print!("{} {}, ", i, arr[i]);
+    }
+
+    let arr = ['a', 'b', 'c'];
+    for ch in arr.iter() {
+        print!("{}, ", ch);
+    }
+
+    let arr = ['a', 'b', 'c'];
+    let mut i = 0;
+    for ch in arr.iter() {
+        print!("{} {}, ", i, *ch);
+        i += 1;
+    }
+
+    let arr = ['a', 'b', 'c'];
+    for (i, ch) in arr.iter().enumerate() {
+        print!("{} {}, ", i, *ch);
+    }
+
+    // An Iterator Consumer: any
+    println!("");
+    let s = "Hello, world!";
+    let ch = 'R';
+    let mut contains = false;
+    for c in s.chars() {
+        if c == ch {
+            contains = true;
+        }
+    }
+    println!(
+        "\"{}\" {} '{}'.",
+        s,
+        if contains {
+            "contains"
+        } else {
+            "does not contain"
+        },
+        ch
+    );
+
+    let s = "Hello, world!";
+    let ch = 'R';
+    print!(
+        "\"{}\" {} '{}'.",
+        s,
+        if s.chars().any(|c| c == ch) {
+            "contains"
+        } else {
+            "does not contain"
+        },
+        ch
+    );
+
+    print!("{} ", [45, 8, 2, 6].iter().any(|n| *n < 0));
+    print!("{} ", [45, 8, -2, 6].iter().any(|n| *n < 0));
+    print!(
+        "{} ",
+        [45, 8, 2, 6].iter().any(|n: &i32| -> bool { *n < 0 })
+    );
+    print!(
+        "{} ",
+        [45, 8, -2, 6].iter().any(|n: &i32| -> bool { *n < 0 })
+    );
 }

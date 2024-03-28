@@ -3340,3 +3340,138 @@ trong khi `filter()` loại bỏ các item trong vòng lặp và giữ lại cá
 
 điểm khác biệt nữa giữa chúng đó là `filter()` nhận vào tham chiếu làm đối số cho `closure` còn `map()` thì nhận vào giá trị
 
+
+# *The enumerate Iterator Adapter*
+
+thông thường khi muốn lặp chuỗi dùng biến đếm số nguyên để lấy ra index và sau đó lấy item qua biến số nguyên index như sau
+
+```
+let arr = ['a', 'b', 'c'];
+for i in 0..arr.len() {
+    print!("{} {}, ", i, arr[i]);
+}
+
+/*
+0 a, 1 b, 2 c,
+*/
+```
+
+ta có thể sử dụng 1 vòng lặp chuỗi để tránh dùng biến đếm số nguyên
+
+```
+let arr = ['a', 'b', 'c'];
+for ch in arr.iter() {
+    print!("{}, ", ch);
+}
+
+/*
+a, b, c, 
+*/
+```
+
+nhưng nếu vẫn muốn dùng biến đếm thì có thể dùng cách cũ, hoặc thêm 1 biến khác và tăng dần sau mỗi vòng lặp
+
+```
+let arr = ['a', 'b', 'c'];
+let mut i = 0;
+for ch in arr.iter() {
+    print!("{} {}, ", i, *ch);
+    i += 1;
+}
+```
+
+ngoài ra vẫn có 1 cách khác
+
+```
+let arr = ['a', 'b', 'c'];
+for (i, ch) in arr.iter().enumerate() {
+    print!("{} {}, ", i, *ch);
+}
+```
+
+ở dòng thứ 2 biến lặp thực chất là 1 tuple bao gồm 1 số nguyên và 1 tham chiếu tới ký tự trong array, ở lần đầu tiên biến `i` nhận vào giá trị 0 và biến `ch` nhận vào giá trị đầu tiên trong array. ở mỗi lần lặp tiếp theo cả `i` và `ch` đều được tăng lên
+
+điều này hoạt động vì function `enumerate()` lấy 1 vòng lặp và trả ra 1 vòng lặp khác. trình vòng lặp này ở mỗi lần lặp trả về giá trị kiểu `(usize, &char)`. giá trị đầu tiên trong tuple là biến đếm còn giá trị thứ 2 copy giá trị được nhận vào từ vòng lặp
+
+
+# *An Iterator Consumer: any*
+
+đề bài: cho 1 chuỗi, làm sao để xác định trong chuỗi có chứa ký tự cần xác định hay không
+
+```
+let s = "Hello, world!";
+let ch = 'R';
+let mut contains = false;
+for c in s.chars() {
+    if c == ch {
+        contains = true;
+    }
+}
+print!(
+    "\"{}\" {} '{}'.",
+    s,
+    if contains {
+        "contains"
+    } else {
+        "does not contain"
+    },
+    ch
+);
+
+/*
+Hello, world!" does not contain 'R'
+*/
+```
+
+kết quả như vậy vì ta đang so sánh ký tự in hoa với ký tự thường. nhưng nếu thay thế `R` bằng `r` kết quả sẽ khác `"Hello, world!" contains 'r'.`
+ngoài ra cũng có thể thử theo cách này
+
+```
+let s = "Hello, world!";
+let ch = 'R';
+print!(
+    "\"{}\" {} '{}'.",
+    s,
+    if s.chars().any(|c| c == ch) {
+        "contains"
+    } else {
+        "does not contain"
+    },
+    ch
+);
+```
+
+ở đây biến `contains` được khai báo bằng `False` và trong vòng lặp được set lại bằng `True` đã bị xóa và việc sử dụng biến đã đã được thay thế bằng biểu thức `s.chars().any(|c| c == ch)`
+mục đích duy nhất của biến `contains` là để biết trong string có chứa giá trị được lưu ở biến `ch` hay không nên tất nhiên biểu thức thay thế cho nó cũng cần phải có cùng giá trị
+như đã biết biểu thức `s.chars()` cho ta 1 vòng lặp các ký tự trong chuỗi `s`. sau đó function `any()` (nằm trong thư viện `std` của Rust) sẽ được sử dụng lên vòng lặp. với mục đích xác định xem tất cả giá trị của vòng lặp cung cấp có đáp ứng với điều kiện không
+
+function `any()` phải đươc áp dụng trên 1 vòng lặp và nhận vào đối số là `closure`. nó sẽ áp dụng `closure` lên tất cả các item nhận được từ vòng lặp và trả ra `true` nếu kết quả của `closure` là `true` trên 1 item và trả về false nếu kết quả `closure` là `false` cho tất cả items
+
+như vậy function sẽ cho ta biết bất kỳ item nào trong vòng lặp có thỏa mãn điều kiện của `closure` hay không
+
+cũng có thể dùng function `any()` để xác định xem trong array có chứa số âm hay không
+
+```
+print!("{} ",
+    [45, 8, 2, 6].iter().any(|n| *n < 0));
+print!("{} ",
+    [45, 8, -2, 6].iter().any(|n| *n < 0));
+
+/*
+false true
+*/
+```
+
+để làm rõ hơn câu lệnh có thể viết như sau
+
+```
+print!("{} ", [45, 8, 2, 6].iter()
+    .any(|n: &i32| -> bool { *n < 0 }));
+print!("{} ", [45, 8, -2, 6].iter()
+    .any(|n: &i32| -> bool { *n < 0 }));
+```
+
+bỏ qua các ký tự `&` sẽ gây ra lỗi
+tuy các `iterator adapter` phía trên để trả về 1 vòng lặp, function `any()` cũng nhận vào 1 vòng lặp nhưng lại trả ra giá trị `Boolean` không phải vòng lặp
+
+mọi function áp dụng lên vòng lặp mà không trả về vòng lặp sẽ đều được gọi là `iterator consumer` bởi vì giá trị được lấy từ vòng lặp không được đẩy qua 1 vòng lặp khác vậy nên nó `consumes` data thay thì `adapting` data
