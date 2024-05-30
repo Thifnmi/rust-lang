@@ -3946,7 +3946,7 @@ help: use `let _ = ...` to ignore the resulting value
 warning: 2 warnings emitted
 ```
 
-Điều này có nghĩa là `read_line` trả về giá trị thuộc loại `Result` và giá trị đó bị bỏ qua hoặc không được sử dụng. Rust coi việc bỏ qua giá trị trả về của loại "Kết quả" là nguy hiểm, vì loại như vậy có thể biểu thị runtime error và do đó logic chương trình không tính đến một loại lỗi như vậy. Điều này nguy hiểm trong production code nhưng cũng không thích hợp trong debug code vì nó che giấu các lỗi mà bạn đang  biết.
+Điều này có nghĩa là `read_line` trả về giá trị thuộc loại `Result` và giá trị đó bị bỏ qua hoặc không được sử dụng. Rust coi việc bỏ qua giá trị trả về của loại "Result" là nguy hiểm, vì loại như vậy có thể biểu thị runtime error và do đó logic chương trình không tính đến một loại lỗi như vậy. Điều này nguy hiểm trong production code nhưng cũng không thích hợp trong debug code vì nó che giấu các lỗi mà bạn đang  biết.
 Do đó, trong debug code, việc luôn viết ít nhất một mệnh đề `.unwrap()` là phù hợp.
 Nhưng trong production code, vấn đề không đơn giản như vậy.
 
