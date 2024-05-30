@@ -18,7 +18,7 @@ fn main(){} function rỗng tên main
 
 command line script debug
 
-```
+```/bin/bash
 rustc $* --color always 2>&1 | more
 ```
 
@@ -26,39 +26,39 @@ rustc $* --color always 2>&1 | more
 
 ## *string*
 
-```
+```rust
 let x = "my string"
 ```
 
 ## *integer*
 
-```
+```rust
 let number = 12345
 ```
 
 ## *float*
 
-```
+```rust
 let f = 12.3
 let f = 12.
 ```
 
 ## *bool*
 
-```
+```rust
 let b = true
 let b = false
 ```
 
 ## *array*
 
-```
+```rust
 let my_array = ["my", "array"]
 ```
 
 ## *mutable array* (array in array)
 
-```
+```rust
 let mut my_mutable_array = ["my", "array"];
 my_mutable_array[0] = ["this is"];
 print!("{} {}.", my_mutable_array[0], my_mutable_array[1]);
@@ -71,31 +71,31 @@ this is array.
 
 ## *Multidimensional Arrays* (Mảng đa chiều)
 
-```
+```rust
 let multidimensional_arrays = [[[[]]]]
 ```
 
 ## *Vector*
 
-```
+```rust
 let x = vec!["This", "is"];
 ```
 
 *rust cannot mix interger number with float number*
 
-```
+```rust
 println!("{}", 2.5 + 1)
 ```
 
 *fixed with add a dot (.)*
 
-```
+```rust
 println!("{}", 2.5 + 1.)
 ```
 
 # **operators**
 
-```
+```/bin/bash
 < is less than
 > is greater than
 == is equal to
@@ -106,13 +106,13 @@ println!("{}", 2.5 + 1.)
 
 # **conditional statements (if)**
 
-```
+```rust
 if condition {
     //exec code
 }
 ```
 
-```
+```rust
 if condition {
     // if logic
 }
@@ -121,7 +121,7 @@ else {
 }
 ```
 
-```
+```rust
 if condition {
     // if logic
 }
@@ -135,7 +135,7 @@ else {
 
 # **expression**
 
-```
+```rust
 print!("{}",
     if condition {
         "value 1"
@@ -156,7 +156,7 @@ print!("{}",
 
 ## *conditioned loop*
 
-```
+```rust
 while condition {
     // logic
 }
@@ -164,7 +164,7 @@ while condition {
 
 ## *infinite loop*
 
-```
+```rust
 while true {
     // logic
 }
@@ -172,7 +172,7 @@ while true {
 
 ## *couting loop (for)*
 
-```
+```rust
 for variable in a..b  {
     // logic
 }
@@ -182,31 +182,31 @@ there is the in keyword, followed by two integer numeric expressions, separated 
 
 # **array**
 
-```
-let `<mut>` _arr = ["value 1", "value 2"];
+```rust
+let <mut> _arr = ["value 1", "value 2"];
 ```
 
 ## *Arrays of Specified Size*
 
-```
-let `<mut> `_arr = [`<default value>`; `<length>`];
+```rust
+let <mut> _arr = [<default value>; <length>];
 ```
 
 ## *Multidimensional Arrays*
 
-```
-let `mut` arr = [[[[["ahihi"], 100], 17], 5], 20];
+```rust
+let mut arr = [[[[["ahihi"], 100], 17], 5], 20];
 ```
 
 default value is "ahihi", first statement declare an arr of 20 items
 
 check len array
 
-```
+```rust
 print!("{}, {}, {}, {}.", arr.len(), arr[0].len(), arr[0][0].len(), arr[0][0][0].len(), arr[0][0][0][0].len());
 ```
 
-```
+```rust
 let length = 6;
 
 let arr = [0; length];
@@ -214,7 +214,7 @@ let arr = [0; length];
 
 # **vector**
 
-```
+```rust
 let vt = vec![default_value; length];
 ```
 
@@ -222,7 +222,7 @@ Vectors allow us to do everything that is allowed for arrays, but they allow als
 
 add item to vector:
 
-```
+```rust
 vt.push("value"); // same stack, it push data to latest position
 
 vt[index] = "value"; // same array
@@ -230,7 +230,7 @@ vt[index] = "value"; // same array
 
 Định nghĩa vector với chuỗi giá trị bằng 4. (float) và có độ dài là 500. kiểu khai báo này không thể thực hiện với array
 
-```
+```rust
 let length = 500;
 let mut y = vec![4.; length];
 y[6] = 3.14;
@@ -245,7 +245,7 @@ Kết quả:
 
 không giống với array, độ dài của vector có thể thay đổi được trong quá trình runtime tuy nhiêu kiểu giá trị không thể thay đổi. trong rust giá trị của biến chỉ khai báo 1 lần khi biên dịch
 
-```
+```rust
 let mut _x = vec!["a", "b", "c"];
 _x = vec!["X", "Y"];
 let mut _x = vec!["a", "b", "c"];
@@ -254,7 +254,7 @@ _x = vec![15, 16, 17];
 
 các phương thức khác với vector
 
-```
+```rust
 let mut x = vec!["This", "is", "a", "sentence"];
 x.insert(1, "line");
 x.insert(2, "contains");
@@ -277,7 +277,7 @@ This line contains a sentence.
 
 ## *Non-Decimal Numeric Bases*
 
-```
+```rust
 let hexadecimal = 0x10;
 let decimal = 10;
 let octal = 0o10;
@@ -292,7 +292,7 @@ Kết quả:
 
 ## *Underscore in Numeric Literals (_)*
 
-```
+```rust
 let one_billion = 1_000_000_000;
 
 let x = 3___4_.56_;
@@ -325,7 +325,7 @@ có 2 loại là integer và float
 
 integer trong Rust chia thành 8-bit signed integer, 16-bit signed integer, 32-bit signed integer, 64-bit signed integer
 
-```
+```rust
 let a: i8 = 5;
 let b: i16 = 5;
 let c: i32 = 5;
@@ -354,13 +354,13 @@ Rust không hỗ trợ 16-bit system nhưng lại hỗ trợ cả 32-bit system 
 Việc lựa chọn 32-bit hay 64-bit không liên quan tới việc tối ưu code mà nó phụ thuộc vào việc sau khi biên dịch sẽ chạy trên hệ thống nào? (32-bit hay 64-bit). Với mục đích đó, Rust có thêm 2 loại là isize và usize
 
 ## *Float*
+
 Trong rust có 2 kiểu float là f32 và f64 tương đương với 32-bit floating-point numbers và 64-bit floating-point numbers
 f32 hiển thị 7 số phần thập phân, f64 hiển thị 16 số phần thập phân
 
 # **Explicit Conversions**
 
-
-```
+```rust
 let a: i16 = 12;
 let b: u32 = 4;
 let c: f32 = 3.7;
@@ -372,12 +372,14 @@ Kết quả:
 19
 */
 ```
+
 sử dụng toán tử `as` để có thể convert
 
 ở ví dụ trên khi convert biến `c` có giá trị 3.7 kiểu f32 qua kiểu i8 thì phần nguyên của giá trị là 3 nên kết quả đạt được sau convert là 3 kiểu dữ liệu i8
 
 với 1 ví dụ khác
-```
+
+```rust
 let a = 500 as i8;
 let b = 100_000 as u16;
 let c = 10_000_000_000 as u32;
@@ -394,7 +396,7 @@ tương tự ...
 
 ## *Type suffixes of numeric literals*
 
-```
+```rust
 let _a: i16 = -150;
 let _b = -150 as i16;
 let _c = -150 + _b - _b;
@@ -416,7 +418,7 @@ Tương tự với kiểu dữ liệu float
 
 # **All the Numeric Types**
 
-```
+```rust
 let _: i8 = 127;
 let _: i16 = 32_767;
 let _: i32 = 2_147_483_647;
@@ -431,7 +433,7 @@ let _: f32 = 1e38;
 let _: f64 = 1e308;
 ```
 
-```
+```table
 Type    | Occupied bytes | Minimum value                           |  Maximum value
 i8      |     1          |   -128                                  |     +127
 i16     |     2          |   -32,768                               |     +32,767
@@ -452,10 +454,9 @@ just two floating-point numeric types:
 
 ```
 
-
 # **Booleans and Characters**
 
-```
+```rust
 let a: bool = true;
 print!("[{}]", a);
 let b: char = 'a';
@@ -479,7 +480,7 @@ Kết quả:
 */
 ```
 
-```
+```rust
 let _a = 'a' + 'b';
 let _b = false + true;
 
@@ -517,7 +518,7 @@ Kết quả:
 trong đó true/false là 1 và 0, các ký tự được convert về Hex trong bảng mã ascii
 ngược lại, ta có thể convert các dữ liệu dạng số nguyên qua ký tự
 
-```
+```rust
 print!("{} {}",65 as char, 224 as char);
 
 /*
@@ -530,10 +531,9 @@ A à
 
 ....
 
-
 # **Array and Vector Types**
 
-```
+```rust
 let _array1: [char; 3] = ['x', 'y', 'z'];
 let _array2: [f32; 200] = [0f32; 200];
 let _vector1: Vec<char> = vec!['x', 'y', 'z'];
@@ -542,7 +542,7 @@ let _vector2: Vec<i32> = vec![0; 5000];
 
 # **Constants**
 
-```
+```rust
 let n = 20;
 let _ = [0; n];
 
@@ -559,16 +559,14 @@ error: aborting due to previous error
 
 Cách làm trên đã vi phạm qui tắc trong Rust. Bởi độ dài của array phải được làm rõ trước khi biên dịch ngay cả khi nó là immutable (giá trị bất biến, không thể thay đổi khi gán vào biến), do đó theo 1 nghĩa nào đó có thể hiểu giá trị khi biên dịch là 1 hằng số (constants)
 
-```
+```rust
 const N: usize = 20;
 let _ = [0; N];
 ```
 
-
 # **Discovering the Type of an Expression**
 
 ....
-
 
 # **Enumerating Cases**
 
@@ -576,7 +574,7 @@ let _ = [0; N];
 
 Instead of writing the following code:
 
-```
+```rust
 const ONE: u8 = 1;
 const TWO: u8 = 2;
 const THREE: u8 = 3;
@@ -603,7 +601,7 @@ Kết quả:
 
 It is better to write the following equivalent code:
 
-```
+```rust
 enum Number {
     One,
     Two,
@@ -628,7 +626,7 @@ Kết quả:
 
 enums chỉ có thể có 1 giá trị trong list được định nghĩa trước. Những items đó được gọi là variants (biến thể)
 
-```
+```rust
 enum T {A, B, C, D};
 let n: i32 = T::D;
 let e: T = 1;
@@ -660,7 +658,8 @@ The `match` statement is the basic Rust tool to use enumerations, similarly to t
 
 Các biểu thức (expressions) ở sau keyword `match` không nhất thiết phải nằm trong dấu ngoặc kép (enclosed). Các trường hợp khác nhau được tạo từ pattern sau đó là ký tự `=>` và cuối cùng là biểu thức, những trường hợp này được ngăn cách bởi dấu phẩy (commas)
 ví dụ:
-```
+
+```rust
 enum Var {
     Val1,
     Val2,
@@ -671,10 +670,10 @@ match x {
     Var::Val2 => print!("hi"),
 }
 ```
+
 `print!()` là 1 biểu thức hợp lệ. Tuy nhiên `let a = 3;`, `let a = 3` hay `fn empty() {}` không phải biểu thức hợp lệ
 
-
-```
+```rust
 enum Number {
     One,
     Two,
@@ -694,7 +693,7 @@ match contin {
 
 Nếu muốn sử dụng biểu câu lệnh không phải biêủ thức hay đánh giá một số biểu thức ở sau `=>` có thể sử dụng block `{}`
 
-```
+```rust
 enum Continent {
     Europe,
     Asia,
@@ -724,9 +723,9 @@ E
 
 ## *Relational Operators and Enums*
 
-enums không thể so sánh với toán tử `==` 
+enums không thể so sánh với toán tử `==`
 
-```
+```rust
 enum CardinalPoint {
     North,
     South,
@@ -748,10 +747,10 @@ error[E0369]: binary operation `==` cannot be applied to type `CardinalPoint`
     |        CardinalPoint
 */
 ```
+
 enums được dùng trong rất nhiều thư viện và cả trong các thư viện của Rust vì vậy không chỉ toán tử `==` mà các toán tử quan hệ khác cũng bị coi là không hợp lệ
 
-
-```
+```rust
 enum CardinalPoint {
     North,
     South,
@@ -774,7 +773,7 @@ error[E0369]: binary operation `<` cannot be applied to type `CardinalPoint`
 
 ## *Handling All the Cases*
 
-```
+```rust
 enum CardinalPoint {
     North,
     South,
@@ -808,7 +807,7 @@ note: `CardinalPoint` defined here
 
 Để có thể biên dịch được, cần phải handle hết các case
 
-```
+```rust
 enum CardinalPoint {
     North,
     South,
@@ -826,7 +825,7 @@ match direction {
 
 Đây là 2 biến nhưng nếu có nhiều biến hơn thì sao? để tránh phải handle hết các biến không có tác động có thể dùng `_` (underscore)
 
-```
+```rust
 enum CardinalPoint {
     North,
     South,
@@ -845,8 +844,7 @@ match direction {
 
 ## *Using match with Numbers*
 
-
-```
+```rust
 
 match "value" {
     "val" => print!("value "),
@@ -872,7 +870,7 @@ other three point
 
 # *Enumerations with Data*
 
-```
+```rust
 enum Result {
     Success(f64),
     Failure(u16, char),
@@ -895,9 +893,9 @@ Error n. 1200 in module X
 
 ## *“match” Expressions*
 
-giống như `if`, `match` cũng là biểu thức 
+giống như `if`, `match` cũng là biểu thức
 
-```
+```rust
 enum CardinalPoint {
     North,
     South,
@@ -921,7 +919,7 @@ Nếu thay biểu thức thứ 3 thành `_ => {},` có thể sẽ gặp lỗi `m
 
 ## *Use of Guards in match Constructs*
 
-```
+```rust
 for n in -2..5 {
     println!("{} is {}.", n, match n {
         0 => "zero",
@@ -949,7 +947,7 @@ for n in -2..5 {
 
 Không giống như arrays hay vector, tuple có thể lưu trữ đối một hay nhiều object không có cùng kiểu dữ liệu
 
-```
+```rust
 let data = (10000000, 183.19, 'Q');
 let copy_of_data = data;
 print!("{}, {}, {}", data.0, copy_of_data.1, data.2);
@@ -960,21 +958,21 @@ print!("{}, {}, {}", data.0, copy_of_data.1, data.2);
 */
 ```
 
-ngoài ra data type của tuples có thể được định nghĩa rõ ràng 
+ngoài ra data type của tuples có thể được định nghĩa rõ ràng
 
-```
+```rust
 let data: (i32, f64, char) = (10000000, 183.19, 'Q');
 ```
 
 giống như array, tuple cũng có thể truy vấn dữ liệu từng item bên trong bằng cách
 
-```
+```rust
 data.<index>
 ```
 
 Và dữ liệu của tuple cũng có thể thay đổi được
 
-```
+```rust
 let mut data = (10000000, 183.19, 'Q'); data.0 = -5;
 data.2 = 'x';
 print!("{}, {}, {}", data.0, data.1, data.2);
@@ -987,8 +985,7 @@ print!("{}, {}, {}", data.0, data.1, data.2);
 
 Điểm khác nhau giữa array và tuple là tuple không thể truy cập bằng variable index
 
-
-```
+```rust
 let array = [12, 13, 14];
 let tuple = (12, 13, 14);
 let i = 0;
@@ -1008,7 +1005,7 @@ error[E0609]: no field `i` on type `({integer}, {integer}, {integer})`
 
 tuples rất hữu ích khi không có quá nhiều item, nhưng khi có nhiều thì rất dễ nhầm lẫn và code trở nên khó hiểu hơn
 
-```
+```rust
 let data = (10, 'x', 12, 183.19, 'Q', false, -9);
 print!("{}", data.2 + data.6);
                 ^        ^
@@ -1021,7 +1018,7 @@ print!("{}", data.2 + data.6);
 
 Ngoài ra kiểu dữ liệu của từng ittem trong tuple được định nghĩa bởi chuỗi các field, nếu nhiều field thì sẽ quá dài để định nghĩa và khó để hiểu
 
-```
+```rust
 let data1 = (10, 'x', 12, 183.19, 'Q', false, -9);
 let mut data2: (u16, char, i16, f64, bool, char, i16);
 data2 = data1;
@@ -1030,11 +1027,12 @@ data2 = data1;
 Đoạn code trên lỗi do nhầm kiểu giá trị giữa index 4 và 5
 */
 ```
+
 Ngoài ra nếu thêm 1 field vào đầu của tuple thì tất cả index object của tuple phải tăng thêm 1 trong code ví dụ `data.2` phải tăng lên thành `data.3`
 
 Do đó, sẽ rất hữu ích nếu có câu lệnh định nghĩa cấu trúc, khai báo tên, gán nhãn cho các field của cấu trúc đó
 
-```
+```rust
 struct ExampleStruct {
     integer: i32,
     fractional: f32,
@@ -1058,9 +1056,9 @@ fn main() {
 */
 ```
 
-Nếu variable được định nghĩa là mutable thì giá trị các trường của biến có thể được thay đổi 
+Nếu variable được định nghĩa là mutable thì giá trị các trường của biến có thể được thay đổi
 
-```
+```rust
 struct ExampleStruct {
     integer: i32,
     fractional: f32,
@@ -1083,7 +1081,7 @@ Giống như tuple, vì vậy có thể khỏi tạo empty structs
 
 Là sự kết hợp giữa `tuples` và `structs`. kiểu cấu trúc này có tên, phải được định nghĩa trước giống như `structs` nhưng lại không có tên các `fields` giống `tuples`
 
-```
+```rust
 struct SomeData (
     i32,
     f32,
@@ -1105,7 +1103,7 @@ Q, 10000000, 183.19, 250
 
 ## *Lexical Conventions*
 
-```
+```rust
 const MAXIMUM_POWER: u16 = 600;
 enum VehicleKind {
     Motorcycle,
@@ -1129,17 +1127,15 @@ if vehicle.power > MAXIMUM_POWER {
 }
 ```
 
-    - Tên của biến constaints chỉ cho phép khí tự viết hoa và được nối với nhau bằng dấu underscore `_`
+    - Tên của biến constaints chỉ cho phép khí tự viết hoa và được nối với nhau bằng dấu underscore`_`
     - Tên hàm, thư viện thông thường và enum variant bao gôm các từ được ghép với nhau và viết hoa chứ cái đầu tiên mỗi từ (Camel style convention)
     - Các biến khác chỉ sử dụng chữ cái viết thường, giữa các từ nối với nhau bằng dấu underscore `_`
-
 
 # **Defining Functions**
 
 ## *Defining and Invoking a Function*
 
-
-```
+```rust
 fn line() {
     println!("----------");
 }
@@ -1157,14 +1153,15 @@ line();
 ## *Functions Defined After Their Use*
 
 Not use with variable
-```
+
+```rust
 f();
 fn f() {}
 ```
 
 ## *Functions Shadowing Other Functions*
 
-```
+```rust
 {
     fn f() {
         print!("a");
@@ -1182,7 +1179,7 @@ aab
 */
 ```
 
-```
+```rust
 fn f() {
     print!("1");
 }
@@ -1205,7 +1202,7 @@ fn f() {
 
 ## *Passing Arguments to a Function*
 
-```
+```rust
 fn print_sum(addend1: f64, addend2: f64) {
     println!("{} + {} = {}", addend1, addend2, addend1 + addend2);
 }
@@ -1220,11 +1217,9 @@ fn main() {
 */
 ```
 
-
 ## *Passing Arguments by Value*
 
-
-```
+```rust
 fn print_double(mut x: f64) {
     x *= 2.0;
     println!("value in func print_double {}", x);
@@ -1238,7 +1233,7 @@ fn main() {
 
 ## *Returning a Value from a Function*
 
-```
+```rust
 fn double(x: f64) -> f64 {
     x * 2.0
 }
@@ -1251,7 +1246,7 @@ fn main() {
 */
 ```
 
-```
+```rust
 fn f1(x: i32) {}
 fn f2(x: i32) -> () {}
 ```
@@ -1259,14 +1254,16 @@ fn f2(x: i32) -> () {}
 `f1` `f2` is a same function, both return an empty tuple
 
 This code is valid
-```
+
+```rust
 fn f1() -> i32 { 4.5; "abc"; 73i32 }
 fn f2() -> i32 { 4.5; "abc"; 73 }
 fn f3() -> i32 { 4.5; "abc"; 73 + 100 }
 ```
+
 but this code is not
 
-```
+```rust
 fn f1() -> i32 { 4.5; "abc"; false }
 fn f2() -> i32 { 4.5; "abc"; () }
 fn f3() -> i32 { 4.5; "abc"; {} }
@@ -1282,7 +1279,7 @@ f2,f3,f4: expected i32, found ()
 
 ## *Early Exit*
 
-```
+```rust
 fn f(x: f64) -> f64 {
     if x <= 0. {
         return 0.;
@@ -1297,7 +1294,7 @@ print!("{} {}", f(1.), f(-1.));
 */
 ```
 
-```
+```rust
 fn f(x: i32) {
     if x <= 0 { return; }
     if x == 4 { return (); }
@@ -1311,7 +1308,7 @@ f(5);
 
 có thể dùng tuple
 
-```
+```rust
 fn several_values(dividend: i32, divisor: i32) -> (i32, i32){
     (dividend / divisor, dividend % divisor)
 }
@@ -1325,7 +1322,7 @@ println!("{:?}", several_values(12, 9))
 
 hoặc có thể trả về enum, struct, tuple struct, array, vector
 
-```
+```rust
 enum E { E1, E2 }
 struct S { a: i32, b: bool }
 struct TS (f64, char);
@@ -1345,9 +1342,9 @@ print!("{} ", f5()[0]);
 
 ## *Change a Variable of the Caller*
 
-Thông thường 
+Thông thường
 
-```
+```rust
 let mut arr = [5, -4, 9, 0, -7, -1, 3, 5, 3, 1];
 for i in 0..10 {
     if arr[i] < 0 {
@@ -1363,7 +1360,7 @@ print!("{:?}", arr);
 
 Chuyển sang thành func để tái sử dụng
 
-```
+```rust
 fn double_negatives(mut a: [i32; 10]) { for i in 0..10 {
     if a[i] < 0 {
         a[i] *= 2;
@@ -1381,7 +1378,7 @@ print!("{:?}", arr);
 
 Kết qủa là array vẫn được giữ nguyên. bởi vì khi gọi hàm giá trị của array đã được sao chép qua array khác. khi hàm xử lý xong các giá trị được sao chép (cũng đã qua xử lý) cũng sẽ bị hủy vì vậy giá trị của hàm gốc vẫn còn nguyên và cũng có thể bỏ khai báo `mut` khi khai báo mảng. Cách khắc phục
 
-```
+```rust
 fn double_negatives(mut a: [i32; 10]) -> [i32; 10] {
     for i in 0..10 {
         if a[i] < 0 {
@@ -1403,8 +1400,7 @@ Kết quả lúc này đã chính xác. tuy nhiên có 1 nhược điểm là t�
 
 ## *Passing Arguments by Reference*
 
-
-```
+```rust
 fn double_negatives(a: &mut [i32; 10]) {
     for i in 0..10 {
         if (*a)[i] < 0 {
@@ -1426,10 +1422,9 @@ fn main() {
 kết quả lúc này đã chính xác, nhưng không cần copy data
 lúc này xuất hiện 2 ký tự mới `*` và `&`. Những thứ này trong Rust có ý nghĩa giống với trong C, `&` mang ý nghĩa `địa chỉ của object trong RAM` *the (memory) address of the object* và `*` là `giá trị của object trong RAM` *the object that is present at the (memory) address*
 
-
 ## *Using References*
 
-```
+```rust
 let a = 15;
 let ref_a = &a;
 print!("{} {} {} {}", a, *ref_a, ref_a, &ref_a);
@@ -1439,7 +1434,7 @@ print!("{} {} {} {}", a, *ref_a, ref_a, &ref_a);
 */
 ```
 
-```
+```rust
 let a = &&&7;
 print!("{} {} {} {}", ***a, **a, *a, a);
 
@@ -1450,8 +1445,7 @@ print!("{} {} {} {}", ***a, **a, *a, a);
 
 ## *Mutability of References*
 
-
-```
+```rust
 let mut a: i32 = 10;
 let mut b: i32 = 20;
 let mut p: &mut i32 = &mut a;
@@ -1477,7 +1471,7 @@ println!("{} {}", *p, p);
 
 Rust kiểm tra kiểu dữ liệu nghiêm ngặt, vì vậy khi định nghĩa function cần xác định chính xác kiểu dữ liệu của parameters
 
-```
+```rust
 fn square_root(x: f32) -> f32 {}
 ```
 
@@ -1485,8 +1479,7 @@ ví dụ khi gọi tới hàm `square_root` cần phải truyền chính xác ki
 
 điều này gây bất tiện cho chính người viết functions cũng như người sử dụng gọi tới function đó. ví dụ nếu quyết định function đó sử dụng kiểu i16, nhưng mỗi khi gọi vào lại là kiểu i32 thì tốt nhất là nên thay đổi cách định nghĩa function
 
-
-```
+```rust
 fn f(ch: char, num1: i16, num2: i16) -> i16 {
     if ch == 'a' {
         num1
@@ -1503,7 +1496,7 @@ print!("{}", f('a', 37, 41));
 */
 ```
 
-```
+```rust
 fn f(ch: char, num1: i16, num2: i16) -> i16 {
     if ch == 'a' {
         num1
@@ -1531,7 +1524,7 @@ nếu thay đổi cách định nghĩa function (thay thế i16 bằng f32 hoặ
 
 ## *Defining and Using Generic Functions*
 
-```
+```rust
 fn f1<T>(ch: char, num1: T, num2: T) -> T {
     if ch == 'a' { num1 } else { num2 }
 }
@@ -1567,7 +1560,7 @@ Trong `C` không cho phép những hàm dùng chung nhưng `C++` thì có và đ
 
 đoạn code phía trên chạy tốt nhưng có thể tối giản hơn được
 
-```
+```rust
 fn f1<T>(ch: char, num1: T, num2: T) -> T {
     if ch == 'a' { num1 } else { num2 }
 }
@@ -1583,10 +1576,10 @@ println!("{} {}", a, b);
 ```
 
 các mệnh đề như `::<i16>` và `::<f64>` đã bị loại bỏ nhưng kết quả vẫn tương đương. đúng vậy, khi phân tích cú pháp biên dịch của hàm chung các giá trị được truyền vào sẽ được sử dụng để xác định kiểu của tham số
-Như có vẻ như, các mệnh đề ::<i16> và ::<f64> đã bị xóa, dù sao cũng có được một chương trình tương đương. Thật vậy, trình biên dịch, khi phân tích cú pháp lệnh gọi hàm chung, sử dụng các loại giá trị được truyền làm đối số để xác định tham số loại.
+Như có vẻ như, các mệnh đề ::`<i16>` và ::`<f64>` đã bị xóa, dù sao cũng có được một chương trình tương đương. Thật vậy, trình biên dịch, khi phân tích cú pháp lệnh gọi hàm chung, sử dụng các loại giá trị được truyền làm đối số để xác định tham số loại.
 Điều này có nghĩa là kiểu tham số được suy ra từ kiểu của các giá trị được sử dụng trong biểu thức chứa lệnh gọi hàm chung, đương nhiên các loại khác nhau được sử dụng phải nhất quán.
 
-```
+```rust
 fn f<T>(a: T, _b: T) -> T { a }
 let _a = f(12u8, 13u8);
 let _b = f(12i64, 13i64);
@@ -1598,8 +1591,7 @@ ví dụ này chương trình sẽ gặp lỗi ở dòng lệnh `let _c = f(12i1
 
 nếu muốn tham số hóa một hàm có nhiều tham số có kiểu dữ liệu khác nhau hay chỉ định kiểu dữ liệu cho tham số đó
 
-
-```
+```rust
 fn f<Param1, Param2>(_a: Param1, _b: Param2) {}
 f('a', true);
 f(12.56, "Hello");
@@ -1608,7 +1600,7 @@ f((3, 'a'), [5, 6, 7]);
 
 ## *Defining and Using Generic Structs*
 
-```
+```rust
 struct S<T1, T2> {
     c: char,
     n1: T1,
@@ -1617,17 +1609,19 @@ struct S<T1, T2> {
 }
 let _s = S { c: 'a', n1: 34, n2: 782, n3: 0.02 };
 ```
+
 Định nghĩa struct chung có tên là S nhận vào 2 tham số hóa là T1 và T2. Tham số thứ nhất được sử dụng 2 lần bởi 2 field trong struct trong khi tham số thứ 2 chỉ được sử dụng bởi 1 field
 
-```
+```rust
 struct TS<T1, T2>(char, T1, T1, T2);
 let _se = TS('a', 34, 782, 0.02);
 ```
+
 tương tự như phía trên nhưng thay vì struct thì ví dụ này là tuple-struct
 
 Ngoài ra cũng có thể biểu diễn việc tham số hóa cho struct rõ ràng hơn
 
-```
+```rust
 struct S<T1, T2> { c: char,
     n1: T1,
     n2: T1,
@@ -1641,12 +1635,11 @@ let _ts = TS::<u16, f32> ('a', 34, 782, 0.02);
 
 structs chung (generic structs) không được cho phép trong `C` nhưng trong `C++` thì được. chúng được gọi là `class templates` và `the struct templates`.
 
-
 ## *Genericity Mechanics*
 
-để hiểu rõ hơn về cách thức hoạt động hãy thử đặt mình vào vị trí của trình biên dịch để theo dõi quá trình biên dịch. về mặt khái niệm quá trình biên dịch được chia làm nhiều giai đoạn. hãy thử sức với đoạn code này 
+để hiểu rõ hơn về cách thức hoạt động hãy thử đặt mình vào vị trí của trình biên dịch để theo dõi quá trình biên dịch. về mặt khái niệm quá trình biên dịch được chia làm nhiều giai đoạn. hãy thử sức với đoạn code này
 
-```
+```rust
 fn swap<T1, T2>(a: T1, b: T2) -> (T2, T1) { (b, a) }
 let x = swap(3i16, 4u16);
 let y = swap(5f32, true);
@@ -1664,7 +1657,7 @@ Ngay từ đầu array và vector đã là những dạng chung, trong thực t�
 
 Enum cũng có thể có dạng chung
 
-```
+```rust
 enum Result1<SuccessCode, FailureCode> {
     Success(SuccessCode),
     Failure(FailureCode, char),
@@ -1687,7 +1680,7 @@ một vài ngôn ngữ khác thì trả về giá trị `null` nhưng vector có
 
 Vậy trong Rust xử lý như nào?
 
-```
+```rust
 let mut v = vec![11, 22, 33]; for _ in 0..5 {
     let item: Option<i32> = v.pop();
     match item {
@@ -1706,19 +1699,18 @@ vòng for sẽ lặp lại 5 lần, mỗi lần sẽ remove 1 item trong vector 
 
 với `Option` là generic enum được định nghĩa bởi thư viện tiêu chuẩn của Rust
 
-```
+```rust
 enum Option<T> {
     Some(T),
     None,
 }
 ```
 
-
 ## *Error Handling*
 
 Trong thư viện của Rust cũng đã có 1 số generic enum để handle trường hợp function không trả về được đúng giá kiểu giá trị mong muốn
 
-```
+```rust
 fn divide(numerator: f64, denominator: f64) -> Result<f64, String> {
     if denominator == 0.0 { Err(format!("Divide by zero")) } else { Ok(numerator / denominator) }
 }
@@ -1734,7 +1726,7 @@ Ok(4.0), Err("Divide by zero")
 
 Tương tự `Result` cũng giống như `Option` đều là generic enum trong thư viện tiêu chuẩn của Rust. tuy nhiên `Option` không có giá trị nào được thể hiện khi không có kết quả còn `Result` có thể thêm mô tả khi thực hiện gặp lỗi
 
-```
+```rust
 enum Result<T, E> {
     Ok(T),
     Err(E),
@@ -1743,7 +1735,7 @@ enum Result<T, E> {
 
 ở ví dụ trên T có dạng f64 vì vậy kết quả của function phải là f64 và E là String vì chỉ muốn hiển thị message. các kết quả trên được in ra dưới dạng thông tin debug. tuy nhiên trong production điều đó là không được chấp nhận
 
-```
+```rust
 fn divide(numerator: f64, denominator: f64) -> Result<f64, String> {
     if denominator == 0.0 { Err(format!("Divide by zero")) } else { Ok(numerator / denominator) }
 }
@@ -1770,8 +1762,7 @@ Cannot divide 8 by 0: Divide by zero
 
 `Result` và `Option` là 2 thư viện tiêu chuẩn cho phép nắm bắt linh hoạt và hiệu quả tất cả các trường hợp có thể xảy ra trong quá trình code thực tế. tuy nhiên sử dụng `match` để so sánh gặp khá nhiều bất tiện. vì vậy trong thư viện tiêu chuẩn có một vài function để giải mã giá trị của `Result` và `Option`
 
-
-```
+```rust
 fn divide(numerator: f64, denominator: f64) -> Result<f64, String> {
     if denominator == 0.0 { Err(format!("Divide by zero")) } else { Ok(numerator / denominator) }
 }
@@ -1795,9 +1786,9 @@ thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: "Divide 
 
 `is_ok()` trả về `true` nếu `Ok()` của `Result` được áp dụng và ngược lại `is_er()` trả về `true` nếu `Err()` của `Result` được áp dụng. điều này có nghĩa là `is_err` và `! is_ok` trả về kết quả giống nhau
 `unwrap()` trả về giá trị của biến khi `Ok()` của `Result` được áp dụng
-`unwrap()` cũng là 1 function của Option enum. khi đó có thể lấy ra giá trị của cả vector như sau 
+`unwrap()` cũng là 1 function của Option enum. khi đó có thể lấy ra giá trị của cả vector như sau
 
-```
+```rust
 let mut v = vec![11, 22, 33];
 for _ in 0..v.len() {
     print!("{}, ", v.pop().unwrap())
@@ -1816,7 +1807,6 @@ for _ in 0..v.len() {
 
 để hiểu rõ hơn về Rust cũng như các ngôn ngữ lập trình hệ thống khác ví dụ như `C`, cần phải hiểu rõ các khái niệm khác nhau về  `memory allocation`, `static allocation`, `stack allocation`, `heap allocation`
 
-
 ## *Linear Addressing*
 
 trong bất kỳ phần cứng máy tính nào đều có 1 thứ dùng để đọc và ghi nó được gọi là RAM, bao gồm các chuỗi bytes dài và có thể truy cập.  bytes đầu tiên trong RAM có vị trí là 0 trong khi byte cuối cùng có vị trí là kích thước bộ nhớ -1
@@ -1829,7 +1819,7 @@ nói một cách đơn giản thì hiện tại chúng ta có 2 loại máy tín
 
 ## *Static Allocation*
 
-```
+```rust
 static _A: u32 = 3;
 static _B: i32 = -1_000_000;
 static _C: f64 = 5.7e10;
@@ -1846,7 +1836,7 @@ static _D: u8 = 200;
 1 nhược điểm nữa là nếu tất cả các biến trong chương trình đều là `static allocation`, khi thực thi nếu chương trình nhiều biến mỗi lần chỉ sử dụng 1 phần nhỏ các biến sẽ gây tốn nhiều bộ nhớ
 thêm vào đó biến static không an toàn khi thay đổi
 vì vậy trong Rust chúng không được sử dụng nhiều
-tuy nhiên `static allocation` được sử dụng nhiều cho 2 kiểu dữ liệu: file thực thi nhị phân (executable binary code thực ra nó cũng không thực sự là dữ liệu) và các chuỗi ký tự 
+tuy nhiên `static allocation` được sử dụng nhiều cho 2 kiểu dữ liệu: file thực thi nhị phân (executable binary code thực ra nó cũng không thực sự là dữ liệu) và các chuỗi ký tự
 
 ## *Stack Allocation*
 
@@ -1856,8 +1846,7 @@ trong thực tế có 1 stack cho mỗi luồng chứ không chỉ là stack cho
 
 mỗi luồng lưu trữ địa chỉ các đầu của `stack` đó. thông thường phần cuối giá trị cao hơn được gọi là phần đáy cảu ngăn xếp, phần cuối có giá trị nhỏ hơn được coi là phần trên cùng của ngăn xếp
 
-
-```
+```rust
 let _a: u32 = 3;
 let _b: i32 = -1_000_000;
 let _c: f64 = 5.7e10;
@@ -1873,14 +1862,11 @@ let _d: u8 = 200;
     - Rust cho phép phân bổ stack chỉ với các object có kích thước biết trước khi biên dịch như kiểu và mảng nguyên thủy, không cho phân bổ stack các đối tượng có kích thước chỉ được xác định khi chạy như vector
     - không được phân bổ/giải phóng các đối tượng explicitly (rõ ràng?) trong ngăn xếp, mọi biến đều đươc tự động phân bổ khi hàm mà nó khai báo được gọi, ngay cả khi nó được khai báo trong  của hàm đó và nó sẽ bị hủy cấp phát khi quá trình thực thi hàm đó kết thúc. không thể ghi đè hành vi đó.
 
-
 ...
 
 ## *Heap Allocation*
 
-
 ...
-
 
 ## *Heap Management*
 
@@ -1894,7 +1880,6 @@ let _d: u8 = 200;
 
 ...
 
-
 ## *Boxing and Unboxing*
 
 ...
@@ -1902,8 +1887,6 @@ let _d: u8 = 200;
 ## *Register Allocation*
 
 ...
-
-
 
 # **Data Implementation**
 
@@ -1913,7 +1896,7 @@ từ source file, Rust có thể biên dịch ra tất cả ngôn ngữ máy, mi
 Do đó, với một biến ta không xác định được nó sử dụng bao nhiêu bit bộ nhớ và vị trí của nó trong bộ nhớ. Nhưng trình biên dịch thậm chí có thể xóa biến đó khỏi bộ nhớ vì nó không bao giờ được sử dụng hoặc vì nó được lưu trong thanh ghi bộ xử lý.
 Tuy nhiên, nên xem cách triển khai điển hình có thể có của việc sắp xếp dữ liệu được sử dụng bởi chương trình Rust.
 
-```
+```rust
 print!("{} ", std::mem::size_of::<i32>());
 print!("{} ", std::mem::size_of_val(&12));
 
@@ -1921,6 +1904,7 @@ print!("{} ", std::mem::size_of_val(&12));
 4 4
 */
 ```
+
 trong câu lệnh đầu tiên trình biên dịch sử dụng thư viện module `std` (standard) sau đó có thêm sub-module `mem` (memory) cuối cùng là generic function `size_of`
 trình biêm dịch cụ thể hóa generic function bằng cách sử dụng kiểu i32 sau đó tạo ra lệnh gọi hàm cụ thể mà không truyền bất cứ tham số nào. Hàm như vậy sẽ trả về số byte (chính xác là “octet của bit”) được chiếm bởi bất kỳ đối tượng nào thuộc loại đã chỉ định. Thông thường, việc gọi hàm như vậy sẽ được nội tuyến và do đó code được tạo ra chỉ là một số không đổi. Trên thực tế, một số 32 bit xuất hiện chiếm 4 byte.
 Lưu ý rằng có thể gọi hàm này ngay cả khi trong chương trình không có đối tượng thuộc loại được chỉ định.
@@ -1928,14 +1912,11 @@ Lưu ý rằng có thể gọi hàm này ngay cả khi trong chương trình kh�
 ở câu lệnh thứ 2 tương tự câu thứ nhất nhưng gọi generic function khác là `size_of_val` “size of value”. Trong trường hợp này, loại tham số cần thiết để cụ thể hóa hàm chung được suy ra từ đối số và do đó không cần phải chỉ định rõ ràng. Thay vào đó, trong câu lệnh đầu tiên không có đối số và do đó tham số kiểu là bắt buộc.
 Khi hàm cụ thể size_of_val được gọi, một tham chiếu bất biến tới một đối tượng sẽ được truyền tới nó. Hàm trả về kích thước tính bằng byte của đối tượng đó.
 
-
 ## *The use Directive*
 
 trong Rust `use` giống như trong `C++`
 
-
-
-```
+```rust
 use std::mem;
 
 fn main() {
@@ -1961,7 +1942,7 @@ dấu * `the asterisk` là ký tự đại diện để import tất cả các s
 
 ## *The Sizes of the Primitive Types*
 
-```
+```rust
 use std::mem::*;
 println!(
     "{} {} {} {} {} {} {} {} {} {} {} {}",
@@ -1983,10 +1964,9 @@ println!(
 */
 ```
 
-
 với 1 vài kiểu dữ liệu khác sẽ phụ thuộc vào nên tảng của thiết bị đang biên dịch
 
-```
+```rust
 use std::mem::*;
 println!(
     "{} {} {} {}",
@@ -2004,12 +1984,11 @@ while in a 32-bit system 4 4 4 4
 
 2 giá trị được in ra cuối cùng là giá trị tham chiếu, đối tượng được tham chiếu (pointer) có kích thước bằng một địa chỉ bộ nhớ
 
-
 ## *The Representation of Primitive Types*
 
 trong Rust không khuyến khích việc truy cập vào biểu diễn bên trong các đối tượng cũng bởi vì việc này không dễ thực hiện nhưng vẫn có mẹo để làm điều đó
 
-```
+```rust
 fn as_bytes<T>(o: &T) -> &[u8] {
     unsafe { std::slice::from_raw_parts(o as *const _ as *const u8, std::mem::size_of::<T>()) }
 }
@@ -2053,7 +2032,7 @@ dòng cuối cùng sẽ in ra địa chỉ của số i8. địa chỉ như vậ
 
 với bộ nhớ ảo cũng có thể xem được địa chỉ của đối tượng
 
-```
+```rust
 let b1 = true;
 let b2 = true;
 let b3 = false;
@@ -2071,7 +2050,7 @@ print!(
 
 ## *Sizes of Composite Data Types*
 
-```
+```rust
 use std::mem::*;
 
 enum E1 {
@@ -2111,8 +2090,7 @@ về mặt lý thuêys có 1 vài khác để triển khai vector data structure
 
 ...
 
-
-```
+```rust
 let mut v = vec![0; 0];
 println!("{} {}", v.len(), v.capacity());
 v.push(11);
@@ -2137,8 +2115,7 @@ println!("{} {}", v.len(), v.capacity());
 */
 ```
 
-
-```
+```rust
 let mut v = vec![0; 0];
 let mut prev_capacity = std::usize::MAX;
 for i in 0..1_000 {
@@ -2164,13 +2141,11 @@ for i in 0..1_000 {
 */
 ```
 
-
 # **Defining Closures**
 
 ## *The Need for “Disposable” Functions*
 
-
-```
+```rust
 let mut arr = [4, 8, 1, 10, 0, 45, 12, 7];
 arr.sort();
 print!("{:?}", arr);
@@ -2183,8 +2158,7 @@ print!("{:?}", arr);
 
 đoạn code trên sắp xếp array theo thứ tự tăng dần (ascending), tuy nhiên nếu muốn theo thứ tự giảm dần (descending) hay sử dụng tiêu chí khác thì sao? không có prepacket function nào cả, phải tự gọi hàm `sort_by` và truyền tham chiếu tới hàm so sánh. hàm nhận vào 2 số và sẽ trả dấu hiệu xem số nào đứng trước
 
-
-```
+```rust
 use std::cmp::Ordering;
 fn desc(a: &i32, b: &i32) -> Ordering {
     if a < b {
@@ -2216,7 +2190,7 @@ cách này có hoạt động tuy nhiên nó có 1 vài nhược điểm
 
 các hàm trong Rust không thể truy cập tới biến khai báo bên ngoài chúng, có thể truy cập tới `static` nhưng không thể truy cập tới các biến `stack allocation` được khai báo với `let`
 
-```
+```rust
 fn main() {
     let two = 2.;
     print_double(17.2);
@@ -2237,7 +2211,7 @@ error[E0434]: can't capture dynamic environment in a fn item
 
 vì vậy có thể sửa thành
 
-```
+```rust
 const TWO: f64 = 2.;
 fn print_double(x: f64) {
     print!("{}", x * TWO);
@@ -2263,7 +2237,7 @@ vì tính hữu dụng rất lớn nên trong Rust có một tính năng có tê
 
 trong thực tế, bạn cũng có thể định nghĩa `closure` gắn vào biến, đặt tên và gọi tới nó bằng tên biến. tuy nhiên đó không phải cách sử dụng điển hình nhất của `closure`
 
-```
+```rust
 use std::cmp::Ordering;
 fn main() {
     let mut arr = [4, 8, 1, 10, 0, 45, 12, 7];
@@ -2291,8 +2265,7 @@ fn main() {
     - `(` và `)` đưuojc loại bỏ và thay vào đó là `|`
     - `;` được thêm vào ở cuối
 
-
-```
+```rust
 use std::cmp::Ordering;
 let mut arr = [4, 8, 1, 10, 0, 45, 12, 7];
 arr.sort_by(|a, b| {
@@ -2307,22 +2280,21 @@ arr.sort_by(|a, b| {
 print!("{:?}", arr);
 ```
 
-nó đã đơn giản hơn, tuy nhiên ở thư viện `std` có chứa 1 function `cmp` viết tắt của compare. function này return giá trị tương đương với enum Ordering (trả về gía trị nào lớn hơn trong 2 đối số nhận vào - order asc) 
+nó đã đơn giản hơn, tuy nhiên ở thư viện `std` có chứa 1 function `cmp` viết tắt của compare. function này return giá trị tương đương với enum Ordering (trả về gía trị nào lớn hơn trong 2 đối số nhận vào - order asc)
 
-
-```
+```rust
 arr.sort();
 arr.sort_by(|a, b| a.cmp(b));
 ```
 
 do vậy cũng có thể đảo ngược thứ tự 2 số để có thể nhận được kết quả đảo ngược của 2 số (order desc)
 
-```
+```rust
 arr.sort_by(|a, b| (&-*a).cmp(&-*b));
 arr.sort_by(|a, b| b.cmp(a));
 ```
 
-```
+```rust
 let mut arr = [4, 8, 1, 10, 0, 45, 12, 7];
 arr.sort_by(|a, b| b.cmp(a));
 print!("{:?}", arr);
@@ -2332,7 +2304,7 @@ print!("{:?}", arr);
 
 1 vài cách để call closure
 
-```
+```rust
 let factor = 2;
 let multiply = |a| a * factor;
 print!("{}", multiply(13));
@@ -2345,9 +2317,9 @@ let multiply_ref: &(Fn(i32) -> i32) = &multiply; print!(
     |a| -> i32 { a * factor }(13));
 ```
 
-    - `print!("{}", multiply(13));` ...
+    -`print!("{}", multiply(13));` ...
 
-```
+```rust
 print!(
     "{}",
     (|v: &Vec<i32>| {
@@ -2359,13 +2331,11 @@ print!(
     })(&vec![11, 22, 34]));
 ```
 
-
 # **Using Changeable Strings**
-
 
 ## *Static Strings*
 
-```
+```rust
 fn main() {
     let mut a = "Hel";
     println!("{}", a);
@@ -2384,7 +2354,7 @@ lo
 nếu muốn tạo hoặc sửa nội dung của string trong quá trình runtime thì kiểu `&str` thường được sử dụng lại không phù hợp
 nhưng trong Rust lại cung cấp 1 phương thức khác của kiểu string, đó là dynamic strings, nó cho phép thay đổi nội dung của string
 
-```
+```rust
 let mut a: String = "He".to_string(); a.push('l');
 a.push('l');
 a.push('o');
@@ -2399,7 +2369,7 @@ có nhiều cách để tạo `dynamic strings` trong đó việc call tới `to
 
 `dynamic string` có thể in ra được giống như bất kỳ `static string` nào. nhưng nó có khả năng làm được điều mà `static string` khong thể nào làm được: to grow
 
-```
+```rust
 let mut b: String = "Xy".to_string();
 b.remove(0);
 b.insert(0, 'H');
@@ -2416,7 +2386,7 @@ Hi
 
 `static string` trong Rust khá giống với `string` trong C và có thêm vài điểm cộng. `dynamic string` trong Rust lại giống với object std::string trong C++. tuy nhiên sự khác biệt chính giữa Rust và dynamic string trong C++ đó là bất kỳ chuỗi nào trong C++ đều chứa 1 mảng ký tự còn trong Rust thì chưa 1 mảng byte biểu thị chuỗi UTF-8,nó không chứa 1 mảng ký tự nào
 
-Rust cũng có vài điểm tương đồng khác như bộ đệm `static string` giống như array, nghĩa là type string giống như generic [u8, N] type, `dynamic string` giống như vectors bytes, string type giống với Vec<u8> type
+Rust cũng có vài điểm tương đồng khác như bộ đệm `static string` giống như array, nghĩa là type string giống như generic [u8, N] type, `dynamic string` giống như vectors bytes, string type giống với Vec`<u8>` type
 
 thật vậy, các function chúng ta thấy `push`, `pop`, `insert`, `remove`, `len` giống như với Vector
 
@@ -2425,8 +2395,7 @@ ngoài ra cả `synamic string` và `vectors` đều có cách thực hiện gi�
     • the number of items that may be contained in the allocated buffer;
     • the number of items presently used in the allocated buffer.
 
-
-```
+```rust
 let mut s1 = "".to_string();
 s1.push('e');
 let mut s2 = "".to_string();
@@ -2438,8 +2407,7 @@ println!("{} {}; ", s2.capacity(), s2.len());
 println!("{} {}", s3.capacity(), s3.len());
 ```
 
-
-```
+```rust
 let mut s = "".to_string();
 for _ in 0..10 {
     println!("{:?} {} {}", s.as_ptr(), s.capacity(), s.len());
@@ -2449,15 +2417,13 @@ println!("{:?} {} {}: {}", s.as_ptr(), s.capacity(), s.len(), s);
 
 ```
 
-
 as_ptr function (as pointer) return address of the head-allocation buffer chứa ký tự của string
-
 
 ## *Creating Strings*
 
 create an empty dynamic string
 
-```
+```rust
 let s1 = String::new();
 let s2 = String::from("");
 let s3 = "".to_string();
@@ -2475,7 +2441,7 @@ funtion `from()` của kiểu String là converter contructor, nó giống với
 
 ngoại trừ function `new()`, tất cả các cách trước đó dùng để tạo `dynamic string` có thể sử dụng để convert `non-empty static string` thành `dynamic string`
 
-```
+```rust
 let s = "a,";
 let s1 = String::from(s);
 let s2 = s.to_string();
@@ -2493,7 +2459,7 @@ print!("({}{}{}{})", s1, s2, s3, s6);
 
 ## *Concatenating Strings*
 
-```
+```rust
 let ss1 = "He";
 let ss2 = "llo ";
 let ds1 = ss1.to_string();
@@ -2508,8 +2474,7 @@ Hello Hello Hello Hello
 */
 ```
 
-
-```
+```rust
 let mut dyn_str = "Hello".to_string();
 dyn_str = format!("{}{}", dyn_str, ", ");
 dyn_str = format!("{}{}", dyn_str, "world");
@@ -2528,8 +2493,7 @@ Hello, world!
 
 function `push_str()` nhận vào 1 `static string` và đẩy tất cả vào chuỗi đích
 
-
-```
+```rust
 let mut dyn_str = "Hello".to_string();
 dyn_str += ", ";
 dyn_str += "world";
@@ -2539,12 +2503,11 @@ print!("{}", dyn_str);
 
 `+=` operator tương tự với function `push_str`
 
-
 # **Ranges and Slices**
 
 ## *The Ranges*
 
-```
+```rust
 fn main() {
     for i in 0..12 {
         print!("{}", i);
@@ -2588,8 +2551,7 @@ fn main() {
 
 ```
 
-
-```
+```rust
 let r1 = 3u8..12i8;
 let r2: std::ops::Range<u32> = -3..12;
 let r3: std::ops::Range<i32> = 3i16..12;
@@ -2599,14 +2561,14 @@ dòng thứ nhất lỗi do kiểu dữ liệu khác nhau
 dòng thứ 2 lỗi do -3 không thuộc kiểu u32
 dòng cuối lỗi do 3i16 không thuộc giá trị của i32
 
-```
+```rust
 let _r1 = 3u8..1200;
 let _r2 = 3..5_000_000_000;
 ```
 
-cả 2 đều có cảnh báo bị tràn số nguyên, dòng thứ nhất vị phạm Range<u8> dòng thứ 2 vi phạm Range<i32>
+cả 2 đều có cảnh báo bị tràn số nguyên, dòng thứ nhất vị phạm Range`<u8>` dòng thứ 2 vi phạm Range`<i32>`
 
-```
+```rust
 let _r1 = false .. true;
 let _r2 = "hello" .. "world";
 let _r3 = 4.2 .. 7.9;
@@ -2614,11 +2576,9 @@ let _r3 = 4.2 .. 7.9;
 
 trông những đoạn code trên thật vô nghĩa nhưng nó lại được cho phép không có cảnh báo tuy nhiên những range vô lý như vậy không được sử dụng trong `for`
 
-
 ## *Passing a Sequence to a Function*
 
-
-```
+```rust
 fn min(arr: [i32; 8]) -> i32 {
     let mut minimum = arr[0];
     for i in 1..arr.len() {
@@ -2643,7 +2603,7 @@ kết quả trả ra tuy chính xác nhưng lại có 1 số nhược điểm:
 
 để khắc phục lỗi thứ nhất có thể truyền tham chiếu của array thay vì truyền giá trị
 
-```
+```rust
 fn min_drawback1(arr: &[i32; 8]) -> i32 {
     let mut minimum = arr[0];
     for i in 1..arr.len() {
@@ -2661,7 +2621,7 @@ fn min_drawback1(arr: &[i32; 8]) -> i32 {
 
 để khắc phục nhược điểm thứ 4 ta có thể thêm các đối số vào để xác định xử lý từ index nào và xử lý bao nhiêu item
 
-```
+```rust
 fn min_drawback4(arr: &[i32; 8], start: usize, count: usize) -> i32 {
     // Let's assume 'start' is between 0 and 7,
     // and 'count' is between 1 and 8 - start.
@@ -2680,13 +2640,14 @@ print!("{}", min(&[23, 17, 12, 16, 15, 28, 17, 30], 3, 2));
 15
 */
 ```
+
 kết quả ở đây đã khác, do ngoài array được tham chiếu vào còn có thêm 2 đối số khác `3, 2`. số đầu tiên là vị trí bắt đầu, số thứ 2 là số lượng item xử lý => có 2 số được xử lý từ array bắt đầu từ vị trí thứ 3 (index bắt đầu từ 0) là `16, 15`
 
 ## *The Slices*
 
 sau khi đang giá các vấn đề trên và để khắc phục chúng, 1 khái niệm tên `slice` được đưa vào Rust
 
-```
+```rust
 fn min(arr: &[i32]) -> i32 {
     // Let's assume 'arr' is not empty.
     let mut minimum = arr[0];
@@ -2716,7 +2677,7 @@ loại này là `a reference to a slice` hay `slice reference`. dạng chung c�
 
 nhờ sự tiện dụng của `slices` ta lại có cách sử dụng mới. giả sử có array hoặc vector như `let arr = [23, 17, 12, 16, 15, 2]` và một function lấy một slice đối số, ví dụ như func `min` ở phía trên
 
-```
+```rust
 fn min(arr: &[i32]) -> i32 {
     // Let's assume 'arr' is not empty.
     let mut minimum = arr[0];
@@ -2740,9 +2701,7 @@ fn main() {
 */
 ```
 
-
-
-```
+```rust
 let arr = [55, 22, 33, 44, 66, 7, 8];
 let v = vec![55, 22, 33, 44, 66, 7, 8];
 let sr1 = &arr[2..5];
@@ -2754,10 +2713,9 @@ print!("{:?} {:?} {:?} {:?}", sr1, sr2, &sr1[1..2], &sr1[1]);
 */
 ```
 
-
 ## *Out-of-Range Slicing*
 
-```
+```rust
 let arr = [55, 22, 33, 44, 66];
 let _r1 = 4..4;
 let _a1 = &arr[_r1];
@@ -2782,8 +2740,7 @@ dòng thứ 8 đã vi phạm kích thước của array, nó có thể biên d�
 
 một slice là 1 phần của chuỗi khác vì vậy thay đổi nội dung cũng có nghĩa là thay đổi giá trị của một hoặc nhiều item trong chuỗi ban đầu
 
-
-```
+```rust
 let mut arr = [11, 22, 33, 44];
 {
     let sl_ref = &mut arr[1..3];
@@ -2798,14 +2755,13 @@ print!(" {:?}", arr);
 */
 ```
 
-sl_ref là immutable variable tham chiếu tới một mutable slice 
-
+sl_ref là immutable variable tham chiếu tới một mutable slice
 
 ## *Open-Ended Ranges and Slicing*
 
 đôi khi ta muốn lấy tất cả các item từ đầu tới vị trí thứ n hoặc từ vị trí thứ n tới hết có thể làm theo cách sau
 
-```
+```rust
 let arr = [11, 22, 33, 44];
 let n = 2;
 let sr1 = &arr[0..n];
@@ -2819,7 +2775,7 @@ print!("{:?} {:?}", sr1, sr2);
 
 hoặc có thể viết đơn giản hơn như này
 
-```
+```rust
 let arr = [11, 22, 33, 44];
 let n = 2;
 let sr1 = &arr[..n];
@@ -2833,7 +2789,7 @@ print!("{:?} {:?}", sr1, sr2);
 
 ta thấy ở dòng thứ 3 không có điểm đầu và dòng thứ 4 không có điểm cuối, nhưng trên thực tế những range này là loại riêng biệt
 
-```
+```rust
 let r1: std::ops::RangeFrom<i32> = 3..;
 let r2: std::ops::RangeTo<i32> = ..12;
 println!(
@@ -2857,7 +2813,7 @@ r1 là biến thuộc loại RangeFrom có nghĩa là biến này có 1 giới h
 
 như đã tìm hiểu từ trước, trong Rust tồn tại cả `static string` và `dynamic string` và cả 2 đều thuộc dạng `UTF-8`
 
-```
+```rust
 let s = "abc012è€";
 for i in 0..s.len() {
     println!("{}: {}", i, s.as_bytes()[i]);
@@ -2885,11 +2841,11 @@ ký tự `€` được biểu diễn bằng 1 chuỗi 3 bytes là 226, 230 và 
 
 Tình huống này tương tự như trường hợp của tệp văn bản, so với các tệp có độ dài bản ghi cố định. Khi sử dụng tệp có độ dài bản ghi cố định, có thể đọc bản ghi ở bất kỳ vị trí n nào bằng cách “tìm kiếm” vị trí đó mà không cần đọc tất cả các dòng trước đó. Thay vào đó, bằng cách sử dụng tệp có độ dài dòng thay đổi, để đọc dòng thứ n, bắt buộc phải đọc tất cả các dòng trước đó.
 
-# *Scanning a String*
+## *Scanning a String*
+
 Để xử lý được các ký tự trong 1 chuỗi cần phải quét qua lần lượt các ký tự đó. vì vậy muốn in ra được ký tự thứ 3 trong chuỗi `€èe` đầu tiên phải quét qua ký tự `€` mà ký tự này được biểu diễn bằng chuỗi 3 bytes vậy nên phải quét qua 3 bytes đầu tiên cho ký tự thứ nhất, ký tự thứ 2 `è` lại được biểu diễn bằng chuỗi 2 bytes vậy nên cần phải quét qua thêm 2 bytes nữa và cuối cùng là ký tự `e` chỉ cần quét qua 1 byte nữa vì nó chỉ dùng chuỗi 1 bytes để biểu diễn
 
-
-```
+```rust
 fn print_nth_char(s: &str, mut n: u32) {
     let mut iter: std::str::Chars = s.chars();
     loop {
@@ -2920,7 +2876,7 @@ bằng việc sử dụng câu lệnh `match`, trường hợp `Some` sẽ xử 
 
 từ 1 chuỗi ta có thể dễ dàng in ra được mã số của các ký tự
 
-```
+```rust
 fn print_codes(s: &str) {
     let mut iter = s.chars();
     loop {
@@ -2937,11 +2893,11 @@ fn print_codes(s: &str) {
 print_codes("€èe");
 ```
 
-# *Using Iterators in for Loops*
+## *Using Iterators in for Loops*
 
 ở ví dụ trước nó có phần phức tạp, do đó cần trải qua quá trình cải tiến mạnh mẽ để đơn giản cú pháp hơn
 
-```
+```rust
 fn print_codes(s: &str) {
     for c in s.chars() {
         println!("{}: {}", c, c as u32);
@@ -2958,8 +2914,7 @@ cho đến nay ta đã sử dụng `range` trong vòng lặp. tất cả các `r
 
 ví dụ như:
 
-
-```
+```rust
 // OK: std::ops::Range<u32> is an iterator
 let _v1 = (0u32..10).next();
 // OK: std::ops::RangeFrom<u32> is an iterator
@@ -2970,8 +2925,7 @@ let _v2 = (5u32..).next();
 // let _v4 = (..).next();
 ```
 
-
-```
+```rust
 for byte in "€èe".bytes() {
     print!("{} ", byte);
 }
@@ -2983,9 +2937,9 @@ for byte in "€èe".bytes() {
 
 3 số đầu tiên đại diện cho ký tự `€`, 2 số tiếp theo đại diện cho `è` và byte cuối cùng là `e` trong bảng mã ASCII
 
-đoạn mã phía trên có thể được chia ra thành 
+đoạn mã phía trên có thể được chia ra thành
 
-```
+```rust
 
 let string: &str = "€èe";
 let string_it: std::str::Bytes = string.bytes();
@@ -3003,8 +2957,7 @@ các string function này đều khác với `as_bytes()` function, nó trả v�
 
 việc sử dụng vòng lặp trên slice, array hay vector cũng khá điển hình nhưng string không phải vòng lặp, slice, array hay vector. Tuy nhiên, giống như string iterator có được bằng cách gọi hàm `chars()`, do đó, slice, array hoặc vectơ iterator có được bằng cách gọi hàm `iter()`.
 
-
-```
+```rust
 for item_ref in (&[11u8, 22, 33]).iter() {
     // *item_ref += 1;
     print!("{} ", *item_ref);
@@ -3025,8 +2978,7 @@ for item_ref in vec!['a', 'b', 'c'].iter() {
 
 đoạn code phía trên có thể được tách nhỏ ra như sau
 
-
-```
+```rust
 let slice: &[u8] = &[11u8, 22, 33];
 let slice_it: std::slice::Iter<u8> = slice.iter();
 for item_ref in slice_it {
@@ -3055,7 +3007,7 @@ câu lệnh đầu tiên trong vòng lặp thứ nhất ở bên trên đã bị
 
 vòng lặp chuỗi trên các bytes của string được tạo bằng function `bytes()`
 
-```
+```rust
 for byte in "€èe".bytes() {
     print!("{} ", byte);
 }
@@ -3063,13 +3015,13 @@ for byte in "€èe".bytes() {
 
 một cách khác để lặp các bytes trên chuỗi đó là tạo slice tham chiếu tới các bytes của string bằng cách sử dụng function `as_bytes()` sau đó lặp trên tham chiếu slice đó
 
-```
+```rust
 for byte in "€èe".as_bytes().iter() {
     print!("{} ", byte);
 }
 ```
 
-# *Iterations Without Mutation*
+## *Iterations Without Mutation*
 
 tới hiện tại vẫn chỉ dùng vòng lặp để đọc các chuỗi, điều này khá điển hình
 trong khi lặp các ký tự trong chuỗi, việc cố gắng thay đổi chúng là điều không hợp lý vì ký tự mới có thể được biểu diễn bằng số byte khác với hiện tại, ví dụ nếu ký từ `è` được thay thế bằng ký tự `e` nghĩa là 2 byte của ký tự `è` phải được thay thế chỉ bằng 1 byte của ký tự `e`. do đó trong thư viện `std` của Rust không có cách nào để thay thế ký tự bằng ký tự khác với cách sử dụng vòng lặp chuỗi ký tự
@@ -3078,7 +3030,7 @@ Khi lặp các byte của một chuỗi, việc cố gắng thay đổi chúng l
 
 Khi lặp trên `range`, như chúng ta đã thấy, giá trị `range` được vòng lặp sử dụng là giá trị ở đầu vòng lặp, ngay cả khi nó được thay đổi bên trong vòng lặp
 
-```
+```rust
 let mut r = "abc".chars();
 for i in r {
     r = "XY".chars();
@@ -3094,7 +3046,7 @@ như ta thấy, giá trị mới được gán bên trong vòng lặp được s
 
 biến vòng lặp được khỏi tạo ở mỗi lần vòng lặp chạy
 
-```
+```rust
 let r = 0..5;
 for mut i in r {
     i += 10;
@@ -3110,13 +3062,13 @@ giá trị của `i` được tăng dần qua từng vòng lặp, tuy nhiên `i`
 
 do đó, đối với string và range không cần sử dụng vòng lặp để thay đổi item trong chuỗi
 
-# *Iterations with Mutation*
+## *Iterations with Mutation*
 
 đôi khi lặp 1 chuỗi cũng cần thay đổi các phần tử của nó. Nhưng các cách lặp phía trên đều không cho phép thực hiện điều đó, thậm chí ngay cả khi dùng `mutable iterator` cũng không thể làm được
 
 trong thực tế `mutable iterator` có thể thay đổi và có thể được tạo ra để lặp trên 1 chuỗi khác chứ không phải được sử dụng để làm thay đổi trình tự của vòng lặp
 
-```
+```rust
 let slice1 = &[3, 4, 5];
 let slice2 = &[7, 8];
 let mut iterator = slice1.iter();
@@ -3141,7 +3093,7 @@ vòng lặp tương tự như tham chiếu, trong đó mutable reference lại k
 
 nhưng nếu muốn thay đổi các giá trị trong chuỗi thông qua vòng lặp trên một chuỗi thì không thể sử dụng vòng lặp thông thường (ngay vả khi nó là immutable hay mutable)
 
-```
+```rust
 let mut slice = &mut [3, 4, 5]; {
 let mut iterator = slice.iter();
 for mut item_ref in iterator {
@@ -3156,7 +3108,7 @@ print!("{:?}", slice);
 
 với mục đích của đoạn code phía trên cần phải sử dụng loại vòng lặp khác. `mutating iterator`. tất nhiên nó phải được khởi tạo trên chuỗi có thể thay đổi
 
-```
+```rust
 let slice = &mut [3, 4, 5]; {
 let iterator = slice.iter_mut();
 for item_ref in iterator {
@@ -3174,7 +3126,7 @@ một vài mệnh đề `mut` đã bị loại bỏ, có 1 vài thay đổi nh�
 
 đoạn code phía trên có thể được trình bày 1 cách rõ ràng như sau
 
-```
+```rust
 let slice = &mut [3, 4, 5]; {
     let iterator: std::slice::IterMut<i32> = slice.iter_mut();
     for item_ref in iterator {
@@ -3188,7 +3140,7 @@ trong khi `iter()` trả về giá trị kiểu `Iter<T>` thì `iter_mut()` tr�
 
 quay trở lại với bài toán lặp trên slice, array, vector mà không thay đổi các giá trị của chuỗi đó, các ví dụ dưới đây sẽ thay đổi giá trị của chuỗi
 
-```
+```rust
 for item_ref in (&mut [11u8, 22, 33]).iter_mut() {
     *item_ref += 1;
     print!("{} ", *item_ref);
@@ -3210,8 +3162,7 @@ for item_ref in vec!['a', 'b', 'c'].iter_mut() {
 
 đoạn code phía trên có thể được chia nhỏ ra như sau
 
-
-```
+```rust
 let slice: &mut [u8] = &mut [11u8, 22, 33];
 let slice_it: std::slice::IterMut<u8> = slice.iter_mut();
 for item_ref in slice_it {
@@ -3241,8 +3192,7 @@ có 1 vài điểm khác biệt giữa 2 đoạn code trước khi bắt đầu 
 
 dưới đây là 1 ví dụ chứng minh cho việc thay đổi đối với dữ liệu cơ bản là có hiệu quả
 
-
-```
+```rust
 let slice = &mut [11u8, 22, 33];
 for item_ref in slice.iter_mut() {
     *item_ref += 1;
@@ -3268,13 +3218,13 @@ print!("{:?} ", vec);
 
 vậy là tới nay ta đã có 4 function để lấy từ 1 chuỗi và trả về vòng lặp là `chars()`, `bytes`, `iter()`, `iter_mut()`. các function không nhận vào 1 vòng lặp nhưng lại trả ra vòng lặp được gọi là `iterator generators`
 
-# *An Iterator Adapter: filter*
+## *An Iterator Adapter: filter*
 
 một số cách sử dụng khác của iterators
 
 ví dụ cho 1 mảng các số, làm như nào để lấy được ra các số âm trong mảng đó
 
-```
+```rust
 let arr = [66, -8, 43, 19, 0, -31];
 for n in arr.iter() {
     if *n < 0 { print!("{} ", n); }
@@ -3287,12 +3237,13 @@ for n in arr.iter() {
 
 nhưng cũng có cách khác để làm việc này
 
-```
+```rust
 let arr = [66, -8, 43, 19, 0, -31];
 for n in arr.iter().filter(|x| **x < 0) {
     print!("{} ", n);
 }
 ```
+
 function `filter()` nằm trong thư viện `std` của Rust. nó được sử dụng trong vòng lặp và nhận vào 1 `closure` như 1 đối số. đúng như tên gọi của nó, mục tiêu của hàm này dùng để `filtering` các giá trị trong chuỗi lặp, nghĩa là loại bỏ các giá trị không đạt tiêu chí của `closure` và chỉ cho phép các giá trị thoả mãn tiêu chí đó
 
 function `filter()` lấy 1 item tại 1 thời điểm từ vòng lặp và gọi tới `closure` với mỗi đối số được nhận vào. trong ví dụ trên item hiện tại là 1 số nguyên và được gắn vào biến local `x`
@@ -3308,11 +3259,11 @@ như đã thấy function `filter()` trả về 1 vòng lặp khác, vì vậy c
 
 vì function `filter()` lấy 1 vòng lặp và lại trả về 1 vòng lặp khác nên có thể nói nó biến "transforms" vòng lặp thành 1 vòng lặp khác. những việc biến đổi vòng lặp như vậy thường được gọi là `iterator adapter`. thuật ngữ `adapter` gợi nhớ tới các đầu cắm điện và câu nói "if a plug does not fit a socket, you use an adapter"
 
-# *The map Iterator Adapter*
+## *The map Iterator Adapter*
 
 đề bài: cho 1 array các số, làm thế nào để gấp đối các số trong array
 
-```
+```rust
 let arr = [66, -8, 43, 19, 0, -31];
 for n in arr.iter() {
     print!("{} ", n * 2);
@@ -3325,7 +3276,7 @@ for n in arr.iter() {
 
 nhưng cũng có thể thực hiện theo cách này
 
-```
+```rust
 let arr = [66, -8, 43, 19, 0, -31];
 for n in arr.iter().map(|x| *x * 2) {
     print!("{} ", n);
@@ -3340,12 +3291,11 @@ trong khi `filter()` loại bỏ các item trong vòng lặp và giữ lại cá
 
 điểm khác biệt nữa giữa chúng đó là `filter()` nhận vào tham chiếu làm đối số cho `closure` còn `map()` thì nhận vào giá trị
 
-
-# *The enumerate Iterator Adapter*
+## *The enumerate Iterator Adapter*
 
 thông thường khi muốn lặp chuỗi dùng biến đếm số nguyên để lấy ra index và sau đó lấy item qua biến số nguyên index như sau
 
-```
+```rust
 let arr = ['a', 'b', 'c'];
 for i in 0..arr.len() {
     print!("{} {}, ", i, arr[i]);
@@ -3358,7 +3308,7 @@ for i in 0..arr.len() {
 
 ta có thể sử dụng 1 vòng lặp chuỗi để tránh dùng biến đếm số nguyên
 
-```
+```rust
 let arr = ['a', 'b', 'c'];
 for ch in arr.iter() {
     print!("{}, ", ch);
@@ -3371,7 +3321,7 @@ a, b, c,
 
 nhưng nếu vẫn muốn dùng biến đếm thì có thể dùng cách cũ, hoặc thêm 1 biến khác và tăng dần sau mỗi vòng lặp
 
-```
+```rust
 let arr = ['a', 'b', 'c'];
 let mut i = 0;
 for ch in arr.iter() {
@@ -3382,7 +3332,7 @@ for ch in arr.iter() {
 
 ngoài ra vẫn có 1 cách khác
 
-```
+```rust
 let arr = ['a', 'b', 'c'];
 for (i, ch) in arr.iter().enumerate() {
     print!("{} {}, ", i, *ch);
@@ -3393,12 +3343,11 @@ for (i, ch) in arr.iter().enumerate() {
 
 điều này hoạt động vì function `enumerate()` lấy 1 vòng lặp và trả ra 1 vòng lặp khác. trình vòng lặp này ở mỗi lần lặp trả về giá trị kiểu `(usize, &char)`. giá trị đầu tiên trong tuple là biến đếm còn giá trị thứ 2 copy giá trị được nhận vào từ vòng lặp
 
-
-# *An Iterator Consumer: any*
+## *An Iterator Consumer: any*
 
 đề bài: cho 1 chuỗi, làm sao để xác định trong chuỗi có chứa ký tự cần xác định hay không
 
-```
+```rust
 let s = "Hello, world!";
 let ch = 'R';
 let mut contains = false;
@@ -3426,7 +3375,7 @@ Hello, world!" does not contain 'R'
 kết quả như vậy vì ta đang so sánh ký tự in hoa với ký tự thường. nhưng nếu thay thế `R` bằng `r` kết quả sẽ khác `"Hello, world!" contains 'r'.`
 ngoài ra cũng có thể thử theo cách này
 
-```
+```rust
 let s = "Hello, world!";
 let ch = 'R';
 print!(
@@ -3451,7 +3400,7 @@ như vậy function sẽ cho ta biết bất kỳ item nào trong vòng lặp c�
 
 cũng có thể dùng function `any()` để xác định xem trong array có chứa số âm hay không
 
-```
+```rust
 print!("{} ",
     [45, 8, 2, 6].iter().any(|n| *n < 0));
 print!("{} ",
@@ -3464,7 +3413,7 @@ false true
 
 để làm rõ hơn câu lệnh có thể viết như sau
 
-```
+```rust
 print!("{} ", [45, 8, 2, 6].iter()
     .any(|n: &i32| -> bool { *n < 0 }));
 print!("{} ", [45, 8, -2, 6].iter()
@@ -3476,14 +3425,13 @@ tuy các `iterator adapter` phía trên để trả về 1 vòng lặp, function
 
 mọi function áp dụng lên vòng lặp mà không trả về vòng lặp sẽ đều được gọi là `iterator consumer` bởi vì giá trị được lấy từ vòng lặp không được đẩy qua 1 vòng lặp khác vậy nên nó `consumes` data thay thì `adapting` data
 
-
-# *The all Iterator Consumer*
+## *The all Iterator Consumer*
 
 với function `any()` xác định xem 1 trong số các item của vòng lặp có thỏa mãn giá điều kiện vậy làm như nào để xác định tất cả các item trong vòng lặp thỏa mãn điều kiện
 
 ví dụ: làm như nào để xác định tất cả các số trong array có phải số nguyên
 
-```
+```rust
 print!("{} ", [45, 8, 2, 6].iter()
     .all(|n: &i32| -> bool { *n > 0 }));
 print!("{} ", [45, 8, -2, 6].iter()
@@ -3497,16 +3445,15 @@ true false
 lưu ý rằng function `any()` có nghĩa là lặp lại toán tử `or` còn function `all()` lặp lại tất cả với toán tử `and`
 Cũng lưu ý rằng, tuân theo các quy tắc logic, nếu vòng lặp không tạo ra item nào thì function `any()` trả về `false` cho bất kỳ `closure` nào và function `all()` trả về `true` cho bất kỳ `closure` nào.
 
+## *The count Iterator Consumer*
 
-# *The count Iterator Consumer*
-
-trong 1 vòng lặp, làm sao để biết có bao nhiêu item 
+trong 1 vòng lặp, làm sao để biết có bao nhiêu item
 
 nếu đang sử dụng vòng lặp với slice, array hay vector ta có thể sử dụng function `len()`. đó là cách đơn giản và nhanh nhất để lấy ra độ dài của chúng. nhưng nếu muốn biết có bao nhiêu ký tự trong 1 chuỗi string, nếu làm tương tự sẽ phải quét qua tất cả string bởi vì số lượng ký tự dùng để tạo ra string đó không được lưu trữ ở bất kỳ nơi nào, trừ người đã tạo ra nó
 
 vì vậy cần sử dụng cách khác đơn giản hơn
 
-```
+```rust
 let s = "€èe";
 print!("{} {}", s.chars().count(), s.len());
 
@@ -3519,11 +3466,11 @@ kết quả của đoạn code trên là 3 và 6 có nghĩa là chuỗi trên c�
 
 function `count()` iterator consumer không nhận vào bất kỳ tham số nào và luôn trả về giá trị kiểu `usize`
 
-# *The sum Iterator Consumer*
+## *The sum Iterator Consumer*
 
 nếu thay vì đếm số lượng item, ta lại muốn biết xem nếu các item cộng lại với nhau thì tổng bằng bao nhiêu. việc này cũng rất đơn giản
 
-```
+```rust
 print!("{}", [45, 8, -2, 6].iter().sum::<i32>());
 
 /*
@@ -3533,7 +3480,7 @@ print!("{}", [45, 8, -2, 6].iter().sum::<i32>());
 
 mặc dù `sum()` iterator consumer không nhận vào than số nào, nhưng lại yêu cầu phải có 1 kiểu parameter trong dấu ngoặc nhọn. nó chính là kiểu giá trị trả về của số. ở function này điều đó là bắt buộc, bởi vì trong khi biên dịch sẽ không thể suy ra kiểu như vậy. nhưng trong trường hợp khác như ví dụ sau thì nó lại là tùy chọn
 
-```
+```rust
 let s: i32 = [45, 8, -2, 6].iter().sum();
 print!("{}", s);
 
@@ -3544,7 +3491,7 @@ print!("{}", s);
 
 điều đó cũng có thể sử dụng với chuỗi rỗng
 
-```
+```rust
 let s: u32 = [].iter().sum();
 print!("{}", s);
 
@@ -3555,13 +3502,12 @@ print!("{}", s);
 
 lưu ý rằng, trong khi function `count()` có thể áp dụng cho mọi vòng lặp thì function `sum()` chỉ áp dụng cho các vòng lặp tạo ra các item có thể thêm vào với nhau. ví dụ `[3.4].iter().sum::<f64>()` là hợp pháp, tuy nhiên `[true].iter().sum::<bool>()` lại là sai cú pháp, bỏi vì nó không cho phép tính `sum()` của các giá trị Booleans.
 
-
-# *The min and max Iterator Consumers*
+## *The min and max Iterator Consumers*
 
 nếu 1 vòng lặp tạo ra giá trị và có thể so sánh nó với 1 giá trị khác vậy từ đó có thể lấy ra giá trị mimimum hoặc maximum của chúng. nhưng có 1 vấn đề với chuỗi rỗng.
 nếu vòng lặp không có item nào, vẫn có thể `count()` chúng tuy nhiên kết quả là 0, tương tự với `sum()` cũng có thể thêm được và kết quả cũng là 0, nhưng với maximum và minimum thì không thể lấy được giá trị với chuỗi rỗng. bởi vậy `min` và `max` iterator consumer có `Option` value. `Some(n)` được áp dụng với non-empty sequence và None được áp dụng với empty sequence
 
-```
+```rust
 let arr = [45, 8, -2, 6];
 match arr.iter().min() {
     Some(n) => print!("{} ", n),
@@ -3582,8 +3528,7 @@ match [0; 0].iter().min() {
 
 `max` `min` consumer cũng có thể được sử dụng với vòng lặp không trả ra non-numeric objects
 
-
-```
+```rust
 let arr = ["hello", "brave", "new", "world"];
 match arr.iter().min() {
     Some(n) => println!("{} ", n),
@@ -3599,12 +3544,12 @@ brave world
 */
 ```
 
-# *The collect Consumer*
+## *The collect Consumer*
 
 các hàm như `any(), count(), sum(), min(), max()` iterator consumer trả về 1 thông tin duy nhất từ 1 chuỗi dài các items
 tuy nhiên ta có thể đẩy tất cả các item đã được consum vào 1 Vector
 
-```
+```rust
 let arr = [36, 1, 15, 9, 4];
 let v = arr.iter().collect::<Vec<&i32>>();
 print!("{:?}", v);
@@ -3619,8 +3564,7 @@ function collect sẽ tạo ra 1 Vector mới với kiểu `Vec<&i32>` và sẽ 
 
 function này được tham số hóa theo kiểu kết quả của collection. bởi vì function có thể được sử dụng để đẩy bất kỳ item có kiểu dữ liệu nào vào collection và việc không rõ ràng về kiểu dữ liệu của Vector là điều cần thiết. trong thực tế, Rust có thể đối chiếu về kiểu `&i32` dó đó nó có thể được thay thế bằng `_` "underscore".
 
-
-```
+```rust
 let arr = [36, 1, 15, 9, 4];
 let v = arr.iter().collect::<Vec<_>>();
 print!("{:?}", v);
@@ -3633,7 +3577,7 @@ Kết quả
 
 nhưng nếu kiểu dữ liệu có thể được suy ra từ kết quả của collection thì việc loại bỏ tham số hóa dữ liệu khỏi collect là có thể. thật vậy, chương trình dưới đây tương đương với chương trình trước đó
 
-```
+```rust
 let arr = [36, 1, 15, 9, 4];
 let v: Vec<_> = arr.iter().collect();
 print!("{:?}", v);
@@ -3646,7 +3590,7 @@ Kết quả
 
 tương tự, chuỗi các ký tự hoặc chuỗi bytes cũng có thể được được collect thành 1 string hay 1 vector
 
-```
+```rust
 let s = "Hello";
 println!("{:?}", s.chars().collect::<String>());
 println!("{:?}", s.chars().collect::<Vec<char>>());
@@ -3670,14 +3614,13 @@ dòng thứ 5 sử dụng function `as_bytes()` để dụng dụng dưới dạ
 
 lưu ý rằng function `collect()` không thể sử dụng để đẩy các item vào static string, array, slice, bởi vì nó cần được phân bổ space trong quá trình chạy
 
-
-# *Iterator Chains*
+## *Iterator Chains*
 
 giả sử ta có 1 array các số, ta cần lấy các số dương của mảng đó qua 1 mảng mới và nhân với 2
 
 không cần sử dụng iterators:
 
-```
+```rust
 let arr = [66, -8, 43, 19, 0, -31];
 let mut v = vec![];
 for i in 0..arr.len() {
@@ -3693,8 +3636,7 @@ kết quả
 
 hoặc tương tự có thể sử dụng iterator mà không cần sử dụng iterator adapters
 
-
-```
+```rust
 let arr = [66, -8, 43, 19, 0, -31];
 let mut v = vec![];
 for n in arr.iter() {
@@ -3709,7 +3651,7 @@ kết quả
 
 tương tự có thể sử dụng iterator và 2 iterator adapters, và không sử dụng iterator consumer
 
-```
+```rust
 let arr = [66, -8, 43, 19, 0, -31];
 let mut v = vec![];
 for n in arr
@@ -3729,8 +3671,7 @@ kết quả
 
 tương tự có thể sử dụng iterator, 2 iterator và iterator consumer
 
-
-```
+```rust
 let arr = [66, -8, 43, 19, 0, -31];
 let v = arr
     .iter()
@@ -3755,11 +3696,11 @@ các chuỗi bắt đầu với 1 iterator hoặc 1 function không được áp
 1 số `iterator adapters`: `filter()`, `map()`, `enumerate()`
 1 số `iterator consumer`: `any()`, `all()`, `count()`, `sum()`, `min()`,  `max()`, `collect()`
 
-# *Iterators Are “Lazy”*
+## *Iterators Are “Lazy”*
 
 ở ví dụ cuối cùng phía trên thêm 1 vài lệnh debug print
 
-```
+```rust
 let v = [66, -8, 43, 19, 0, -31]
     .iter()
     .filter(|x| { print!("F{} ", x); **x > 0 })
@@ -3772,5 +3713,309 @@ F66 M66 F-8 F43 M43 F19 M19 F0 F-31 [132, 86, 38]
 */
 ```
 
-
 ....
+
+# **Input/Output and Error Handling**
+
+## *Command-Line Arguments*
+
+```rust
+fn main() {
+    let command_line: std::env::Args = std::env::args();
+    for argument in command_line {
+        println!("[{}]", argument);
+    }
+}
+```
+
+khi biên dịch đoạn mã trên với file tên `main` sau đó chạy với command `./main 1 2` kết quả in ra sẽ là:
+
+```/bin/bash
+[./main]
+[1]
+[2]
+```
+
+funtionc `args()` trong thư viện `std` trả về 1 vòng lặp dựa trên command-line arguments. type của vòng lặp là `Args` và nó tạo ra các giá trị String. giá trị đầu tiên được tạo ra là tên của chương trình (bao gồm cả đường dẫn tới chương trình) các giá trị tiếp theo là các đối số được truyền vào
+
+bất kỳ khoảng trắng nào đều sẽ bị xóa. nêú muốn giữ phải để đối số trong dấu nháy đôi.
+
+```/bin/bash
+./main " hello" ", world" "!   "
+[./main]
+[ hello]
+[, world]
+[!   ]
+```
+
+ngoài ra có thể viết lại đoạn mã trên ngắn gọn như sau
+
+```rust
+fn main() {
+    for a in std::env::args() {
+        println!("[{}]", a);
+    }
+}
+```
+
+## *Process Return Code*
+
+output cơ bản của chương trình là mã được trả về `return code`
+
+```rust
+std::process::exit(107);
+```
+
+chương trình sẽ bị tắt ngay lập tức khi gọi tới function `exit()` và trả về số 107
+
+nếu chương trình chạy ở console của các hệ điều hành như Unix, Linux, MacOS nếu sử dụng thêm command
+
+```/bin/bash
+echo $?
+```
+số 107 sẽ được in ra trên console
+
+với hệ điều hành Windown
+
+```/bin/bash
+echo %errorlevel%
+```
+
+## *Environment Variables*
+
+environment variables (biến môi trường) cũng là một dạng khác của I/O.
+
+```rust
+for var in std::env::vars() {
+    println("[{}]=[{}]", var.0, var1)
+}
+```
+chương trình phía trên sẽ in ra tất cả các environment variables. mỗi dòng sẽ là một environment variables
+
+```/bin/bash
+[SECURITYSESSIONID]=[********]
+[USER]=[user]
+[MallocNanoZone]=[0]
+[__CFBundleIdentifier]=[com.microsoft.VSCode]
+[COMMAND_MODE]=[unix2003]
+[SHELL]=[/bin/zsh]
+[HOME]=[/Users/user]
+[__CF_USER_TEXT_ENCODING]=[0x1F5:0x0:0x0]
+[LaunchInstanceID]=[********************]
+[XPC_SERVICE_NAME]=[0]
+[XPC_FLAGS]=[0x0]
+[LOGNAME]=[user]
+[TMPDIR]=[/var/folders/bd/****************/T/]
+[ORIGINAL_XDG_CURRENT_DESKTOP]=[undefined]
+[PWD]=[path to repo]
+[INFOPATH]=[/opt/homebrew/share/info:/opt/homebrew/share/info:]
+[HOMEBREW_PREFIX]=[/opt/homebrew]
+[MANPATH]=[/opt/homebrew/share/man:/usr/share/man:/usr/local/share/man:/opt/homebrew/share/man:]
+[TERM]=[xterm-256color]
+[LC_CTYPE]=[UTF-8]
+[LDFLAGS]=[-L/usr/local/opt/openssl/lib]
+[HOMEBREW_CELLAR]=[/opt/homebrew/Cellar]
+[SHLVL]=[3]
+[HOMEBREW_REPOSITORY]=[/opt/homebrew]
+[TERM_PROGRAM_VERSION]=[1.89.1]
+[TERM_SESSION_ID]=[************************]
+[TERM_PROGRAM]=[vscode]
+[LANG]=[en_US.UTF-8]
+[COLORTERM]=[truecolor]
+[GIT_ASKPASS]=[/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass.sh]
+[VSCODE_GIT_ASKPASS_NODE]=[/Applications/Visual Studio Code.app/Contents/Frameworks/Code Helper (Plugin).app/Contents/MacOS/Code Helper (Plugin)]
+[VSCODE_GIT_ASKPASS_EXTRA_ARGS]=[]
+[VSCODE_GIT_ASKPASS_MAIN]=[/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/git/dist/askpass-main.js]
+[VSCODE_GIT_IPC_HANDLE]=[/var/folders/bd/****************/T/vscode-git-1e2e5487e3.sock]
+[VSCODE_INJECTION]=[1]
+```
+
+tuy nhiên để đọc hoặc ghi 1 environment variables cụ thể hãy dùng cách sau:
+
+```rust
+println!("[{:?}]", std::env::var("abcd"));
+std::env::set_var("abcd", "This is the value");
+println!(" [{:?}]", std::env::var("abcd"));
+```
+
+khi chạy chương trình trên sẽ nhận được output như sau
+
+```/bin/bash
+[Err(NotPresent)]
+[Ok("This is the value")]
+```
+
+dòng đầu tiên khi environment variables `abcd` chưa được định nghĩa và khi gọi tới function `var()` sẽ trả về biến thể (variant) `Err` của giá trị `Result` (kết quả trả về của funtion có type Enum ). loại cụ thể của lỗi là `NotPresent`. tiếp theo environment variables được định nghĩa trong process hiện tại khi gọi tới function `set_var()`. tiếp theo thử gọi lại function `var()` để lấy giá trị được định nghĩa cho environment variables `abcd`. lúc này giá trị của environment variables sẽ được trả về bên trong biến thể `Ok`
+
+chương trình sau cũng là 1 ví dụ tương tự
+
+```rust
+println!("{}",
+if std::env::var("abcd").is_ok() {
+    "Already defined" } else {
+        "Undefined"
+    });
+std::env::set_var("abcd", "This is the value");
+println!("{}.", match std::env::var("abcd") {
+    Ok(value) => value,
+    Err(err) => format!("Still undefined: {}", err),
+});
+
+/*
+Undefined
+This is the value.
+*/
+```
+
+## *Reading from the Console*
+
+đối với `command-line oriented programs` chương trình hướng dòng lệnh cách điển hình để nhận dữ liệu đầu vào đó là đọc từ console khi người dùng nhập bằng bàn phím tới khi họ nhấn `Enter`. cách này cũng có thể thay thế bằng việc đọc từ file hoặc nhận từ output của 1 process khác
+
+
+```rust
+let mut line = String::new();
+println!("{:?}", std::io::stdin().read_line(&mut line)); println!("[{}]", line);
+/*
+gogo
+Ok(5)
+[gogo
+]
+*/
+```
+
+khi chương trình được bắt đầu nó sẽ đợi tín hiệu nhập vào từ bàn phím cho từ khi nhấn phím `Enter`. ví dụ khi nhập `gogo` rồi nhấn phím `Enter` sẽ nhận được kết quả như trên.
+lưu ý số được trả về sẽ bao gồm số bytes của chuỗi ký tự nhập vào và ký tự điều khiển `end-of-line` (ở đây là phím `Enter`) vì vậy sẽ có số `n+1` được in ra với `n` là số ký tự nhập vào
+
+nếu function `read_line()` không đọc được ký tự từ input stream nó sẽ trả về obect `Err` và sẽ không thay đổi giá trị của biến `line`
+
+thử xem điều gì sẽ xảy ra khi có nhiều dòng được đọc từ input stream
+
+```rust
+let mut text = format!("First: ");
+let inp = std::io::stdin();
+inp.read_line(&mut text).unwrap();
+text.push_str("Second: ");
+inp.read_line(&mut text).unwrap();
+println!("{}: {} bytes", text, text.len());
+```
+
+```/bin/bash
+First: hello
+Second: world
+: 27 bytes
+```
+
+
+```rust
+let mut text = format!("First: ");
+let inp = std::io::stdin();
+inp.read_line(&mut text);
+text.push_str("Second: ");
+inp.read_line(&mut text);
+println!("{}: {} bytes", text, text.len());
+```
+
+khi biên dịch chương trình này sẽ trả ra lỗi
+
+```/bin/bash
+warning: unused `Result` that must be used
+  --> main.rs:x:5
+   |
+   |     inp.read_line(&mut text);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this `Result` may be an `Err` variant, which should be handled
+   = note: `#[warn(unused_must_use)]` on by default
+help: use `let _ = ...` to ignore the resulting value
+   |
+   |     let _ = inp.read_line(&mut text);
+   |     +++++++
+
+warning: unused `Result` that must be used
+  --> main.rs:x:5
+   |
+   |     inp.read_line(&mut text);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+   |
+   |     let _ = inp.read_line(&mut text);
+   |     +++++++
+
+warning: 2 warnings emitted
+```
+
+Điều này có nghĩa là `read_line` trả về giá trị thuộc loại `Result` và giá trị đó bị bỏ qua hoặc không được sử dụng. Rust coi việc bỏ qua giá trị trả về của loại "Kết quả" là nguy hiểm, vì loại như vậy có thể biểu thị runtime error và do đó logic chương trình không tính đến một loại lỗi như vậy. Điều này nguy hiểm trong production code nhưng cũng không thích hợp trong debug code vì nó che giấu các lỗi mà bạn đang  biết.
+Do đó, trong debug code, việc luôn viết ít nhất một mệnh đề `.unwrap()` là phù hợp.
+Nhưng trong production code, vấn đề không đơn giản như vậy.
+
+
+## *Proper Runtime Error Handling*
+
+```rust
+fn f1(x: i32) -> Result<i32, String> {
+    if x == 1 { Err(format!("Err. 1")) } else { Ok(x) }
+}
+fn f2(x: i32) -> Result<i32, String> {
+    if x == 2 { Err(format!("Err. 2")) } else { Ok(x) }
+}
+fn f3(x: i32) -> Result<i32, String> {
+    if x == 3 { Err(format!("Err. 3")) } else { Ok(x) }
+}
+fn f4(x: i32) -> Result<i32, String> {
+    if x == 4 { Err(format!("Err. 4")) } else { Ok(x) }
+}
+fn f(x: i32) -> Result<i32, String> {
+    match f1(x) {
+        Ok(result) => {
+            match f2(result) {
+                Ok(result) => {
+                    match f3(result) {
+                        Ok(result) => f4(result),
+                        Err(err_msg) => Err(err_msg),
+                    }
+                }
+                Err(err_msg) => Err(err_msg),
+            }
+        }
+        Err(err_msg) => Err(err_msg),
+    }
+}
+match f(2) {
+    Ok(y) => println!("{}", y),
+    Err(e) => println!("Error: {}", e),
+}
+match f(4) {
+    Ok(y) => println!("{}", y),
+    Err(e) => println!("Error: {}", e),
+}
+match f(5) {
+    Ok(y) => println!("{}", y),
+    Err(e) => println!("Error: {}", e),
+}
+```
+
+
+## *Writing to the Console*
+
+## *Converting a Value to a String*
+
+nếu muốn biểu diễn một loại giá trị khác có thể sử dụng function `to_string()`. nó được định nghĩa cho tất cả các kiểu dữ liệu nguyên thủy.
+
+```rust
+let int_str: String = 45.to_string();
+let float_str: String = 4.5.to_string();
+let bool_str: String = true.to_string();
+print!("{} {} {}", int_str, float_str, bool_str);
+
+/*
+45 4.5 true
+*/
+```
+
+function `to_string()` phân bổ một object String, có header nằm trong stack và contents của nó nằm trong vùng heap. Vì vậy, nó không phải là hiệu quả nhất.
+
+## *File Input/Output*
+
+## *Processing Text Files*
