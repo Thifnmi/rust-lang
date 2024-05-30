@@ -3475,3 +3475,302 @@ bỏ qua các ký tự `&` sẽ gây ra lỗi
 tuy các `iterator adapter` phía trên để trả về 1 vòng lặp, function `any()` cũng nhận vào 1 vòng lặp nhưng lại trả ra giá trị `Boolean` không phải vòng lặp
 
 mọi function áp dụng lên vòng lặp mà không trả về vòng lặp sẽ đều được gọi là `iterator consumer` bởi vì giá trị được lấy từ vòng lặp không được đẩy qua 1 vòng lặp khác vậy nên nó `consumes` data thay thì `adapting` data
+
+
+# *The all Iterator Consumer*
+
+với function `any()` xác định xem 1 trong số các item của vòng lặp có thỏa mãn giá điều kiện vậy làm như nào để xác định tất cả các item trong vòng lặp thỏa mãn điều kiện
+
+ví dụ: làm như nào để xác định tất cả các số trong array có phải số nguyên
+
+```
+print!("{} ", [45, 8, 2, 6].iter()
+    .all(|n: &i32| -> bool { *n > 0 }));
+print!("{} ", [45, 8, -2, 6].iter()
+    .all(|n: &i32| -> bool { *n > 0 }));
+
+/*
+true false
+*/
+```
+
+lưu ý rằng function `any()` có nghĩa là lặp lại toán tử `or` còn function `all()` lặp lại tất cả với toán tử `and`
+Cũng lưu ý rằng, tuân theo các quy tắc logic, nếu vòng lặp không tạo ra item nào thì function `any()` trả về `false` cho bất kỳ `closure` nào và function `all()` trả về `true` cho bất kỳ `closure` nào.
+
+
+# *The count Iterator Consumer*
+
+trong 1 vòng lặp, làm sao để biết có bao nhiêu item 
+
+nếu đang sử dụng vòng lặp với slice, array hay vector ta có thể sử dụng function `len()`. đó là cách đơn giản và nhanh nhất để lấy ra độ dài của chúng. nhưng nếu muốn biết có bao nhiêu ký tự trong 1 chuỗi string, nếu làm tương tự sẽ phải quét qua tất cả string bởi vì số lượng ký tự dùng để tạo ra string đó không được lưu trữ ở bất kỳ nơi nào, trừ người đã tạo ra nó
+
+vì vậy cần sử dụng cách khác đơn giản hơn
+
+```
+let s = "€èe";
+print!("{} {}", s.chars().count(), s.len());
+
+/*
+3 6
+*/
+```
+
+kết quả của đoạn code trên là 3 và 6 có nghĩa là chuỗi trên có chứa 3 ký tự được biểu diễn từ 6 bytes
+
+function `count()` iterator consumer không nhận vào bất kỳ tham số nào và luôn trả về giá trị kiểu `usize`
+
+# *The sum Iterator Consumer*
+
+nếu thay vì đếm số lượng item, ta lại muốn biết xem nếu các item cộng lại với nhau thì tổng bằng bao nhiêu. việc này cũng rất đơn giản
+
+```
+print!("{}", [45, 8, -2, 6].iter().sum::<i32>());
+
+/*
+57
+*/
+```
+
+mặc dù `sum()` iterator consumer không nhận vào than số nào, nhưng lại yêu cầu phải có 1 kiểu parameter trong dấu ngoặc nhọn. nó chính là kiểu giá trị trả về của số. ở function này điều đó là bắt buộc, bởi vì trong khi biên dịch sẽ không thể suy ra kiểu như vậy. nhưng trong trường hợp khác như ví dụ sau thì nó lại là tùy chọn
+
+```
+let s: i32 = [45, 8, -2, 6].iter().sum();
+print!("{}", s);
+
+/*
+57
+*/
+```
+
+điều đó cũng có thể sử dụng với chuỗi rỗng
+
+```
+let s: u32 = [].iter().sum();
+print!("{}", s);
+
+/*
+0
+*/
+```
+
+lưu ý rằng, trong khi function `count()` có thể áp dụng cho mọi vòng lặp thì function `sum()` chỉ áp dụng cho các vòng lặp tạo ra các item có thể thêm vào với nhau. ví dụ `[3.4].iter().sum::<f64>()` là hợp pháp, tuy nhiên `[true].iter().sum::<bool>()` lại là sai cú pháp, bỏi vì nó không cho phép tính `sum()` của các giá trị Booleans.
+
+
+# *The min and max Iterator Consumers*
+
+nếu 1 vòng lặp tạo ra giá trị và có thể so sánh nó với 1 giá trị khác vậy từ đó có thể lấy ra giá trị mimimum hoặc maximum của chúng. nhưng có 1 vấn đề với chuỗi rỗng.
+nếu vòng lặp không có item nào, vẫn có thể `count()` chúng tuy nhiên kết quả là 0, tương tự với `sum()` cũng có thể thêm được và kết quả cũng là 0, nhưng với maximum và minimum thì không thể lấy được giá trị với chuỗi rỗng. bởi vậy `min` và `max` iterator consumer có `Option` value. `Some(n)` được áp dụng với non-empty sequence và None được áp dụng với empty sequence
+
+```
+let arr = [45, 8, -2, 6];
+match arr.iter().min() {
+    Some(n) => print!("{} ", n),
+    _ => (), }
+match arr.iter().max() {
+    Some(n) => print!("{} ", n),
+    _ => (),
+}
+match [0; 0].iter().min() {
+    Some(n) => print!("{} ", n),
+    _ => print!("---"),
+}
+
+/*
+-2 45 ---
+*/
+```
+
+`max` `min` consumer cũng có thể được sử dụng với vòng lặp không trả ra non-numeric objects
+
+
+```
+let arr = ["hello", "brave", "new", "world"];
+match arr.iter().min() {
+    Some(n) => println!("{} ", n),
+    _ => (),
+}
+match arr.iter().max() {
+    Some(n) => print!("{} ", n),
+    _ => (),
+}
+
+/*
+brave world
+*/
+```
+
+# *The collect Consumer*
+
+các hàm như `any(), count(), sum(), min(), max()` iterator consumer trả về 1 thông tin duy nhất từ 1 chuỗi dài các items
+tuy nhiên ta có thể đẩy tất cả các item đã được consum vào 1 Vector
+
+```
+let arr = [36, 1, 15, 9, 4];
+let v = arr.iter().collect::<Vec<&i32>>();
+print!("{:?}", v);
+
+/*
+Kết quả
+[36, 1, 15, 9, 4]
+*/
+```
+
+function collect sẽ tạo ra 1 Vector mới với kiểu `Vec<&i32>` và sẽ đâỷ các item đã được xử lý bỏi vòng lặp (iterator) vào đó
+
+function này được tham số hóa theo kiểu kết quả của collection. bởi vì function có thể được sử dụng để đẩy bất kỳ item có kiểu dữ liệu nào vào collection và việc không rõ ràng về kiểu dữ liệu của Vector là điều cần thiết. trong thực tế, Rust có thể đối chiếu về kiểu `&i32` dó đó nó có thể được thay thế bằng `_` "underscore".
+
+
+```
+let arr = [36, 1, 15, 9, 4];
+let v = arr.iter().collect::<Vec<_>>();
+print!("{:?}", v);
+
+/*
+Kết quả
+[36, 1, 15, 9, 4]
+*/
+```
+
+nhưng nếu kiểu dữ liệu có thể được suy ra từ kết quả của collection thì việc loại bỏ tham số hóa dữ liệu khỏi collect là có thể. thật vậy, chương trình dưới đây tương đương với chương trình trước đó
+
+```
+let arr = [36, 1, 15, 9, 4];
+let v: Vec<_> = arr.iter().collect();
+print!("{:?}", v);
+
+/*
+Kết quả
+[36, 1, 15, 9, 4]
+*/
+```
+
+tương tự, chuỗi các ký tự hoặc chuỗi bytes cũng có thể được được collect thành 1 string hay 1 vector
+
+```
+let s = "Hello";
+println!("{:?}", s.chars().collect::<String>());
+println!("{:?}", s.chars().collect::<Vec<char>>());
+println!("{:?}", s.bytes().collect::<Vec<u8>>());
+println!("{:?}", s.as_bytes().iter().collect::<Vec<&u8>>());
+
+/*
+Kết quả
+"Hello"
+['H', 'e', 'l', 'l', 'o']
+[72, 101, 108, 108, 111]
+[72, 101, 108, 108, 111]
+*/
+```
+
+dòng thứ 2 và dòng thứ 3 áp dụng function `chars()` lên chuỗi, kết quả thu được 1 vòng lặp các ký tự. nhưng dòng thứ 2 collect các ký tự vào 1 `String` object, trong khi dòng thứ 3 collect vào 1 vector
+
+dòng thứ 4 sử dùng function `bytes()` kết quả thu về 1 vòng lặp các bytes. các bytes đó là tham kiểu của chúng trên bẳng mã ASCII, sau đó collect vào vector
+
+dòng thứ 5 sử dụng function `as_bytes()` để dụng dụng dưới dạng 1 slice các bytes sau đó sử dụng function `iter()` để thu về 1 vòng lặp trên slice. sau đó tham chiếu tới các bytes như vậy sẽ collect được thành 1 vector
+
+lưu ý rằng function `collect()` không thể sử dụng để đẩy các item vào static string, array, slice, bởi vì nó cần được phân bổ space trong quá trình chạy
+
+
+# *Iterator Chains*
+
+giả sử ta có 1 array các số, ta cần lấy các số dương của mảng đó qua 1 mảng mới và nhân với 2
+
+không cần sử dụng iterators:
+
+```
+let arr = [66, -8, 43, 19, 0, -31];
+let mut v = vec![];
+for i in 0..arr.len() {
+    if arr[i] > 0 { v.push(arr[i] * 2); } }
+print!("{:?}", v);
+
+
+/*
+kết quả
+[132, 86, 38]
+*/
+```
+
+hoặc tương tự có thể sử dụng iterator mà không cần sử dụng iterator adapters
+
+
+```
+let arr = [66, -8, 43, 19, 0, -31];
+let mut v = vec![];
+for n in arr.iter() {
+    if *n > 0 { v.push(*n * 2); } }
+print!("{:?}", v);
+
+/*
+kết quả
+[132, 86, 38]
+*/
+```
+
+tương tự có thể sử dụng iterator và 2 iterator adapters, và không sử dụng iterator consumer
+
+```
+let arr = [66, -8, 43, 19, 0, -31];
+let mut v = vec![];
+for n in arr
+        .iter()
+        .filter(|x| **x > 0)
+        .map(|x| *x * 2)
+{
+    v.push(n);
+}
+print!("{:?}", v);
+
+/*
+kết quả
+[132, 86, 38]
+*/
+```
+
+tương tự có thể sử dụng iterator, 2 iterator và iterator consumer
+
+
+```
+let arr = [66, -8, 43, 19, 0, -31];
+let v = arr
+    .iter()
+    .filter(|x| **x > 0)
+    .map(|x| *x * 2)
+    .collect::<Vec<_>>();
+print!("{:?}", v);
+
+/*
+kết quả
+[132, 86, 38]
+*/
+```
+
+ở phiên bản cuối cùng này là một ví dụ điển hình của functional languages: the iterator chain (chuỗi vòng lặp)
+
+từ 1 chuỗi ban đầu, 1 iterator sẽ được tạo ra sau đó không có hoặc sẽ có nhiều iterator adapters được sử dụng liên tiếp và cuối cùng là 1 iterator consumer để kết thúc
+
+các chuỗi bắt đầu với 1 iterator hoặc 1 function không được áp dụng cho iterator nhưng tạo ra iterator hay còn gọi là `iterator generator`. chúng được xử lý với 0 hoặc nhiều function áp dụng cho iterator và tạo ra iterator khác sẽ được gọi là iterator adapters. kết quả được kết thúc với 1 iterator hoặc 1 function áp dụng cho iterator nhưng không tạo ra iterator khác được gọi là iterator consumer
+
+1 số `iterator generators`: `iter()`, `iter_mut()`, `chars()`, `bytes()`'
+1 số `iterator adapters`: `filter()`, `map()`, `enumerate()`
+1 số `iterator consumer`: `any()`, `all()`, `count()`, `sum()`, `min()`,  `max()`, `collect()`
+
+# *Iterators Are “Lazy”*
+
+ở ví dụ cuối cùng phía trên thêm 1 vài lệnh debug print
+
+```
+let v = [66, -8, 43, 19, 0, -31]
+    .iter()
+    .filter(|x| { print!("F{} ", x); **x > 0 })
+    .map(|x| { print!("M{} ", x); *x * 2 })
+    .collect::<Vec<_>>();
+print!("{:?}", v);
+
+/*
+F66 M66 F-8 F43 M43 F19 M19 F0 F-31 [132, 86, 38]
+*/
+```
+
+
+....
