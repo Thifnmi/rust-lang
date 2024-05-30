@@ -200,14 +200,108 @@ fn main() {
         ch
     );
 
-    print!("{} ", [45, 8, 2, 6].iter().any(|n| *n < 0));
-    print!("{} ", [45, 8, -2, 6].iter().any(|n| *n < 0));
-    print!(
+    println!("{} ", [45, 8, 2, 6].iter().any(|n| *n < 0));
+    println!("{} ", [45, 8, -2, 6].iter().any(|n| *n < 0));
+    println!(
         "{} ",
         [45, 8, 2, 6].iter().any(|n: &i32| -> bool { *n < 0 })
     );
-    print!(
+    println!(
         "{} ",
         [45, 8, -2, 6].iter().any(|n: &i32| -> bool { *n < 0 })
     );
+
+    // count() iterator consumer
+    let s = "€èe";
+    println!("{} {}", s.chars().count(), s.len());
+
+    // sum() iterator consumer
+    println!("{}", [45, 8, -2, 6].iter().sum::<i32>());
+
+    let s: i32 = [45, 8, -2, 6].iter().sum();
+    println!("{}", s);
+
+    let s: u32 = [].iter().sum();
+    println!("{}", s);
+
+    // The min and max Iterator Consumers
+    let arr = [45, 8, -2, 6];
+    match arr.iter().min() {
+        Some(n) => print!("{} ", n),
+        _ => (), }
+    match arr.iter().max() {
+        Some(n) => print!("{} ", n),
+        _ => (),
+    }
+    match [0; 0].iter().min() {
+        Some(n) => print!("{} ", n),
+        _ => print!("---"),
+    }
+
+    println!("");
+    let arr = ["hello", "brave", "new", "world"];
+    match arr.iter().min() {
+        Some(n) => print!("{} ", n),
+        _ => (),
+    }
+    match arr.iter().max() {
+        Some(n) => print!("{} ", n),
+        _ => (),
+    }
+
+    // The collect Consumer
+    print!("\n");
+    let arr = [36, 1, 15, 9, 4];
+    let v = arr.iter().collect::<Vec<&i32>>();
+    println!("{:?}", v);
+
+    let arr = [36, 1, 15, 9, 4];
+    let v = arr.iter().collect::<Vec<_>>();
+    println!("{:?}", v);
+
+    let arr = [36, 1, 15, 9, 4];
+    let v: Vec<_> = arr.iter().collect();
+    println!("{:?}", v);
+
+    let s = "Hello";
+    println!("{:?}", s.chars().collect::<String>());
+    println!("{:?}", s.chars().collect::<Vec<char>>());
+    println!("{:?}", s.bytes().collect::<Vec<u8>>());
+    println!("{:?}", s.as_bytes().iter().collect::<Vec<&u8>>());
+
+    // iterator chains
+
+    let arr = [66, -8, 43, 19, 0, -31];
+    let mut v = vec![];
+    for i in 0..arr.len() {
+        if arr[i] > 0 { v.push(arr[i] * 2); } }
+    print!("{:?}", v);
+
+    for n in arr.iter() {
+        if *n > 0 { v.push(*n * 2); } }
+    print!("{:?}", v);
+
+
+    for n in arr
+        .iter()
+        .filter(|x| **x > 0)
+        .map(|x| *x * 2)
+    {
+        v.push(n);
+    }
+    print!("{:?}", v);
+
+    let v = arr
+        .iter()
+        .filter(|x| **x > 0)
+        .map(|x| *x * 2)
+        .collect::<Vec<_>>();
+    print!("{:?}", v);
+
+    let v = arr
+        .iter()
+        .filter(|x| { print!("F{} ", x); **x > 0 })
+        .map(|x| { print!("M{} ", x); *x * 2 })
+        .collect::<Vec<_>>();
+    print!("{:?}", v);
 }
