@@ -3447,7 +3447,7 @@ Cũng lưu ý rằng, tuân theo các quy tắc logic, nếu vòng lặp không 
 
 ## *The count Iterator Consumer*
 
-trong 1 vòng lặp, làm sao để biết có bao nhiêu item
+trong 1 vòng lặp, làm sao để biết có bao nhiêu item 
 
 nếu đang sử dụng vòng lặp với slice, array hay vector ta có thể sử dụng function `len()`. đó là cách đơn giản và nhanh nhất để lấy ra độ dài của chúng. nhưng nếu muốn biết có bao nhiêu ký tự trong 1 chuỗi string, nếu làm tương tự sẽ phải quét qua tất cả string bởi vì số lượng ký tự dùng để tạo ra string đó không được lưu trữ ở bất kỳ nơi nào, trừ người đã tạo ra nó
 
