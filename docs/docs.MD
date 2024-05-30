@@ -2885,7 +2885,7 @@ ký tự `€` được biểu diễn bằng 1 chuỗi 3 bytes là 226, 230 và 
 
 Tình huống này tương tự như trường hợp của tệp văn bản, so với các tệp có độ dài bản ghi cố định. Khi sử dụng tệp có độ dài bản ghi cố định, có thể đọc bản ghi ở bất kỳ vị trí n nào bằng cách “tìm kiếm” vị trí đó mà không cần đọc tất cả các dòng trước đó. Thay vào đó, bằng cách sử dụng tệp có độ dài dòng thay đổi, để đọc dòng thứ n, bắt buộc phải đọc tất cả các dòng trước đó.
 
-# *Scanning a String*
+## *Scanning a String*
 Để xử lý được các ký tự trong 1 chuỗi cần phải quét qua lần lượt các ký tự đó. vì vậy muốn in ra được ký tự thứ 3 trong chuỗi `€èe` đầu tiên phải quét qua ký tự `€` mà ký tự này được biểu diễn bằng chuỗi 3 bytes vậy nên phải quét qua 3 bytes đầu tiên cho ký tự thứ nhất, ký tự thứ 2 `è` lại được biểu diễn bằng chuỗi 2 bytes vậy nên cần phải quét qua thêm 2 bytes nữa và cuối cùng là ký tự `e` chỉ cần quét qua 1 byte nữa vì nó chỉ dùng chuỗi 1 bytes để biểu diễn
 
 
@@ -2937,7 +2937,7 @@ fn print_codes(s: &str) {
 print_codes("€èe");
 ```
 
-# *Using Iterators in for Loops*
+## *Using Iterators in for Loops*
 
 ở ví dụ trước nó có phần phức tạp, do đó cần trải qua quá trình cải tiến mạnh mẽ để đơn giản cú pháp hơn
 
@@ -3069,7 +3069,7 @@ for byte in "€èe".as_bytes().iter() {
 }
 ```
 
-# *Iterations Without Mutation*
+## *Iterations Without Mutation*
 
 tới hiện tại vẫn chỉ dùng vòng lặp để đọc các chuỗi, điều này khá điển hình
 trong khi lặp các ký tự trong chuỗi, việc cố gắng thay đổi chúng là điều không hợp lý vì ký tự mới có thể được biểu diễn bằng số byte khác với hiện tại, ví dụ nếu ký từ `è` được thay thế bằng ký tự `e` nghĩa là 2 byte của ký tự `è` phải được thay thế chỉ bằng 1 byte của ký tự `e`. do đó trong thư viện `std` của Rust không có cách nào để thay thế ký tự bằng ký tự khác với cách sử dụng vòng lặp chuỗi ký tự
@@ -3110,7 +3110,7 @@ giá trị của `i` được tăng dần qua từng vòng lặp, tuy nhiên `i`
 
 do đó, đối với string và range không cần sử dụng vòng lặp để thay đổi item trong chuỗi
 
-# *Iterations with Mutation*
+## *Iterations with Mutation*
 
 đôi khi lặp 1 chuỗi cũng cần thay đổi các phần tử của nó. Nhưng các cách lặp phía trên đều không cho phép thực hiện điều đó, thậm chí ngay cả khi dùng `mutable iterator` cũng không thể làm được
 
@@ -3268,7 +3268,7 @@ print!("{:?} ", vec);
 
 vậy là tới nay ta đã có 4 function để lấy từ 1 chuỗi và trả về vòng lặp là `chars()`, `bytes`, `iter()`, `iter_mut()`. các function không nhận vào 1 vòng lặp nhưng lại trả ra vòng lặp được gọi là `iterator generators`
 
-# *An Iterator Adapter: filter*
+## *An Iterator Adapter: filter*
 
 một số cách sử dụng khác của iterators
 
@@ -3308,7 +3308,7 @@ như đã thấy function `filter()` trả về 1 vòng lặp khác, vì vậy c
 
 vì function `filter()` lấy 1 vòng lặp và lại trả về 1 vòng lặp khác nên có thể nói nó biến "transforms" vòng lặp thành 1 vòng lặp khác. những việc biến đổi vòng lặp như vậy thường được gọi là `iterator adapter`. thuật ngữ `adapter` gợi nhớ tới các đầu cắm điện và câu nói "if a plug does not fit a socket, you use an adapter"
 
-# *The map Iterator Adapter*
+## *The map Iterator Adapter*
 
 đề bài: cho 1 array các số, làm thế nào để gấp đối các số trong array
 
@@ -3341,7 +3341,7 @@ trong khi `filter()` loại bỏ các item trong vòng lặp và giữ lại cá
 điểm khác biệt nữa giữa chúng đó là `filter()` nhận vào tham chiếu làm đối số cho `closure` còn `map()` thì nhận vào giá trị
 
 
-# *The enumerate Iterator Adapter*
+## *The enumerate Iterator Adapter*
 
 thông thường khi muốn lặp chuỗi dùng biến đếm số nguyên để lấy ra index và sau đó lấy item qua biến số nguyên index như sau
 
@@ -3394,7 +3394,7 @@ for (i, ch) in arr.iter().enumerate() {
 điều này hoạt động vì function `enumerate()` lấy 1 vòng lặp và trả ra 1 vòng lặp khác. trình vòng lặp này ở mỗi lần lặp trả về giá trị kiểu `(usize, &char)`. giá trị đầu tiên trong tuple là biến đếm còn giá trị thứ 2 copy giá trị được nhận vào từ vòng lặp
 
 
-# *An Iterator Consumer: any*
+## *An Iterator Consumer: any*
 
 đề bài: cho 1 chuỗi, làm sao để xác định trong chuỗi có chứa ký tự cần xác định hay không
 
@@ -3477,7 +3477,7 @@ tuy các `iterator adapter` phía trên để trả về 1 vòng lặp, function
 mọi function áp dụng lên vòng lặp mà không trả về vòng lặp sẽ đều được gọi là `iterator consumer` bởi vì giá trị được lấy từ vòng lặp không được đẩy qua 1 vòng lặp khác vậy nên nó `consumes` data thay thì `adapting` data
 
 
-# *The all Iterator Consumer*
+## *The all Iterator Consumer*
 
 với function `any()` xác định xem 1 trong số các item của vòng lặp có thỏa mãn giá điều kiện vậy làm như nào để xác định tất cả các item trong vòng lặp thỏa mãn điều kiện
 
@@ -3498,7 +3498,7 @@ lưu ý rằng function `any()` có nghĩa là lặp lại toán tử `or` còn 
 Cũng lưu ý rằng, tuân theo các quy tắc logic, nếu vòng lặp không tạo ra item nào thì function `any()` trả về `false` cho bất kỳ `closure` nào và function `all()` trả về `true` cho bất kỳ `closure` nào.
 
 
-# *The count Iterator Consumer*
+## *The count Iterator Consumer*
 
 trong 1 vòng lặp, làm sao để biết có bao nhiêu item 
 
@@ -3519,7 +3519,7 @@ kết quả của đoạn code trên là 3 và 6 có nghĩa là chuỗi trên c�
 
 function `count()` iterator consumer không nhận vào bất kỳ tham số nào và luôn trả về giá trị kiểu `usize`
 
-# *The sum Iterator Consumer*
+## *The sum Iterator Consumer*
 
 nếu thay vì đếm số lượng item, ta lại muốn biết xem nếu các item cộng lại với nhau thì tổng bằng bao nhiêu. việc này cũng rất đơn giản
 
@@ -3556,7 +3556,7 @@ print!("{}", s);
 lưu ý rằng, trong khi function `count()` có thể áp dụng cho mọi vòng lặp thì function `sum()` chỉ áp dụng cho các vòng lặp tạo ra các item có thể thêm vào với nhau. ví dụ `[3.4].iter().sum::<f64>()` là hợp pháp, tuy nhiên `[true].iter().sum::<bool>()` lại là sai cú pháp, bỏi vì nó không cho phép tính `sum()` của các giá trị Booleans.
 
 
-# *The min and max Iterator Consumers*
+## *The min and max Iterator Consumers*
 
 nếu 1 vòng lặp tạo ra giá trị và có thể so sánh nó với 1 giá trị khác vậy từ đó có thể lấy ra giá trị mimimum hoặc maximum của chúng. nhưng có 1 vấn đề với chuỗi rỗng.
 nếu vòng lặp không có item nào, vẫn có thể `count()` chúng tuy nhiên kết quả là 0, tương tự với `sum()` cũng có thể thêm được và kết quả cũng là 0, nhưng với maximum và minimum thì không thể lấy được giá trị với chuỗi rỗng. bởi vậy `min` và `max` iterator consumer có `Option` value. `Some(n)` được áp dụng với non-empty sequence và None được áp dụng với empty sequence
@@ -3599,7 +3599,7 @@ brave world
 */
 ```
 
-# *The collect Consumer*
+## *The collect Consumer*
 
 các hàm như `any(), count(), sum(), min(), max()` iterator consumer trả về 1 thông tin duy nhất từ 1 chuỗi dài các items
 tuy nhiên ta có thể đẩy tất cả các item đã được consum vào 1 Vector
@@ -3671,7 +3671,7 @@ dòng thứ 5 sử dụng function `as_bytes()` để dụng dụng dưới dạ
 lưu ý rằng function `collect()` không thể sử dụng để đẩy các item vào static string, array, slice, bởi vì nó cần được phân bổ space trong quá trình chạy
 
 
-# *Iterator Chains*
+## *Iterator Chains*
 
 giả sử ta có 1 array các số, ta cần lấy các số dương của mảng đó qua 1 mảng mới và nhân với 2
 
@@ -3755,7 +3755,7 @@ các chuỗi bắt đầu với 1 iterator hoặc 1 function không được áp
 1 số `iterator adapters`: `filter()`, `map()`, `enumerate()`
 1 số `iterator consumer`: `any()`, `all()`, `count()`, `sum()`, `min()`,  `max()`, `collect()`
 
-# *Iterators Are “Lazy”*
+## *Iterators Are “Lazy”*
 
 ở ví dụ cuối cùng phía trên thêm 1 vài lệnh debug print
 
